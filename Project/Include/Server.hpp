@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/12 12:59:48 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:42:45 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Server
 		Server	&operator=(const Server &other);
 		void	set_port(const int &nb);//setter
 		void	set_pass(const std::string &str);//setter
+		void	set_pass(const char *str);//setter with char*
 		void	check_port(const std::string &str); //calls setter if all ok
 		
 };

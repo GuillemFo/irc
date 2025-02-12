@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/12 12:48:36 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:40:32 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int main(int ac, char **av)
 		Server.check_port(av[1]);
 		std::string in(av[2]);
 		Server.set_pass(in);
-		in.clear();	//security?? dunno if necessary
+
 	}
 	catch(std::string &e)
 	{

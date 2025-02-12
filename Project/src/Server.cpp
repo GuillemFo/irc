@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/12 13:00:15 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:42:29 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ void	Server::set_port(const int &nb)
 void	Server::set_pass(const std::string &str)
 {
 	this->_pass = str;
+	//Debug
+	std::cout << "Pass in:" << str << std::endl;
+}
+
+void	Server::set_pass(const char *str)
+{
+	std::string s(str);
+	this->_pass = s;
 	//Debug
 	std::cout << "Pass in:" << str << std::endl;
 }
