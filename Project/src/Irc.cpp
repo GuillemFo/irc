@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Irc.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/12 11:40:04 by gforns-s         ###   ########.fr       */
+/*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/02/12 11:50:41 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Irc.hpp"
 
+Irc::Irc(){}
 
-/*
-Your executable will be run as follows:
-./ircserv <port> <password>
-*/
-int main(int ac, char **av)
+Irc::~Irc(){}
+
+Irc::Irc(const Irc &other)
 {
-	Irc irc;
-	try
+	*this = other;
+}
+
+Irc &Irc::operator=(const Irc &other)
+{
+	if (this != &other)
 	{
-		if (ac != 3)
-			throw ("Wrong arguments");
-		irc.store_port(av[1]);
-		irc.store_pass(av[2]);
+		this->pass = other.pass;
+		this->port = other.port;
 	}
-	catch(const std::string e)
-	{
-		std::cout << e << '\n';
-	}
-	
+	return (*this);
 }
