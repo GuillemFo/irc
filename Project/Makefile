@@ -6,13 +6,13 @@
 #    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/02/06 11:11:43 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/02/12 12:43:12 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
-SRC = main.cpp
+SRC = main.cpp Server.cpp
 
 SRC_P = src/
 

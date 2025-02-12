@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/12 12:10:11 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:48:36 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@ int main(int ac, char **av)
 	try
 	{
 		if (ac != 3)
-			throw ("Wrong arguments");
+			throw std::string("Wrong arguments");
 		Server.check_port(av[1]);
-		Server.set_pass(av[2]);
+		std::string in(av[2]);
+		Server.set_pass(in);
+		in.clear();	//security?? dunno if necessary
 	}
-	catch(const std::string e)
+	catch(std::string &e)
 	{
-		std::cout << e << '\n';
+		std::cout << e << std::endl;
 	}
 	
 }
