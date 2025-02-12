@@ -1,0 +1,10 @@
+#Ignored files:
+#objects and dependencies
+*.o
+*.d
+#anoying vscode XD
+.vscode/
+#tmp folder
+Project/tmp/
+#exec file
+ircserv
