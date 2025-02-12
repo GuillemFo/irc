@@ -1,11 +1,35 @@
+My Makefile creates a folder nammed tmp that will contain all .o and .d files
+It also contains the rule pedantic which forces u to add a new line at the end of each file!
+
 Allowed functions:
-Everything in C++ 98.
-socket, close, setsockopt, getsockname,
-getprotobyname, gethostbyname, getaddrinfo,
-freeaddrinfo, bind, connect, listen, accept, htons,
-htonl, ntohs, ntohl, inet_addr, inet_ntoa, send,
-recv, signal, sigaction, lseek, fstat, fcntl, poll
-(or equivalent)
+	- Everything in C++ 98.
+	- socket
+	- close
+	- setsockopt
+	- getsockname
+	- getprotobyname
+	- gethostbyname
+	- getaddrinfo
+	- freeaddrinfo
+	- bind
+	- connect
+	- listen
+	- accept
+	- htons
+	- htonl
+	- ntohs
+	- ntohl
+	- inet_addr
+	- inet_ntoa
+	- send
+	- recv
+	- signal
+	- sigaction
+	- lseek
+	- fstat
+	- fcntl
+	- poll
+	- (or equivalent)
 
 https://modern.ircdocs.horse/
 
