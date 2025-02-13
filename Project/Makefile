@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/02/12 12:43:12 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/02/13 23:38:49 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ SRC = main.cpp Server.cpp
 SRC_P = src/
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address
+
+GCC = c++
 
 TMP = tmp/
 
@@ -51,12 +53,12 @@ tmp:
 	@mkdir -p $(TMP)
 
 $(NAME): $(OBJ)
-	c++ $(FLAGS) $(OBJ) -I $(INC) -o $(NAME)
+	$(GCC) $(FLAGS) $(OBJ) -I $(INC) -o $(NAME)
 	@echo "$(GREEN)$(NAME) compiled$(RESET)"
 
 $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
-	c++ $(FLAGS) -c $< -I $(INC) -o $@
+	$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
 
 -include $(DEP)
 
