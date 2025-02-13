@@ -30,7 +30,7 @@ Allowed functions:
 	- fcntl
 	- poll // better use epoll() !!!!!!!!!!!!!
 	- (or equivalent)
-
+![alt text](image.png)
 Even if poll() is mentionned in the subject and the evaluation scale,
 you can use any equivalent such as select(), kqueue(), or epoll().
 
@@ -74,3 +74,7 @@ https://modern.ircdocs.horse/
 https://medium.com/@afatir.ahmedfatir/small-irc-server-ft-irc-42-network-7cee848de6f9
 
 https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
+
+https://www.man7.org/linux/man-pages/man2/socket.2.html
+
+https://www.man7.org/linux/man-pages/man7/socket.7.html
