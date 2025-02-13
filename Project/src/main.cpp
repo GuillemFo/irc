@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/13 21:38:15 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:28:37 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,24 @@ int main(int ac, char **av)
 	struct sockaddr_in client_addr;
 	socklen_t client_addr_len = sizeof(client_addr);
 	char	buffer[1024];
-	int port = 6667; //default irc port
+	//int port = 6667; //default irc port
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd < 0)
 	{
-		perror("socket");
+		std::perror("socket");
 		return (1);
 	}
 
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET; // set IPv4 family
 	server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
-	server_addr.sin_port = htons(port); // convert port to network byte order // should set the incoming port?
+	server_addr.sin_port = htons(Server.get_port()); // convert port to network byte order // should set the incoming port?
 
 	//Binding:
 	if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
-		perror("bind");
+		std::perror("bind");
 		close(server_fd);
 		return (1);
 	}
@@ -62,18 +62,18 @@ int main(int ac, char **av)
 	//Listen:
 	if(listen(server_fd, 5) < 0)
 	{
-		perror("listen");
+		std::perror("listen");
 		close(server_fd);
 		return (1);
 	}
 
-	std::cout << "Server Listening on port:" << port << std::endl;
+	std::cout << "Server Listening on port:" << Server.get_port() << std::endl;
 
 	//Accept conn
 	client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
 	if (client_fd < 0)
 	{
-		perror("accept");
+		std::perror("accept");
 		close(server_fd);
 		return (1);
 	}
@@ -84,7 +84,7 @@ int main(int ac, char **av)
 	ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) -1);
 	if (bytes_read < 0)
 	{
-		perror("read");
+		std::perror("read");
 		close(client_fd);
 		close(server_fd);
 		return (1);

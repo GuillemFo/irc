@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/13 18:41:11 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:27:09 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 #include <unistd.h>
 #include <cstring>
 
+
+#include <cstdio> //perror
+
 class Server
 {
 	private:
@@ -39,6 +42,7 @@ class Server
 		void	set_pass(const std::string &str);//setter
 		void	set_pass(const char *str);//setter with char*
 		void	check_port(const std::string &str); //calls setter if all ok
+		const int	&get_port();
 		
 };
 
