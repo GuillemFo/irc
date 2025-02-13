@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/13 18:39:33 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/13 21:38:15 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,35 @@ int main(int ac, char **av)
 		return (1);
 	}
 
+	std::cout << "Server Listening on port:" << port << std::endl;
 
+	//Accept conn
+	client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+	if (client_fd < 0)
+	{
+		perror("accept");
+		close(server_fd);
+		return (1);
+	}
 
+	std::cout << "Client connected" <<std::endl;
 
+	//Read data from cl
+	ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) -1);
+	if (bytes_read < 0)
+	{
+		perror("read");
+		close(client_fd);
+		close(server_fd);
+		return (1);
+	}
 
+	buffer[bytes_read] = '\0'; // hard null end buffer
+	std::cout << "Received message: " << buffer <<std::endl;
 
+	close(client_fd);
+	close(server_fd);
+	return (0);
 	}
 	catch(std::string &e)
 	{
