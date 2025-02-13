@@ -28,7 +28,7 @@ Allowed functions:
 	- lseek
 	- fstat
 	- fcntl
-	- poll
+	- poll // better use epoll() !!!!!!!!!!!!!
 	- (or equivalent)
 
 Even if poll() is mentionned in the subject and the evaluation scale,
