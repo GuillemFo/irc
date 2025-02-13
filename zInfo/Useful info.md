@@ -3,18 +3,18 @@ It also contains the rule pedantic which forces u to add a new line at the end o
 
 Allowed functions:
 	- Everything in C++ 98.
-	- socket
-	- close
-	- setsockopt
-	- getsockname
-	- getprotobyname
+	- socket	https://www.man7.org/linux/man-pages/man2/socket.2.html	https://www.man7.org/linux/man-pages/man7/socket.7.html
+	- close	https://www.man7.org/linux/man-pages/man2/close.2.html
+	- setsockopt	https://www.man7.org/linux/man-pages/man2/getsockopt.2.html
+	- getsockname	https://www.man7.org/linux/man-pages/man2/getsockname.2.html
+	- getprotobyname	https://www.man7.org/linux/man-pages/man3/getprotoent.3.html
 	- gethostbyname
-	- getaddrinfo
+	- getaddrinfo	https://www.man7.org/linux/man-pages/man3/getaddrinfo.3.html
 	- freeaddrinfo
-	- bind
-	- connect
-	- listen
-	- accept
+	- bind	https://www.man7.org/linux/man-pages/man2/bind.2.html
+	- connect	https://www.man7.org/linux/man-pages/man2/connect.2.html
+	- listen	https://www.man7.org/linux/man-pages/man2/listen.2.html
+	- accept	https://www.man7.org/linux/man-pages/man2/accept.2.html
 	- htons
 	- htonl
 	- ntohs
@@ -22,13 +22,13 @@ Allowed functions:
 	- inet_addr
 	- inet_ntoa
 	- send
-	- recv
+	- recv	https://www.man7.org/linux/man-pages/man2/recv.2.html
 	- signal
 	- sigaction
 	- lseek
 	- fstat
-	- fcntl
-	- poll // better use epoll() !!!!!!!!!!!!!
+	- fcntl	https://www.man7.org/linux/man-pages/man2/fcntl.2.html
+	- poll // better use epoll() 
 	- (or equivalent)
 ![alt text](image.png)
 Even if poll() is mentionned in the subject and the evaluation scale,
@@ -75,6 +75,4 @@ https://medium.com/@afatir.ahmedfatir/small-irc-server-ft-irc-42-network-7cee848
 
 https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 
-https://www.man7.org/linux/man-pages/man2/socket.2.html
-
-https://www.man7.org/linux/man-pages/man7/socket.7.html
+IRC Client https://irssi.org/
