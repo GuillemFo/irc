@@ -23,7 +23,7 @@
 /* #undef HAVE_LIBOTR */
 
 /* Define to 1 if you have the `utf8proc' library (-lutf8proc). */
-#define HAVE_LIBUTF8PROC /**/
+/* #undef HAVE_LIBUTF8PROC */
 
 /* Build with socks support */
 /* #undef HAVE_SOCKS */
@@ -35,7 +35,7 @@
 /* #undef HAVE_STATIC_OTR */
 
 /* */
-#define HAVE_STATIC_PERL 1
+/* #undef HAVE_STATIC_PERL */
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
