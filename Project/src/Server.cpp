@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 21:16:25 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 23:48:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ std::string Server::to_lower(std::string &str)
 
 void Server::buff_to_string(char *str)
 {///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
+	//CHANGE ALL THIS TO A SWITCH
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
@@ -166,6 +167,30 @@ void Server::buff_to_string(char *str)
 		tmp = this->to_lower(tmp);
 		std::cout << "user:" << tmp << ":"<<std::endl;
 		this->set_user(tmp);
+	}
+	else if (tmp == "msg")
+	{
+		if (this->get_auth() == false)
+		{
+			this->send_out("User not registered\n");
+			std::cout << "User not registered" << std::endl;
+			return ;
+		}
+		ss >> tmp;
+		std::cout << "msg:" << tmp << ":" <<std::endl;
+		//send as a client to all
+	}
+	else if (tmp == "join")
+	{
+		if (this->get_auth() == false)
+		{
+			this->send_out("User not registered\n");
+			std::cout << "User not registered" << std::endl;
+			return ;
+		}
+		ss >> tmp;
+		std::cout << "join:" << tmp << ":" <<std::endl;
+		//send as a client to all
 	}
 	else
 	{
