@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 18:58:29 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 21:16:25 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,12 @@ void	Server::set_pass(const char *str)
 void	Server::set_nick(const std::string &str){this->_nick = str;}
 void	Server::set_user(const std::string &str){this->_user = str;}
 
-int			Server::get_port(){return (this->_port);}
-const 		std::string	Server::get_nick(){return (this->_nick);}
-const 		std::string	Server::get_name(){return (this->_nick);}
+bool		Server::get_reg() const{return this->_reg;}
+int			Server::get_port()const {return (this->_port);}
+const 		std::string	Server::get_nick()const {return (this->_nick);}
+const 		std::string	Server::get_name()const {return (this->_nick);}
 void		Server::set_auth(bool i){this->auth = i;}
-bool		Server::get_auth(){return (this->auth);}
+bool		Server::get_auth()const {return (this->auth);}
 
 bool 		Server::check_pass(std::string &str)
 {
@@ -99,48 +100,85 @@ void	Server::check_port(const std::string &str) //change to a better name
 }
 
 
+
+int	Server::send_out(std::string message)
+{
+	ssize_t bytes_sent = send(this->client_fd , message.c_str(), strlen(message.c_str()), 0);
+	if (bytes_sent < 0)
+	{
+		std::cout << "Error sending message from server to client" << std::endl;
+		close(this->server_fd);
+		return (1);
+	}
+	return (0);
+}
+
+
+std::string Server::to_lower(std::string &str)
+{
+	std::stringstream ss;
+	for (int i = 0; str[i] != '\0'; i++)
+	{
+		ss << (char)std::tolower(str[i]);
+	}
+		std::string ret = ss.str();
+	return (ret);
+}
+
 void Server::buff_to_string(char *str)
 {///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
-	std::cout << "1:" << tmp << ":" <<std::endl;
-	if (tmp == "pass" || tmp == "PASS")
+	tmp = this->to_lower(tmp);
+	std::cout << "Main command:" << tmp << ":" <<std::endl;
+	if (tmp == "pass")
 	{
 		ss >> tmp;
-		std::cout << "1 tmp:" << tmp << ":"<<std::endl;
+		std::cout << "pass:" << tmp << ":"<<std::endl;
 		if (this->check_pass(tmp))
 			this->set_auth(1);
 		else
 			this->set_auth(0);
 	}
-	else if (tmp == "nick" || tmp == "NICK")
+	else if (tmp == "nick")
 	{
 		if (this->get_auth() == false)
 		{
+			this->send_out("User not registered\n");
 			std::cout << "User not registered" << std::endl;
 			return ;
 		}
-		std::cout << "2 tmp:" << tmp<< ":" <<std::endl;
 		ss >> tmp;
+		tmp = this->to_lower(tmp);
+		std::cout << "nick:" << tmp<< ":" <<std::endl;
 		this->set_nick(tmp);
 	}
-	else if (tmp == "user" || tmp == "USER")
+	else if (tmp == "user")
 	{
 		if (this->get_auth() == false)
 		{
+			this->send_out("User not registered\n");
 			std::cout << "User not registered" << std::endl;
 			return ;
 		}
-		std::cout << "3 tmp:" << tmp << ":"<<std::endl;
 		ss >> tmp;
+		tmp = this->to_lower(tmp);
+		std::cout << "user:" << tmp << ":"<<std::endl;
 		this->set_user(tmp);
 	}
 	else
 	{
 		if (this->get_auth() == false)
+		{
+			this->send_out("User not registered\n");
 			std::cout << "User not registered" << std::endl;
+		}
+		else if (this->get_reg() == false)
+		{
+			this->send_out("User not established\n");
+			std::cout << "User not established" << std::endl;
+		}
 		return ;
 	}
-		
 }
