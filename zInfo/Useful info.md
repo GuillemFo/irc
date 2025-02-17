@@ -76,3 +76,16 @@ https://medium.com/@afatir.ahmedfatir/small-irc-server-ft-irc-42-network-7cee848
 https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 
 IRC Client https://irssi.org/
+
+
+IRC Connex
+https://ircv3.net/specs/extensions/capability-negotiation.html
+
+IRC Return codes
+https://www.alien.net.au/irc/irc2numerics.html
+
+IRC extended info for how to do the returns 
+https://www.rfc-editor.org/rfc/rfc1459
+example:
+353     RPL_NAMREPLY
+"<channel> :[[@|+]<nick> [[@|+]<nick> [...]]]"
