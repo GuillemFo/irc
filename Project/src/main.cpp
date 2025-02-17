@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 13:12:29 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:53:54 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ int main(int ac, char **av)
 		Server.set_pass(in);
 
 	//////////////// TESTING //////////////
-
-	std::string nick;
-	std::string name;
 
 
 	int server_fd;
@@ -85,18 +82,21 @@ int main(int ac, char **av)
 	std::cout << "Client connected" <<std::endl;
 
 	//Read data from cl
-	ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) -1);
-	if (bytes_read < 0)
+	while (1)
 	{
-		std::perror("read");
-		close(client_fd);
-		close(server_fd);
-		return (1);
-	}
+		ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) -1);
+		if (bytes_read < 0)
+		{
+			std::perror("read");
+			close(client_fd);
+			close(server_fd);
+			return (1);
+		}
 
-	buffer[bytes_read] = '\0'; // hard null end buffer
-	std::cout << "Received message: " << buffer <<std::endl;
-	
+		buffer[bytes_read] = '\0'; // hard null end buffer
+		Server.buff_to_string(buffer);
+		//std::cout << "Received message: " << buffer <<std::endl;
+	}
 
 	close(client_fd);
 	close(server_fd);

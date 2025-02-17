@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/13 22:27:59 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:02:43 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ Server::Server(){}
 
 Server::~Server(){}
 
-Server::Server(const Server &other)
-{
-	*this = other;
-}
+Server::Server(const Server &other){*this = other;}
 
 Server &Server::operator=(const Server &other)
 {
@@ -56,10 +53,25 @@ void	Server::set_pass(const char *str)
 	std::cout << "Pass in:" << str << std::endl;
 }
 
-const int	&Server::get_port()
+void	Server::set_nick(const std::string &str){this->_nick = str;}
+void	Server::set_user(const std::string &str){this->_user = str;}
+
+int			Server::get_port(){return (this->_port);}
+const 		std::string	Server::get_nick(){return (this->_nick);}
+const 		std::string	Server::get_name(){return (this->_nick);}
+void		Server::set_auth(int i){this->auth = i;}
+int			Server::get_auth(){return (this->auth);}
+
+bool 		Server::check_pass(std::string &str)
 {
-	return (this->_port);
+	std::cout << "incheck:" <<str << ":" << " and " << this->_pass << ":" <<std::endl;
+	if (str == this->_pass)
+		return (true);
+	else
+		return (false);
+	return (false);
 }
+
 
 void	Server::check_port(const std::string &str) //change to a better name
 {
@@ -83,4 +95,40 @@ void	Server::check_port(const std::string &str) //change to a better name
 	}
 	else
 		throw std::string("Empty string");
+}
+
+
+void Server::buff_to_string(char *str)
+{
+	std::string tmp;
+	std::stringstream ss(str);
+	ss >> tmp;
+	std::cout << "1:" << tmp << ":" <<std::endl;
+	if (tmp == "pass" || tmp == "PASS")
+	{
+		ss >> tmp;
+		std::cout << "1 tmp:" << tmp << ":"<<std::endl;
+		if (this->check_pass(tmp) == 1)
+			this->set_auth(1);
+		else
+			this->set_auth(0);
+	}
+	if (tmp == "nick" || tmp == "NICK")
+	{
+		std::cout << "2 tmp:" << tmp<< ":" <<std::endl;
+		ss >> tmp;
+		this->set_nick(tmp);
+	}
+	if (tmp == "user" || tmp == "USER")
+	{
+		std::cout << "3 tmp:" << tmp << ":"<<std::endl;
+		ss >> tmp;
+		this->set_user(tmp);
+	}
+	else
+	{
+		std::cout << "User not registered" << std::endl;
+		return ;
+	}
+		
 }
