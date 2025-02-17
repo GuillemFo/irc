@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 17:25:19 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:58:29 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	Server::check_port(const std::string &str) //change to a better name
 
 
 void Server::buff_to_string(char *str)
-{
+{///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
