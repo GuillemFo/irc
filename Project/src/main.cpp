@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 10:26:26 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:12:29 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ int main(int ac, char **av)
 
 	//////////////// TESTING //////////////
 
+	std::string nick;
+	std::string name;
+
+
 	int server_fd;
 	int client_fd;
 
@@ -37,7 +41,7 @@ int main(int ac, char **av)
 	struct sockaddr_in client_addr;
 	socklen_t client_addr_len = sizeof(client_addr);
 	char	buffer[1024];
-	//int port = 6667; //default irc port
+	int port = Server.get_port();
 
 	server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_fd < 0)
@@ -49,7 +53,7 @@ int main(int ac, char **av)
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET; // set IPv4 family
 	server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
-	server_addr.sin_port = htons(Server.get_port()); // convert port to network byte order // should set the incoming port?
+	server_addr.sin_port = htons(port); // convert port to network byte order // should set the incoming port?
 
 	//Binding:
 	if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
@@ -67,7 +71,7 @@ int main(int ac, char **av)
 		return (1);
 	}
 
-	std::cout << "Server Listening on port:" << Server.get_port() << std::endl;
+	std::cout << "Server Listening on port:" << port << std::endl;
 
 	//Accept conn
 	client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
@@ -92,10 +96,10 @@ int main(int ac, char **av)
 
 	buffer[bytes_read] = '\0'; // hard null end buffer
 	std::cout << "Received message: " << buffer <<std::endl;
+	
 
 	close(client_fd);
 	close(server_fd);
-	call_test();
 	return (0);
 	}
 	catch(std::string &e)

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 08:34:55 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:04:17 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 #include "gforns-s.hpp"
 #include "rzhdanov.hpp"
+//#include "Client.hpp"
+//#include "Channel.hpp"
+
 
 #include <string>
 #include <exception>
@@ -26,6 +29,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cstring>
+#include <map>
 
 
 #include <cstdio> //perror
@@ -36,6 +40,7 @@ class Server
 		int _port;
 		std::string _pass;
 	public:
+		
 		Server();//start protected with a value?
 		Server(std::string str, int nb);//dunno if it can be started without checking, added just in case
 		~Server();
