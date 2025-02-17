@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/13 22:28:37 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 08:38:25 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int main(int ac, char **av)
 
 	close(client_fd);
 	close(server_fd);
+	call_test();
 	return (0);
 	}
 	catch(std::string &e)

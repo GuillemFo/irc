@@ -6,7 +6,7 @@
 #    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/02/17 07:58:20 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/02/17 08:37:22 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ NAME = ircserv
 
 SRC = main.cpp Server.cpp
 
-SRC_P = src/
-
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address
+
+SRC_F = src/
 
 GCC = c++
 
@@ -24,11 +24,29 @@ TMP = tmp/
 
 INC = Include/
 
-SRC_PREFIX = $(addprefix $(SRC_P),$(SRC))
+SRC_PREFIX = $(addprefix $(SRC_F),$(SRC))
 
 OBJ = $(addprefix $(TMP), $(SRC_PREFIX:.cpp=.o))
 
 DEP = $(OBJ:.o=.d)
+
+#### PATHS FOR Guille
+SRC_G = test.cpp
+
+SRC_F_G = src/gforns-s/
+
+SRC_P_G = $(addprefix $(SRC_F_G),$(SRC_G))
+
+OBJ_G = $(addprefix $(TMP), $(SRC_P_G:.cpp=.o))
+
+#### PATHS FOR Roman
+SRC_R = test2.cpp
+
+SRC_F_R = src/rzhdanov/
+
+SRC_P_R = $(addprefix $(SRC_F_R),$(SRC_R))
+
+OBJ_R = $(addprefix $(TMP), $(SRC_P_R:.cpp=.o))
 
 #############################################################################
 
@@ -52,10 +70,23 @@ all: tmp $(NAME)
 tmp:
 	@mkdir -p $(TMP)
 
-$(NAME): $(OBJ)
-	$(GCC) $(FLAGS) $(OBJ) -I $(INC) -o $(NAME)
+$(NAME): $(OBJ) $(OBJ_G) $(OBJ_R)
+	$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) $(OBJ_R) -I $(INC) -o $(NAME)
 	@echo "$(GREEN)$(NAME) compiled$(RESET)"
 
+###############################################################################
+
+#### Rule for Guille
+g: $(OBJ) $(OBJ_G)
+	$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) -I $(INC) -o $(NAME)
+	@echo "$(GREEN)$(NAME)Guillem's code compiled$(RESET)"
+
+#### Rule for Roman
+r: $(OBJ) $(OBJ_R)
+	$(GCC) $(FLAGS) $(OBJ) $(OBJ_R) -I $(INC) -o $(NAME)
+	@echo "$(GREEN)$(NAME)Roman's code compiled$(RESET)"
+
+###############################################################################
 $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
 	$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
@@ -72,4 +103,4 @@ fclean: clean
 	@rm -rf $(NAME)
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 
-.PHONY: all re clean fclean
+.PHONY: all re clean fclean g r
