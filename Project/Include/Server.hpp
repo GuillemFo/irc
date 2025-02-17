@@ -6,11 +6,14 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/13 22:27:09 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 08:34:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+#include "gforns-s.hpp"
+#include "rzhdanov.hpp"
 
 #include <string>
 #include <exception>
