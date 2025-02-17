@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 17:02:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:25:19 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,15 @@ void	Server::set_user(const std::string &str){this->_user = str;}
 int			Server::get_port(){return (this->_port);}
 const 		std::string	Server::get_nick(){return (this->_nick);}
 const 		std::string	Server::get_name(){return (this->_nick);}
-void		Server::set_auth(int i){this->auth = i;}
-int			Server::get_auth(){return (this->auth);}
+void		Server::set_auth(bool i){this->auth = i;}
+bool		Server::get_auth(){return (this->auth);}
 
 bool 		Server::check_pass(std::string &str)
 {
-	std::cout << "incheck:" <<str << ":" << " and " << this->_pass << ":" <<std::endl;
 	if (str == this->_pass)
+	{
 		return (true);
+	}
 	else
 		return (false);
 	return (false);
@@ -108,26 +109,37 @@ void Server::buff_to_string(char *str)
 	{
 		ss >> tmp;
 		std::cout << "1 tmp:" << tmp << ":"<<std::endl;
-		if (this->check_pass(tmp) == 1)
+		if (this->check_pass(tmp))
 			this->set_auth(1);
 		else
 			this->set_auth(0);
 	}
-	if (tmp == "nick" || tmp == "NICK")
+	else if (tmp == "nick" || tmp == "NICK")
 	{
+		if (this->get_auth() == false)
+		{
+			std::cout << "User not registered" << std::endl;
+			return ;
+		}
 		std::cout << "2 tmp:" << tmp<< ":" <<std::endl;
 		ss >> tmp;
 		this->set_nick(tmp);
 	}
-	if (tmp == "user" || tmp == "USER")
+	else if (tmp == "user" || tmp == "USER")
 	{
+		if (this->get_auth() == false)
+		{
+			std::cout << "User not registered" << std::endl;
+			return ;
+		}
 		std::cout << "3 tmp:" << tmp << ":"<<std::endl;
 		ss >> tmp;
 		this->set_user(tmp);
 	}
 	else
 	{
-		std::cout << "User not registered" << std::endl;
+		if (this->get_auth() == false)
+			std::cout << "User not registered" << std::endl;
 		return ;
 	}
 		

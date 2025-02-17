@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 16:51:33 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:25:11 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ class Server
 		const std::string get_name();
 		void	set_nick(const std::string &str);
 		void	set_user(const std::string &str);
-		void	set_auth(int i);
-		int		get_auth();
+		void	set_auth(bool i);
+		bool		get_auth();
 		
 		bool 	check_pass(std::string &str);
 		void	buff_to_string(char *str);

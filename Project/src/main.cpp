@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 16:53:54 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:27:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int main(int ac, char **av)
 	std::cout << "Client connected" <<std::endl;
 
 	//Read data from cl
+	Server.set_auth(false);
 	while (1)
 	{
 		ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) -1);
