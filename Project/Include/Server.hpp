@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 21:18:13 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/17 21:34:35 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ class Server
 
 	public:
 //Testing
-		int server_fd;
-		int client_fd;
-		struct sockaddr_in server_addr;
-		struct sockaddr_in client_addr;
-		socklen_t client_addr_len;// = sizeof(client_addr);
+		int server_fd;	//should go private --->> getter setter
+		int client_fd;	//should go to a map container or client class
+		struct sockaddr_in server_addr;	//should go private --->> getter setter
+		struct sockaddr_in client_addr;	//should go to the client class or container
+		socklen_t client_addr_len;// = sizeof(client_addr); 	//should go to client class or container
 		
 		int					send_out(std::string message);
 		std::string 		to_lower(std::string &str);
