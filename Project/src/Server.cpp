@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 23:48:10 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:44:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int			Server::get_port()const {return (this->_port);}
 const 		std::string	Server::get_nick()const {return (this->_nick);}
 const 		std::string	Server::get_name()const {return (this->_nick);}
 void		Server::set_auth(bool i){this->auth = i;}
+void		Server::set_reg(bool i){this->_reg = i;}
 bool		Server::get_auth()const {return (this->auth);}
 
 bool 		Server::check_pass(std::string &str)
@@ -128,6 +129,7 @@ std::string Server::to_lower(std::string &str)
 void Server::buff_to_string(char *str)
 {///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
 	//CHANGE ALL THIS TO A SWITCH
+	//Check extra if extra info on string!!
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
