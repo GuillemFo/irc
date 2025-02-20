@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/19 10:44:48 by codespace        ###   ########.fr       */
+/*   Updated: 2025/02/20 08:45:57 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ void Server::buff_to_string(char *str)
 {///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
 	//CHANGE ALL THIS TO A SWITCH
 	//Check extra if extra info on string!!
+	// Move get auth and get_reg to an external function
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
@@ -152,6 +153,12 @@ void Server::buff_to_string(char *str)
 			std::cout << "User not registered" << std::endl;
 			return ;
 		}
+		else if (this->get_reg() == false)
+		{
+			this->send_out("User not established\n");
+			std::cout << "User not established" << std::endl;
+			return ;
+		}
 		ss >> tmp;
 		tmp = this->to_lower(tmp);
 		std::cout << "nick:" << tmp<< ":" <<std::endl;
@@ -163,6 +170,12 @@ void Server::buff_to_string(char *str)
 		{
 			this->send_out("User not registered\n");
 			std::cout << "User not registered" << std::endl;
+			return ;
+		}
+		else if (this->get_reg() == false)
+		{
+			this->send_out("User not established\n");
+			std::cout << "User not established" << std::endl;
 			return ;
 		}
 		ss >> tmp;
@@ -178,6 +191,12 @@ void Server::buff_to_string(char *str)
 			std::cout << "User not registered" << std::endl;
 			return ;
 		}
+		else if (this->get_reg() == false)
+		{
+			this->send_out("User not established\n");
+			std::cout << "User not established" << std::endl;
+			return ;
+		}
 		ss >> tmp;
 		std::cout << "msg:" << tmp << ":" <<std::endl;
 		//send as a client to all
@@ -188,6 +207,12 @@ void Server::buff_to_string(char *str)
 		{
 			this->send_out("User not registered\n");
 			std::cout << "User not registered" << std::endl;
+			return ;
+		}
+		else if (this->get_reg() == false)
+		{
+			this->send_out("User not established\n");
+			std::cout << "User not established" << std::endl;
 			return ;
 		}
 		ss >> tmp;
