@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/20 08:45:57 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:53:52 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void Server::buff_to_string(char *str)
 	//CHANGE ALL THIS TO A SWITCH
 	//Check extra if extra info on string!!
 	// Move get auth and get_reg to an external function
+	// Next step try listen multiple clients with epoll
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
