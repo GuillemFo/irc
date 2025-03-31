@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:04:57 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 15:20:50 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:28:09 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,12 @@ void Server::command_list(std::string &str)
 		}
 		else if (tmp == "ls" || tmp == "LS")
 		{
-			this->send_out("CAP * LS :");
+			this->send_out("CAP * LS :multi-prefix");
 			std::cout << "LS?" << std::endl;
-		}
-		else if (tmp == "ACK" || tmp == "ack")
-		{
-			this->send_out("CAP * ACK :");
-			std::cout << "ACK ?" << std::endl;
 		}
 		else if (tmp == "end" || tmp == "END")
 		{
 			std::cout << "END???" << std::endl;
-			this->welcome_msg(this->_nick);
 		}
 		else
 			std::cout << "WERRORO :(" << std::endl;
@@ -96,6 +90,7 @@ void Server::command_list(std::string &str)
 		if (!this->_nick.empty() && !this->_user.empty())
 		{
 			this->set_reg(1);
+			this->welcome_msg(this->_nick); // if i send the welcome it returns the cap end !!! 31/03/25 15.29
 		}
 	}
 	else if (tmp == "msg")
