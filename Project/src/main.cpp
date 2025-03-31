@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/02/17 21:13:22 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 11:20:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ Your executable will be run as follows:
 int main(int ac, char **av)
 {
 	Server Server;
+	Server.set_server_name("IRC WIL & ROMAN");
 	try
 	{
 		if (ac != 3)
