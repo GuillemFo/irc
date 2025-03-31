@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 11:23:45 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:54:12 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ class Server
 		bool 				check_pass(std::string &str);
 		void				buff_to_string(char *str);
 		void				set_server_name(const std::string &s);
+		void				command_list(std::string &str);
 
 		void				welcome_msg(const std::string &nickname);
 

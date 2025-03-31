@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 13:11:21 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:21:57 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,16 @@ void Server::welcome_msg(const std::string &nickname)
 	std::stringstream message;
 	message << ":" << _sv_name << " 001 " << nickname << " :Welcome to our IRC server " << nickname << "!" << std::endl;
 	this->send_out(message.str());
+	message.clear();
+	message << ":" << _sv_name << " 002 " << nickname << " :Your host is server, running version 1.0" << std::endl;
+	this->send_out(message.str());
+	message.clear();
+	message << ":" << _sv_name << " 003 " << nickname << " :This server was created Mon Mar 31 2025" << std::endl;
+	this->send_out(message.str());
+	message.clear();
+	message << ":" << _sv_name << " 004 " << nickname << " server 1.0 iowghraAsORTVSx NCEMO" << std::endl;
+	this->send_out(message.str());
 }
-
 
 int	Server::send_out(std::string message)
 {
@@ -138,7 +146,7 @@ void Server::buff_to_string(char *str)
 {
 	//Prepare strings to be split when \n is found ???
 	std::string content;
-	std::cout << "->" << str << "<-" << std::endl;
+	//std::cout << "->" << str << "<-" << std::endl;
 	std::string line(str);
 	size_t pos = line.find('\r');
 	if (line[pos +1] == '\n')
@@ -148,21 +156,27 @@ void Server::buff_to_string(char *str)
 			if (line[pos +1] == '\n')
 			{
 				content = line.substr(0, pos);
-				//send content to command with a &
-				std::cout << "-->" << content << "<--" << std::endl << std::endl;  // Debug line
+				this->command_list(content);
+				//std::cout << "-->" << content << "<--" << std::endl << std::endl;  // Debug line
 				line.erase(0, pos+2);
 				pos = line.find('\r');
-				if (!line.empty())
+				if (!line.empty() && line[pos +1] == '\n')
 				{
+					//std::cout << line << " WEWO" << std::endl;
 					pos = line.find('\r');
 				}
-			}
-			
+			}			
 		}
+		pos = line.find('\n');
+		content = line.substr(0, pos);
+		this->command_list(content);
 	}
 	else
 		throw std::string("Exiting");
 }
 
 //moved all commands to a proper file. redoing buff_to_string to properly trim the incoming strings. 31/3/25 12.11PM
+
+//Issues with CAP sometimes sends end and sometimes wont. 31/03/25 15.21
+
 // Next step try listen multiple clients with epoll
