@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 13:06:47 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:11:21 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void Server::buff_to_string(char *str)
 {
 	//Prepare strings to be split when \n is found ???
 	std::string content;
-	std::cout << "->" << str << "<-" << std::endl << std::endl;
+	std::cout << "->" << str << "<-" << std::endl;
 	std::string line(str);
 	size_t pos = line.find('\r');
 	if (line[pos +1] == '\n')
@@ -149,7 +149,7 @@ void Server::buff_to_string(char *str)
 			{
 				content = line.substr(0, pos);
 				//send content to command with a &
-				std::cout << "-->" << content << "<--" << std::endl;  // Debug line
+				std::cout << "-->" << content << "<--" << std::endl << std::endl;  // Debug line
 				line.erase(0, pos+2);
 				pos = line.find('\r');
 				if (!line.empty())
@@ -161,7 +161,7 @@ void Server::buff_to_string(char *str)
 		}
 	}
 	else
-		std::cout << "ERROR?? " << line << " ERROR??" << std::endl;
+		throw std::string("Exiting");
 }
 
 //moved all commands to a proper file. redoing buff_to_string to properly trim the incoming strings. 31/3/25 12.11PM
