@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 12:11:06 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:06:47 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,31 @@ std::string Server::to_lower(std::string &str)
 void Server::buff_to_string(char *str)
 {
 	//Prepare strings to be split when \n is found ???
-	std::string tmp;
-	std::cout <<"####  Incoming string:" << str << "###" << std::endl << std::endl;
-	std::stringstream ss(str);
-	ss >> tmp;
-	std::cout << "Command:" << tmp << ":" << std::endl << std::endl;	//ak the first word of the string incoming
-	
-
+	std::string content;
+	std::cout << "->" << str << "<-" << std::endl << std::endl;
+	std::string line(str);
+	size_t pos = line.find('\r');
+	if (line[pos +1] == '\n')
+	{
+		while (pos != std::string::npos)
+		{
+			if (line[pos +1] == '\n')
+			{
+				content = line.substr(0, pos);
+				//send content to command with a &
+				std::cout << "-->" << content << "<--" << std::endl;  // Debug line
+				line.erase(0, pos+2);
+				pos = line.find('\r');
+				if (!line.empty())
+				{
+					pos = line.find('\r');
+				}
+			}
+			
+		}
+	}
+	else
+		std::cout << "ERROR?? " << line << " ERROR??" << std::endl;
 }
 
 //moved all commands to a proper file. redoing buff_to_string to properly trim the incoming strings. 31/3/25 12.11PM

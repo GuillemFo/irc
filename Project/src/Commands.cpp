@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:04:57 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 12:07:52 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/03/31 12:14:20 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 
 
 ///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
+
+	std::stringstream ss(str);
+	ss >> tmp;
+	std::cout << "Command:" << tmp << ":" << std::endl << std::endl;	//ak the first word of the string incoming
+	
 
 
 if (tmp == "cap")
