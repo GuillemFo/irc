@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 14:33:09 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:33:29 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,3 +106,6 @@ int main(int ac, char **av)
 	}
 	
 }
+
+
+// Need to prepare epoll, create the user with the incoming fd and store its data.

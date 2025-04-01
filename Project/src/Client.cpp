@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:00 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:27:40 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,3 +20,4 @@ void		Client::set_auth(bool i){this->_auth = i;}
 bool		Server::get_auth()const {return (this->auth);}
 void		Client::set_reg(bool i){this->_reg = i;}
 bool		Client::get_reg() const{return this->_reg;}
+
