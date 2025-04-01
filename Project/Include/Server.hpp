@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 12:48:27 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 13:03:09 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 #include "gforns-s.hpp"
 #include "rzhdanov.hpp"
-//#include "Client.hpp"
-//#include "Channel.hpp"
-
 
 #include <string>
 #include <exception>
@@ -36,6 +33,16 @@
 
 #include "Client.hpp"
 #include "Channel.hpp"
+
+////////////COLORS///////////////////
+# define C_R "\x1b[31m" // RED
+# define C_G "\x1b[32m" // GREEN
+# define C_B "\x1b[34m" // BLUE
+# define C_Y "\x1b[33m" // YELLOW
+# define C_M "\x1b[35m" // MAGENTA
+# define C_C "\x1b[36m" // CYAN
+# define C_RESET "\x1b[0m"
+////////////////////////////////////
 
 class Server
 {

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 12:48:13 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 14:03:44 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::set_port(const int &nb)
 {
 	this->_port = nb;
 	//Debug
-	std::cout << "Port in:" << nb << std::endl;
+	std::cout << C_B "Port in:" C_RESET << nb << std::endl;
 }
 
 
@@ -42,7 +42,7 @@ void	Server::set_pass(const std::string &str)
 {
 	this->_sv_pass = str;
 	//Debug
-	std::cout << "Pass in:" << str << std::endl;
+	std::cout << C_B "Pass in:" C_RESET << str << std::endl;
 }
 
 void	Server::set_pass(const char *str)
@@ -50,7 +50,7 @@ void	Server::set_pass(const char *str)
 	std::string s(str);
 	this->_sv_pass = s;
 	//Debug
-	std::cout << "Pass in:" << str << std::endl;
+	std::cout << C_B "Pass in:" C_RESET << str << std::endl;
 }
 
 void	Server::set_server_name(const std::string &s){this->_sv_name = s;}
@@ -145,6 +145,16 @@ std::string Server::to_lower(std::string &str)
 }
 
 
+std::string replace_tool(std::string str, std::string to_replace, std::string _new)
+{
+	size_t pos = 0;
+	while ((pos = str.find(to_replace, pos)) != std::string::npos)
+	{
+		str.replace(pos, to_replace.length(), _new);
+		pos = (pos  + _new.length());
+	}
+	return (str);
+}
 
 
 //This will need to be redesigned
@@ -152,8 +162,14 @@ std::string Server::to_lower(std::string &str)
 void Server::buff_to_string(char *str)
 {
 	//Prepare strings to be split when \n is found ???
+	///////// Printing tool to show non printable //////////////////////////
+	std::string test(str);
+	test = replace_tool(test, "\r", "'/r'");
+	test = replace_tool(test, "\n", "'/n'\n");
+	std::cout << "buff_in:" << C_R << test << C_RESET << ":end"<< std::endl;
+	////////////////////////////////////////////////////////////////////////
+
 	std::string content;
-	std::cout << "IN->" << str << "<-##" << std::endl;
 	std::string line(str);
 	size_t pos = line.find('\r');
 	if (line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 line[pos +1] == '\n' to check poss contains \r first
@@ -164,12 +180,10 @@ void Server::buff_to_string(char *str)
 			{
 				content = line.substr(0, pos);
 				this->command_list(content);
-				//std::cout << "-->" << content << "<--" << std::endl << std::endl;  //Debug line
 				line.erase(0, pos+2);
 				pos = line.find('\r');
 				if (!line.empty() && line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 added check for line[pos] == '\r'
 				{
-					//std::cout << line << " WEWO" << std::endl;
 					pos = line.find('\r');
 				}
 			}			
