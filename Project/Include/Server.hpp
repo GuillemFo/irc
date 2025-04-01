@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 13:54:12 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:48:27 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,15 @@
 
 #include <cstdio> //perror
 
+#include "Client.hpp"
+#include "Channel.hpp"
+
 class Server
 {
 	private:
 		int _port;
 		std::string _sv_name;
-		std::string _pass;
+		std::string _sv_pass;
 		std::string _nick;
 		std::string _user;
 		bool auth;		//check if pass is ok
@@ -54,6 +57,7 @@ class Server
 		socklen_t client_addr_len;// = sizeof(client_addr); 	//should go to client class or container
 		
 		int					send_out(std::string message);
+		std::string 		to_upper(std::string &str);
 		std::string 		to_lower(std::string &str);
 		void				set_reg(bool i);
 		bool				get_reg() const;

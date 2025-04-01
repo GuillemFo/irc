@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:04:57 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 08:52:33 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:54:45 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,36 @@
 /// Needs to be splited properly for each command
 
 
-///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text, msg text and  !!!)
+///transform tmp to to_upper (only first because will be the command) and all tmp else to_lower so we can handle and protect properly dup info (except pass text & msg text!!!)
 
 void Server::command_list(std::string &str)
 {
-	std::cout << "!" << str << "!" <<std::endl;
+	std::cout << "Command:" << str << "<--" <<std::endl;
 
 	std::string tmp;
 	std::stringstream ss(str);
 	ss >> tmp;
-	tmp = to_lower(tmp);
-	if (tmp == "cap")
+	tmp = to_upper(tmp);
+	if (tmp == "CAP")
 	{
 		ss >> tmp;
 		if (tmp == "CAP" || tmp == "cap")
 		{
-			this->send_out("Missing info?? Pending");
+			//this->send_out("Missing info?? Pending");
 		}
-		else if (tmp == "ls" || tmp == "LS")
+		else if (tmp == "LS" || tmp == "ls")
 		{
 			this->send_out("CAP * LS: irssi");
-			std::cout << "LS?" << std::endl;
+			std::cout << "--ls--" << std::endl;
 		}
-		else if (tmp == "end" || tmp == "END")
+		else if (tmp == "END" || tmp == "end")
 		{
-			std::cout << "END???" << std::endl;
+			std::cout << "--end--" << std::endl;
 		}
 		else
-			std::cout << "WERRORO :(" << std::endl;
+			std::cout << "--unkown-- :(" << std::endl;
 	}
-	else if (tmp == "pass")	// this sets auth
+	else if (tmp == "PASS")	// this sets auth
 	{
 		ss >> tmp;
 		std::cout << "pass:" << tmp << ":"<<std::endl;
@@ -55,7 +55,7 @@ void Server::command_list(std::string &str)
 		else
 			this->set_auth(0);
 	}
-	else if (tmp == "nick")	// this sets nick // missing protection for same nicknames!!
+	else if (tmp == "NICK")	// this sets nick // missing protection for same nicknames!!
 	{
 		ss >> tmp;
 		if (this->get_auth() == false)
@@ -69,7 +69,7 @@ void Server::command_list(std::string &str)
 		this->set_nick(tmp);
 		return ;
 	}
-	else if (tmp == "user") // this sets user and check if nick.empty() to set the register flag true or false
+	else if (tmp == "USER") // this sets user and check if nick.empty() to set the register flag true or false
 	{
 		ss >> tmp;
 		if (this->get_auth() == false)
@@ -93,7 +93,7 @@ void Server::command_list(std::string &str)
 			this->welcome_msg(this->_nick); // if i send the welcome it returns the cap end !!! 31/03/25 15.29 on irssi but not on hexchat
 		}
 	}
-	else if (tmp == "msg")
+	else if (tmp == "MSG")
 	{
 		ss >> tmp;
 		if (this->get_auth() == false)
@@ -112,7 +112,7 @@ void Server::command_list(std::string &str)
 		//send as a client to all
 
 	}
-	else if (tmp == "join")
+	else if (tmp == "JOIN")
 	{
 		ss >> tmp;
 		if (this->get_auth() == false)
@@ -135,8 +135,8 @@ void Server::command_list(std::string &str)
 	{
 		this->send_out("Unkown command:");
 		this->send_out(tmp);
-		this->send_out(" Use '!HELP' for more info\n");
-		std::cout << "Unkown command:" << tmp << std::endl;
+		this->send_out(":");
+		std::cout << "Unkown command:" << tmp << ":" << std::endl;
 		return ;
 	}
 

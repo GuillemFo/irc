@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 08:40:12 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:48:13 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Server &Server::operator=(const Server &other)
 {
 	if (this != &other)
 	{
-		this->_pass = other._pass;
+		this->_sv_pass = other._sv_pass;
 		this->_port = other._port;
 	}
 	return (*this);
@@ -40,7 +40,7 @@ void	Server::set_port(const int &nb)
 
 void	Server::set_pass(const std::string &str)
 {
-	this->_pass = str;
+	this->_sv_pass = str;
 	//Debug
 	std::cout << "Pass in:" << str << std::endl;
 }
@@ -48,7 +48,7 @@ void	Server::set_pass(const std::string &str)
 void	Server::set_pass(const char *str)
 {
 	std::string s(str);
-	this->_pass = s;
+	this->_sv_pass = s;
 	//Debug
 	std::cout << "Pass in:" << str << std::endl;
 }
@@ -57,18 +57,18 @@ void	Server::set_server_name(const std::string &s){this->_sv_name = s;}
 
 void	Server::set_nick(const std::string &str){this->_nick = str;}
 void	Server::set_user(const std::string &str){this->_user = str;}
-
-bool		Server::get_reg() const{return this->_reg;}
-int			Server::get_port()const {return (this->_port);}
 const 		std::string	Server::get_nick()const {return (this->_nick);}
 const 		std::string	Server::get_name()const {return (this->_nick);}
+bool		Server::get_reg() const{return this->_reg;}
 void		Server::set_auth(bool i){this->auth = i;}
 void		Server::set_reg(bool i){this->_reg = i;}
+
 bool		Server::get_auth()const {return (this->auth);}
+int			Server::get_port()const {return (this->_port);}
 
 bool 		Server::check_pass(std::string &str)
 {
-	if (str == this->_pass)
+	if (str == this->_sv_pass)
 	{
 		return (true);
 	}
@@ -123,6 +123,16 @@ int	Server::send_out(std::string message)
 }
 
 
+std::string Server::to_upper(std::string &str)
+{
+	std::stringstream ss;
+	for (int i = 0; str[i] != '\0'; i++)
+	{
+		ss << (char)std::toupper(str[i]);
+	}
+		std::string ret = ss.str();
+	return (ret);
+}
 std::string Server::to_lower(std::string &str)
 {
 	std::stringstream ss;
@@ -134,25 +144,30 @@ std::string Server::to_lower(std::string &str)
 	return (ret);
 }
 
+
+
+
+//This will need to be redesigned
+
 void Server::buff_to_string(char *str)
 {
 	//Prepare strings to be split when \n is found ???
 	std::string content;
-	std::cout << "IN ->" << str << "<- ##" << std::endl;
+	std::cout << "IN->" << str << "<-##" << std::endl;
 	std::string line(str);
 	size_t pos = line.find('\r');
-	if (line[pos +1] == '\n')
+	if (line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 line[pos +1] == '\n' to check poss contains \r first
 	{
 		while (pos != std::string::npos)
 		{
-			if (line[pos +1] == '\n')
+			if (line[pos] == '\r' && line[pos +1] == '\n')	//change 01/04/25 12.32 line[pos +1] == '\n' to check poss contains \r first
 			{
 				content = line.substr(0, pos);
 				this->command_list(content);
-				//std::cout << "-->" << content << "<--" << std::endl << std::endl;  // Debug line
+				//std::cout << "-->" << content << "<--" << std::endl << std::endl;  //Debug line
 				line.erase(0, pos+2);
 				pos = line.find('\r');
-				if (!line.empty() && line[pos +1] == '\n')
+				if (!line.empty() && line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 added check for line[pos] == '\r'
 				{
 					//std::cout << line << " WEWO" << std::endl;
 					pos = line.find('\r');
@@ -169,6 +184,6 @@ void Server::buff_to_string(char *str)
 
 //moved all commands to a proper file. redoing buff_to_string to properly trim the incoming strings. 31/3/25 12.11PM
 
-//Issues with CAP sometimes sends end and sometimes wont. 31/03/25 15.21
+//Issues with CAP sometimes sends end and sometimes wont. 31/03/25 15.21 // irssi issue, moving to hexchat 01/04/25
 
-// Next step try listen multiple clients with epoll
+// Next step try listen multiple clients with epoll 
