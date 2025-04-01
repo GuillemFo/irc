@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:04:57 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/03/31 15:28:09 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/01 08:52:33 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /// Needs to be splited properly for each command
 
 
-///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text !!!)
+///transform all tmp to to_uper or to_lower so we can handle and protect properly dup info (except pass text, msg text and  !!!)
 
 void Server::command_list(std::string &str)
 {
@@ -36,7 +36,7 @@ void Server::command_list(std::string &str)
 		}
 		else if (tmp == "ls" || tmp == "LS")
 		{
-			this->send_out("CAP * LS :multi-prefix");
+			this->send_out("CAP * LS: irssi");
 			std::cout << "LS?" << std::endl;
 		}
 		else if (tmp == "end" || tmp == "END")
@@ -90,7 +90,7 @@ void Server::command_list(std::string &str)
 		if (!this->_nick.empty() && !this->_user.empty())
 		{
 			this->set_reg(1);
-			this->welcome_msg(this->_nick); // if i send the welcome it returns the cap end !!! 31/03/25 15.29
+			this->welcome_msg(this->_nick); // if i send the welcome it returns the cap end !!! 31/03/25 15.29 on irssi but not on hexchat
 		}
 	}
 	else if (tmp == "msg")

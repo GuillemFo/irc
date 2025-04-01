@@ -91,3 +91,6 @@ example:
 "<channel> :[[@|+]<nick> [[@|+]<nick> [...]]]"
 
 nc -C ip port to send and test \r\n
+
+
+Hexchat seems a better idea to work than irssi 01/04/25 9.09am
