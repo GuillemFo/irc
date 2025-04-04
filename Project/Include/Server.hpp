@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 13:03:09 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/03 21:32:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,24 @@ class Server
 		int _port;
 		std::string _sv_name;
 		std::string _sv_pass;
-		std::string _nick;
-		std::string _user;
-		bool auth;		//check if pass is ok
-		bool	_reg;	//check if nick and user are stored
+		std::string _nick;	//client side
+		std::string _user;	//client side
+		bool auth;		//check if pass is ok 	//client side
+		bool	_reg;	//check if nick and user are stored 	//client side
 
 	public:
 //Testing
 		int server_fd;	//should go private --->> getter setter
-		int client_fd;	//should go to a map container or client class
+		int client_fd;	//should go to a map container or client class 	//client side
 		struct sockaddr_in server_addr;	//should go private --->> getter setter
-		struct sockaddr_in client_addr;	//should go to the client class or container
-		socklen_t client_addr_len;// = sizeof(client_addr); 	//should go to client class or container
+		struct sockaddr_in client_addr;	//should go to the client class or container 	//client side
+		socklen_t client_addr_len;// = sizeof(client_addr); 	//should go to client class or container 	//client side
 		
 		int					send_out(std::string message);
 		std::string 		to_upper(std::string &str);
 		std::string 		to_lower(std::string &str);
-		void				set_reg(bool i);
-		bool				get_reg() const;
+		void				set_reg(bool i);	//client side
+		bool				get_reg() const;	//client side
 
 		
 		Server();//start protected with a value?
@@ -80,12 +80,12 @@ class Server
 		void				set_pass(const char *str);//setter with char*
 		void				check_port(const std::string &str); //calls setter if all ok
 		int					get_port() const;
-		const std::string	get_nick() const;
-		const std::string	get_name() const;
-		void				set_nick(const std::string &str);
-		void				set_user(const std::string &str);
-		void				set_auth(bool i);
-		bool				get_auth() const;
+		const std::string	get_nick() const;	//client side
+		const std::string	get_name() const;	//client side
+		void				set_nick(const std::string &str);	//client side
+		void				set_user(const std::string &str);	//client side
+		void				set_auth(bool i);	//client side
+		bool				get_auth() const;	//client side
 		bool 				check_pass(std::string &str);
 		void				buff_to_string(char *str);
 		void				set_server_name(const std::string &s);
