@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:04:57 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 13:13:03 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/06 11:08:45 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void Server::command_list(std::string &str)
 	std::cout << C_Y "Command:" C_RESET << str << C_Y "<--" C_RESET <<std::endl;
 
 	std::string tmp;
-	std::stringstream ss(str);
+	std::stringstream ss(str);	//el problema del stringstream es que esta be per treure la 1a string pero pot ser un problema al intentar extreure l'altre info a les hores no se si fer un iterador que retalli fins el primer espai o null
 	ss >> tmp;
 	tmp = to_upper(tmp);
 	if (tmp == "CAP")
