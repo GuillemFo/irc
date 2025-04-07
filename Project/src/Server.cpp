@@ -6,19 +6,19 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/01 14:03:44 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:32:22 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(){}
+Server::Server(int sv_fd, std::string sv_pass, int port) : _sv_fd(sv_fd), _sv_pass(sv_pass), _port(port){}
 
 Server::~Server(){}
 
-Server::Server(const Server &other){*this = other;}
+Server::Server(const Server &other){*this = other;}	//no need??
 
-Server &Server::operator=(const Server &other)
+Server &Server::operator=(const Server &other)	//no need??
 {
 	if (this != &other)
 	{
@@ -30,79 +30,116 @@ Server &Server::operator=(const Server &other)
 
 ///////////////////////////// OUR FUNCTIONS ////////////////////////////////////
 
-void	Server::set_port(const int &nb)
-{
-	this->_port = nb;
-	//Debug
-	std::cout << C_B "Port in:" C_RESET << nb << std::endl;
-}
-
-
-void	Server::set_pass(const std::string &str)
-{
-	this->_sv_pass = str;
-	//Debug
-	std::cout << C_B "Pass in:" C_RESET << str << std::endl;
-}
-
-void	Server::set_pass(const char *str)
-{
-	std::string s(str);
-	this->_sv_pass = s;
-	//Debug
-	std::cout << C_B "Pass in:" C_RESET << str << std::endl;
-}
+int	Server::get_serverFD() {return (this->_sv_fd);}
 
 void	Server::set_server_name(const std::string &s){this->_sv_name = s;}
 
-void	Server::set_nick(const std::string &str){this->_nick = str;}
-void	Server::set_user(const std::string &str){this->_user = str;}
-const 		std::string	Server::get_nick()const {return (this->_nick);}
-const 		std::string	Server::get_name()const {return (this->_nick);}
-bool		Server::get_reg() const{return this->_reg;}
-void		Server::set_auth(bool i){this->auth = i;}
-void		Server::set_reg(bool i){this->_reg = i;}
 
-bool		Server::get_auth()const {return (this->auth);}
-int			Server::get_port()const {return (this->_port);}
+int	Server::get_port()const {return (this->_port);}
 
-bool 		Server::check_pass(std::string &str)
+bool	Server::check_pass(std::string &str)
 {
 	if (str == this->_sv_pass)
 	{
 		return (true);
 	}
-	else
-		return (false);
 	return (false);
 }
 
 
-void	Server::check_port(const std::string &str) //change to a better name
+int	Server::addClientMap(int fd)
 {
-	if (!str.empty())
+	if (_cl_map.find(fd) == _cl_map.end())
 	{
-		for (std::string::size_type i = 0; i < str.length(); ++i)
-		{
-			if (!std::isdigit(str[i]))
-				throw std::string("Non digit for port");
-		}
-		if (str.length() <= 5) // min port 0 max port 65535 //maybe ther is a function to protect this properly for common used ports that are protected
-		{
-			int res = std::atoi(str.c_str());
-			if (res <= 65535 && res >= 0)
-				Server::set_port(res);
-			else
-				throw std::string("Invalid port");
-		}
-		else
-				throw std::string("Invalid port");
+		this->_cl_map.insert(std::pair<int, Client*>(fd, new Client(fd)));
+		return (1);
 	}
 	else
-		throw std::string("Empty string");
+		std::cout << "Client with fd " << fd << " already exists!" << std::endl;
+	return (-1);
 }
 
-void Server::welcome_msg(const std::string &nickname)
+
+
+int	Server::addChannelMap(std::string &str)
+{
+	if (_ch_map.find(str) == _ch_map.end())
+	{
+		this->_ch_map.insert(std::pair<std::string, Channel*>(str, new Channel(str)));
+		return (1);
+	}
+	else
+		std::cout << "Channel with name " << str << " already exists!" << std::endl;
+	return (-1);
+}
+
+
+
+int	Server::addChannelMap(std::string &str, std::string &pw)
+{
+	if (_ch_map.find(str) == _ch_map.end())
+	{
+		this->_ch_map.insert(std::pair<std::string, Channel*>(str, new Channel(str, pw)));
+		return (1);
+	}
+	else
+		std::cout << "Channel with name " << str << " already exists!" << std::endl;
+	return (-1);
+}
+
+
+
+int	Server::rmClientMap(int fd)
+{
+	if (_cl_map.find(fd) == _cl_map.end())
+		std::cout << "Client with fd " << fd << " does not exists!" << std::endl;
+	else
+	{
+		delete this->_cl_map[fd];
+		this->_cl_map.erase(fd);
+		return (1);
+	}
+	return (-1);
+}
+
+
+
+int	Server::rmChannelMap(std::string &str)
+{
+	if (_ch_map.find(str) == _ch_map.end())
+		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
+	else
+	{
+		
+		delete this->_ch_map[str];
+		this->_ch_map.erase(str);
+		return (1);
+	}
+	return (-1);
+}
+
+
+
+int	Server::rmChannelMap(std::string &str, std::string &pw)
+{
+	if (_ch_map.find(str) == _ch_map.end())
+		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
+	else
+	{
+		if (check_pass(pw) == true)	//maybe we need to add a flag to overrule the check if its operator?
+		{
+			delete this->_ch_map[str];
+			this->_ch_map.erase(str);
+			return (1);
+		}
+		else
+			std::cout << "Password missmach for Channel " << str << ". Cannot delete with proper password." << std::endl;
+	}
+	return (-1);
+}
+
+
+void	Server::welcome_msg(const std::string &nickname)
 {
 	std::stringstream message;
 	message << ":" << _sv_name << " 001 " << nickname << " :Welcome to our IRC server " << nickname << "!" << std::endl;
@@ -116,44 +153,10 @@ int	Server::send_out(std::string message)
 	if (bytes_sent < 0)
 	{
 		std::cout << "Error sending message from server to client" << std::endl;
-		close(this->server_fd);
+		close(this->_sv_fd);
 		return (1);
 	}
 	return (0);
-}
-
-
-std::string Server::to_upper(std::string &str)
-{
-	std::stringstream ss;
-	for (int i = 0; str[i] != '\0'; i++)
-	{
-		ss << (char)std::toupper(str[i]);
-	}
-		std::string ret = ss.str();
-	return (ret);
-}
-std::string Server::to_lower(std::string &str)
-{
-	std::stringstream ss;
-	for (int i = 0; str[i] != '\0'; i++)
-	{
-		ss << (char)std::tolower(str[i]);
-	}
-		std::string ret = ss.str();
-	return (ret);
-}
-
-
-std::string replace_tool(std::string str, std::string to_replace, std::string _new)
-{
-	size_t pos = 0;
-	while ((pos = str.find(to_replace, pos)) != std::string::npos)
-	{
-		str.replace(pos, to_replace.length(), _new);
-		pos = (pos  + _new.length());
-	}
-	return (str);
 }
 
 
@@ -201,3 +204,16 @@ void Server::buff_to_string(char *str)
 //Issues with CAP sometimes sends end and sometimes wont. 31/03/25 15.21 // irssi issue, moving to hexchat 01/04/25
 
 // Next step try listen multiple clients with epoll 
+
+
+
+///////////////////////////CLIENT/////////////////////////////////////////////
+void		Server::set_nick(const std::string &str){this->_nick = str;}
+void		Server::set_user(const std::string &str){this->_user = str;}
+const 		std::string	Server::get_nick()const {return (this->_nick);}
+const 		std::string	Server::get_name()const {return (this->_nick);}
+bool		Server::get_reg() const{return this->_reg;}
+void		Server::set_auth(bool i){this->auth = i;}
+void		Server::set_reg(bool i){this->_reg = i;}
+bool		Server::get_auth()const {return (this->auth);}
+//////////////////////////////////////////////////////////////////////////////

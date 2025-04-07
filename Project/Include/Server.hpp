@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 10:10:29 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:31:08 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 #include "Colors.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Tools.hpp"
 
 
 // Need to create a channel once we start the server.
@@ -45,9 +46,9 @@ class Server
 {
 	private:
 		int									_sv_fd;
+		std::string							_sv_pass;
 		int									_port;
 		std::string							_sv_name;
-		std::string							_sv_pass;
 		std::map<int, Client*>				_cl_map;	// int = client_fd
 		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
 		
@@ -63,27 +64,28 @@ class Server
 //Testing
 		
 		int					send_out(std::string message);
-		std::string 		to_upper(std::string &str);
-		std::string 		to_lower(std::string &str);
 
-		Server(int port, int sv_fd);
+		Server(int sv_fd, std::string sv_pass, int port);
 		~Server();
 		Server(const Server &other);
 		Server				&operator=(const Server &other);
 		
 		int					get_serverFD();
 		
-		void				set_port(const int &nb);//setter
 		int					get_port() const;
-		void				check_port(const std::string &str); //calls setter if all ok
 		
-
-		void				set_pass(const std::string &str);//setter
-		void				set_pass(const char *str);//setter with char*
 		bool 				check_pass(std::string &str);
 		
 		//Add client Remove client		// will do new[] and delete
 		//Add channel Remove channel	// will do new[] and delete
+
+		int					addClientMap(int fd);
+		int					addChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
+		int					addChannelMap(std::string &str, std::string &pw);
+		
+		int					rmClientMap(int fd);
+		int					rmChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
+		int					rmChannelMap(std::string &str, std::string &pw);
 
 		void				set_server_name(const std::string &s);
 		void				buff_to_string(char *str);

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 10:06:51 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:21:44 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 
-//Client *clients[fd] = new Client(fd, nickname); !!!!!!!
+//Client *clients[fd] = new Client(fd); !!!!!!!
 class Client
 {
 	private:
