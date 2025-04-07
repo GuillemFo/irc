@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 13:53:56 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:24:57 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int main(int ac, char **av)
 
 	///////////////// Until here all ok /////////////// 07/04/25 13.53
 
-	// move to client!! ??
+	
 	s.client_addr_len = sizeof(s.client_addr);
 	char	buffer[1024];
 	
