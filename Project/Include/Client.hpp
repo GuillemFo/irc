@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 09:46:15 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:06:51 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ class Client
 {
 	private:
 		int 				_client_fd;
-		struct sockaddr_in	_client_addr;
-		socklen_t 			_client_addr_len;
 		std::string 		_nick;
 		std::string 		_user;
 		//maybe we have extra info apart from user, read irc man
@@ -39,12 +37,6 @@ class Client
 		std::string			_string_buff;	//store buffer until \r \n and permission to send. keep storing and remove the part sent. maybe need an int to check the lenght of the string so its easier to cut and to confirm from the server??
 
 		int					get_clientFD();
-
-		void				set_clientAddr(struct sockaddr_in addr);
-		struct sockaddr_in	get_clientAddr();
-
-		void				set_clientAddrLen(socklen_t len);
-		socklen_t			get_clientAddrLen();	
 
 		void				set_nick(const std::string &str);
 		const std::string	get_nick() const;

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 09:56:02 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:07:07 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ class Server
 {
 	private:
 		int									_sv_fd;
-		struct sockaddr_in					_sv_addr;
-		socklen_t							_sv_addr_len;	//tmp for the accept call.
 		int									_port;
 		std::string							_sv_name;
 		std::string							_sv_pass;
@@ -74,12 +72,6 @@ class Server
 		Server				&operator=(const Server &other);
 		
 		int					get_serverFD();
-
-		void				set_serverAddr(struct sockaddr_in addr);
-		struct sockaddr_in	get_serverAddr();
-
-		void				set_serverAddrLen(socklen_t len);
-		socklen_t			get_serverAddrLen();
 		
 		void				set_port(const int &nb);//setter
 		int					get_port() const;
