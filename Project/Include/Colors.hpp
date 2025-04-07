@@ -1,16 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gforns-s.hpp                                       :+:      :+:    :+:   */
+/*   Colors.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/17 08:31:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 07:59:24 by gforns-s         ###   ########.fr       */
+/*   Created: 2025/04/07 08:26:08 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/04/07 08:30:31 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "Server.hpp"
 
-
+////////////COLORS///////////////////
+# define C_R "\x1b[31m" // RED
+# define C_G "\x1b[32m" // GREEN
+# define C_B "\x1b[34m" // BLUE
+# define C_Y "\x1b[33m" // YELLOW
+# define C_M "\x1b[35m" // MAGENTA
+# define C_C "\x1b[36m" // CYAN
+# define C_RESET "\x1b[0m"
+////////////////////////////////////

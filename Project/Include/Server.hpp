@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/03 21:32:52 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/07 09:56:02 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,67 +31,86 @@
 
 #include <cstdio> //perror
 
+#include "Colors.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 
-////////////COLORS///////////////////
-# define C_R "\x1b[31m" // RED
-# define C_G "\x1b[32m" // GREEN
-# define C_B "\x1b[34m" // BLUE
-# define C_Y "\x1b[33m" // YELLOW
-# define C_M "\x1b[35m" // MAGENTA
-# define C_C "\x1b[36m" // CYAN
-# define C_RESET "\x1b[0m"
-////////////////////////////////////
+
+// Need to create a channel once we start the server.
+// Need to give operator permissions to the first client it joins the server or how we stablish an op??
+class Client;
+class Channel;
 
 class Server
 {
 	private:
-		int _port;
-		std::string _sv_name;
-		std::string _sv_pass;
-		std::string _nick;	//client side
-		std::string _user;	//client side
-		bool auth;		//check if pass is ok 	//client side
-		bool	_reg;	//check if nick and user are stored 	//client side
+		int									_sv_fd;
+		struct sockaddr_in					_sv_addr;
+		socklen_t							_sv_addr_len;	//tmp for the accept call.
+		int									_port;
+		std::string							_sv_name;
+		std::string							_sv_pass;
+		std::map<int, Client*>				_cl_map;	// int = client_fd
+		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
+		
+		/////////////////////CLIENT//////////////////////////
+		std::string _nick;
+		std::string _user;
+		bool auth;		//check if pass is ok
+		bool	_reg;	//check if nick and user are stored
+		/////////////////////////////////////////////////////
+
 
 	public:
 //Testing
-		int server_fd;	//should go private --->> getter setter
-		int client_fd;	//should go to a map container or client class 	//client side
-		struct sockaddr_in server_addr;	//should go private --->> getter setter
-		struct sockaddr_in client_addr;	//should go to the client class or container 	//client side
-		socklen_t client_addr_len;// = sizeof(client_addr); 	//should go to client class or container 	//client side
 		
 		int					send_out(std::string message);
 		std::string 		to_upper(std::string &str);
 		std::string 		to_lower(std::string &str);
-		void				set_reg(bool i);	//client side
-		bool				get_reg() const;	//client side
 
-		
-		Server();//start protected with a value?
-		Server(std::string str, int nb);//dunno if it can be started without checking, added just in case
+		Server(int port, int sv_fd, struct sockaddr_in sv_addr);
 		~Server();
 		Server(const Server &other);
 		Server				&operator=(const Server &other);
+		
+		int					get_serverFD();
+
+		void				set_serverAddr(struct sockaddr_in addr);
+		struct sockaddr_in	get_serverAddr();
+
+		void				set_serverAddrLen(socklen_t len);
+		socklen_t			get_serverAddrLen();
+		
 		void				set_port(const int &nb);//setter
+		int					get_port() const;
+		void				check_port(const std::string &str); //calls setter if all ok
+		
+
 		void				set_pass(const std::string &str);//setter
 		void				set_pass(const char *str);//setter with char*
-		void				check_port(const std::string &str); //calls setter if all ok
-		int					get_port() const;
-		const std::string	get_nick() const;	//client side
-		const std::string	get_name() const;	//client side
-		void				set_nick(const std::string &str);	//client side
-		void				set_user(const std::string &str);	//client side
-		void				set_auth(bool i);	//client side
-		bool				get_auth() const;	//client side
 		bool 				check_pass(std::string &str);
-		void				buff_to_string(char *str);
-		void				set_server_name(const std::string &s);
-		void				command_list(std::string &str);
+		
+		//Add client Remove client		// will do new[] and delete
+		//Add channel Remove channel	// will do new[] and delete
 
+		void				set_server_name(const std::string &s);
+		void				buff_to_string(char *str);
+		void				command_list(std::string &str);
 		void				welcome_msg(const std::string &nickname);
+
+		/////////////////////CLIENT//////////////////////////
+		int client_fd;
+		struct sockaddr_in client_addr;
+		socklen_t client_addr_len;// = sizeof(client_addr);
+		void				set_reg(bool i);
+		bool				get_reg() const;
+		const std::string	get_nick() const;
+		const std::string	get_name() const;
+		void				set_nick(const std::string &str);
+		void				set_user(const std::string &str);
+		void				set_auth(bool i);
+		bool				get_auth() const;
+		/////////////////////////////////////////////////////
 
 
 };
