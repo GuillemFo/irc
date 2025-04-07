@@ -6,34 +6,34 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:07:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 11:10:11 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:43:53 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-int	check_port(const std::string &str) //change to a better name
+bool	valid_port(const std::string &str) //change to a better name
 {
 	if (!str.empty())
 	{
 		for (std::string::size_type i = 0; i < str.length(); ++i)
 		{
 			if (!std::isdigit(str[i]))
-				throw std::string("Non digit for port");
+				return (false);
 		}
 		if (str.length() <= 5) // min port 0 max port 65535 //maybe ther is a function to protect this properly for common used ports that are protected
 		{
 			int res = std::atoi(str.c_str());
 			if (res <= 65535 && res >= 0)
-				return(res);
+				return (true);
 			else
-				throw std::string("Invalid port");
+				return (false);
 		}
 		else
-				throw std::string("Invalid port");
+				return (false);
 	}
 	else
-		throw std::string("Empty string");
+		return (false);
 }
 
 std::string to_upper(std::string &str)

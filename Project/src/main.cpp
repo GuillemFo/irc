@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 11:55:27 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:48:13 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,31 @@ Client channel and server are now updated to accept multiple clients. Need to ch
 
 int main(int ac, char **av)
 {
-	Server Server;
-	Server.set_server_name("IRC Server....");
 	try
 	{
 		if (ac != 3)
 			throw std::string("Wrong arguments");
-		Server.check_port(av[1]);
-		std::string in(av[2]);
-		Server.set_pass(in);
-
 	//////////////// TESTING //////////////
+		int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+		if (server_fd < 0)
+		{
+			std::perror("socket");
+			return (-1);
+		}
+		else if (valid_port(av[1]))
+		{
+			std::string in(av[2]);
+			Server Server(server_fd, in, atoi(av[2]));
+		}
+
+
+	Server.set_server_name("IRC Server....");
 
 
 	Server.client_addr_len = sizeof(Server.client_addr);
 	char	buffer[1024];
 	int port = Server.get_port();
 
-	Server.server_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (Server.server_fd < 0)
-	{
-		std::perror("socket");
-		return (1);
-	}
 
 	memset(&Server.server_addr, 0, sizeof(Server.server_addr));
 	Server.server_addr.sin_family = AF_INET; // set IPv4 family
