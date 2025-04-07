@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 12:31:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 13:03:34 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Channel
 		std::string		_chName;
 		std::string		_chTopic;
 		std::string		_chPass;	// if empty no pass need?
-		std::set<int>	_clients;
+		std::set<int>	_clients; //use .find to check if client already on channel or if its operator.
 		std::set<int>	_operators;	//might change to strigns of nicks.
 		bool			_inviteOnly;
 		int				_userLimit;

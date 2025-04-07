@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 12:48:13 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 13:31:19 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,76 +43,83 @@ int main(int ac, char **av)
 			std::perror("socket");
 			return (-1);
 		}
-		else if (valid_port(av[1]))
+		Server s(server_fd, av[1], atoi(av[2]));
+		if (valid_port(av[1]) == false)
 		{
-			std::string in(av[2]);
-			Server Server(server_fd, in, atoi(av[2]));
+			std::perror("Invalid port");
+			return (-1);
 		}
 
+		s.set_server_name("IRC Server....");
 
-	Server.set_server_name("IRC Server....");
 
 
-	Server.client_addr_len = sizeof(Server.client_addr);
+	// move to client!! ??
+	s.client_addr_len = sizeof(s.client_addr);
 	char	buffer[1024];
-	int port = Server.get_port();
+	
 
-
-	memset(&Server.server_addr, 0, sizeof(Server.server_addr));
-	Server.server_addr.sin_family = AF_INET; // set IPv4 family
-	Server.server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
-	Server.server_addr.sin_port = htons(port); // convert port to network byte order // should set the incoming port?
+	struct sockaddr_in server_addr;
+	memset(&server_addr, 0, sizeof(server_addr));
+	server_addr.sin_family = AF_INET; // set IPv4 family
+	server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
+	server_addr.sin_port = htons(s.get_port()); // convert port to network byte order // should set the incoming port?
 
 	//Binding:
-	if (bind(Server.server_fd, (struct sockaddr *)&Server.server_addr, sizeof(Server.server_addr)) < 0)
+	if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
 		std::perror("bind");
-		close(Server.server_fd);
-		return (1);
+		close(s.get_serverFD());
+		return (-1);
 	}
 
 	//Listen:
-	if(listen(Server.server_fd, 5) < 0)
+	if(listen(s.get_serverFD(), 5) < 0)
 	{
 		std::perror("listen");
-		close(Server.server_fd);
-		return (1);
+		close(s.get_serverFD());
+		return (-1);
 	}
 
-	std::cout << "Server Listening on port:" << port << std::endl;
+	std::cout << "Server Listening on port:" << s.get_port() << std::endl;
 
-	//Accept conn
-	Server.client_fd = accept(Server.server_fd, (struct sockaddr *)&Server.client_addr, &Server.client_addr_len);
-	if (Server.client_fd < 0)
-	{
-		std::perror("accept");
-		close(Server.server_fd);
-		return (1);
-	}
 
-	std::cout << "Client connected" <<std::endl;
+	// REDO this with epoll() !!!!! 07/04/25 13.31
+	// //Accept conn
+	// struct sockaddr_in client_addr;
+	// socklen_t client_addr_len;
+	// int client_fd = accept(s.get_serverFD(), (struct sockaddr *)&client_addr, &client_addr_len);
+	// if (client_fd < 0)
+	// {
+	// 	std::perror("accept");
+	// 	close(s.get_serverFD());
+	// 	return (-1);
+	// }
+	// s.addClientMap(client_fd);
 
-	//Read data from cl
-	Server.set_auth(false);
-	Server.set_reg(false);
-	while (1)
-	{
-		ssize_t bytes_read = read(Server.client_fd, buffer, sizeof(buffer) -1);
-		if (bytes_read < 0)
-		{
-			std::perror("read");
-			close(Server.client_fd);
-			close(Server.server_fd);
-			return (1);
-		}
+	// std::cout << "Client connected" <<std::endl;
 
-		buffer[bytes_read] = '\0'; // hard null end buffer
-		Server.buff_to_string(buffer);
-		//std::cout << "Received message: " << buffer <<std::endl;
-	}
+	// //Read data from cl
+	// s.set_auth(false);	//pending to move to client
+	// s.set_reg(false);	//pending to move to client
+	// while (1) //infinite loop
+	// {
+	// 	ssize_t bytes_read = read( , buffer, sizeof(buffer) -1);
+	// 	if (bytes_read < 0)
+	// 	{
+	// 		std::perror("read");
+	// 		close(s.client_fd);
+	// 		close(s.get_serverFD());
+	// 		return (-1);
+	// 	}
 
-	close(Server.client_fd);
-	close(Server.server_fd);
+	// 	buffer[bytes_read] = '\0'; // hard null end buffer
+	// 	s.buff_to_string(buffer);
+	// 	//std::cout << "Received message: " << buffer <<std::endl;
+	// }
+
+	// close(s.client_fd);
+	close(s.get_serverFD());
 	return (0);
 	}
 	catch(std::string &e)
