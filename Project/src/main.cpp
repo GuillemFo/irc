@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 13:31:19 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 13:53:56 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,22 @@ Client channel and server are now updated to accept multiple clients. Need to ch
 */
 
 
+void	setNonBlocking(int sv_fd)
+{
+	int flag = fcntl(sv_fd, F_GETFL, 0);
+	if (flag == -1)
+	{
+		std::perror("fcntl F_GETFL");
+		std::exit(-1);
+	}
+	if (fcntl(sv_fd, F_SETFL, flag | O_NONBLOCK == -1))
+	{
+		std::perror("fcntl F_SETFL");
+		std::exit(-1);
+	}
+}
+
+
 
 int main(int ac, char **av)
 {
@@ -37,13 +53,16 @@ int main(int ac, char **av)
 		if (ac != 3)
 			throw std::string("Wrong arguments");
 	//////////////// TESTING //////////////
-		int server_fd = socket(AF_INET, SOCK_STREAM, 0);
-		if (server_fd < 0)
+		int sv_fd = socket(AF_INET, SOCK_STREAM, 0);
+		if (sv_fd < 0)
 		{
 			std::perror("socket");
 			return (-1);
 		}
-		Server s(server_fd, av[1], atoi(av[2]));
+		setNonBlocking(sv_fd); //set fcntl to non blocking
+
+
+		Server s(sv_fd, av[1], atoi(av[2]));
 		if (valid_port(av[1]) == false)
 		{
 			std::perror("Invalid port");
@@ -52,7 +71,7 @@ int main(int ac, char **av)
 
 		s.set_server_name("IRC Server....");
 
-
+	///////////////// Until here all ok /////////////// 07/04/25 13.53
 
 	// move to client!! ??
 	s.client_addr_len = sizeof(s.client_addr);
@@ -65,8 +84,8 @@ int main(int ac, char **av)
 	server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
 	server_addr.sin_port = htons(s.get_port()); // convert port to network byte order // should set the incoming port?
 
-	//Binding:
-	if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+	//Binding: 
+	if (bind(sv_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
 		std::perror("bind");
 		close(s.get_serverFD());
