@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 10:07:07 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:10:29 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class Server
 		std::string 		to_upper(std::string &str);
 		std::string 		to_lower(std::string &str);
 
-		Server(int port, int sv_fd, struct sockaddr_in sv_addr);
+		Server(int port, int sv_fd);
 		~Server();
 		Server(const Server &other);
 		Server				&operator=(const Server &other);

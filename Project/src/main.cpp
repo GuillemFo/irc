@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 07:50:24 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:13:04 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,18 @@
 Your executable will be run as follows:
 ./ircserv <port> <password>
 */
+
+/*
+Not operational 07/04/25 10.11 need to redo .cpp
+Remember init struct sockaddr_in sv_addr and for client too and same with socklen_t for sv and client addr_lenght
+
+
+
+
+*/
+
+
+
 int main(int ac, char **av)
 {
 	Server Server;
