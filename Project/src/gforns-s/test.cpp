@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 08:10:46 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/08 15:10:07 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/08 15:32:23 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 #define MAX_EVENTS 10
 #define BACKLOG 10
 #define BUFFER_SIZE 1024
+
+//https://www.suchprogramming.com/epoll-in-3-easy-steps/
 
 void setNonBlocking(int fd) {
     int flags = fcntl(fd, F_GETFL, 0);
@@ -112,7 +114,7 @@ int main() {
 
                 // Register client socket
                 ev.events = EPOLLIN | EPOLLET;
-                ev.data.fd = client_fd; /// Working on this at main.cpp line 154 08/04/25 17.10
+                ev.data.fd = client_fd;
                 if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &ev) == -1) {
                     std::perror("epoll_ctl: client_fd");
                     close(client_fd);

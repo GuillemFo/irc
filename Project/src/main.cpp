@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/08 15:10:15 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/08 15:31:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ Your executable will be run as follows:
 //Remember init struct sockaddr_in sv_addr and for client too and same with socklen_t for sv and client addr_lenght
 
 
+//https://www.suchprogramming.com/epoll-in-3-easy-steps/
 
 void	setNonBlocking(int sv_fd)
 {
@@ -66,7 +67,7 @@ int main(int ac, char **av)
 
 		s.set_server_name("IRC Server....");
 
-	///////////////// Until here all ok /////////////// 07/04/25 13.53
+	
 
 	
 	
@@ -152,6 +153,15 @@ int main(int ac, char **av)
 				//Reg cl socket:
 				ev.events = EPOLLIN | EPOLLET;
 				ev.data.fd = cl_fd; //This should go to server class, look on the map and pul the client fd.
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			}
 		}
 	}
@@ -172,5 +182,6 @@ int main(int ac, char **av)
 	
 }
 
+// https://www.suchprogramming.com/epoll-in-3-easy-steps/ 
 
 // Need to prepare epoll, create the user with the incoming fd and store its data.
