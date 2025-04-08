@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 13:51:14 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:40:49 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/epoll.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cstring>
@@ -37,9 +38,10 @@
 #include "Channel.hpp"
 #include "Tools.hpp"
 
+#define HOLD_NON_ACCEPTED 10 //this will set the ammount of connections in hold before start rejecting them if they are not accepted.
 
 // Need to create a channel once we start the server.
-// Need to give operator permissions to the first client it joins the server or how we stablish an op??
+// Need to give operator permissions to the first client it joins the server or how we stablish an initial op??
 class Client;
 class Channel;
 
@@ -47,20 +49,13 @@ class Server
 {
 	private:
 		int									_sv_fd;
+		int									_epoll_fd;
 		std::string							_sv_pass;
 		int									_port;
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;	// int = client_fd
 		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
 		
-		/////////////////////CLIENT//////////////////////////
-		std::string _nick;
-		std::string _user;
-		bool auth;		//check if pass is ok
-		bool	_reg;	//check if nick and user are stored
-		/////////////////////////////////////////////////////
-
-
 	public:
 //Testing
 		
@@ -72,6 +67,9 @@ class Server
 		Server				&operator=(const Server &other);
 		
 		int					get_serverFD();
+
+		void				set_epollFD(int nb);
+		int					get_epollFD();
 		
 		int					get_port() const;
 		
@@ -92,21 +90,6 @@ class Server
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);
 		void				welcome_msg(const std::string &nickname);
-
-		/////////////////////CLIENT//////////////////////////
-		int client_fd;
-		struct sockaddr_in client_addr;
-		socklen_t client_addr_len;// = sizeof(client_addr);
-		void				set_reg(bool i);
-		bool				get_reg() const;
-		const std::string	get_nick() const;
-		const std::string	get_name() const;
-		void				set_nick(const std::string &str);
-		void				set_user(const std::string &str);
-		void				set_auth(bool i);
-		bool				get_auth() const;
-		/////////////////////////////////////////////////////
-
 
 };
 

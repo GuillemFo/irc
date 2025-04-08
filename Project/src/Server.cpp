@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 13:50:56 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:32:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ Server &Server::operator=(const Server &other)	//no need??
 
 
 int	Server::get_serverFD() {return (this->_sv_fd);}
+
+void	Server::set_epollFD(int nb) {this->_epoll_fd = nb;}
+int	Server::get_epollFD() {return (this->_epoll_fd);}
 
 void	Server::set_server_name(const std::string &s){this->_sv_name = s;}
 
@@ -149,7 +152,7 @@ void	Server::welcome_msg(const std::string &nickname)
 	message.clear();
 }
 
-int	Server::send_out(std::string message)
+int	Server::send_out(std::string message)	//redo 08/04/25 16.29
 {
 	ssize_t bytes_sent = send(this->client_fd , message.c_str(), strlen(message.c_str()), 0);
 	if (bytes_sent < 0)
@@ -166,7 +169,7 @@ int	Server::send_out(std::string message)
 
 void Server::buff_to_string(char *str)
 {
-	//Prepare strings to be split when \n is found ???
+	//Prepare strings to be split when \r\n is found ??? 
 	///////// Printing tool to show non printable //////////////////////////
 	std::string test(str);
 	test = replace_tool(test, "\r", "'/r'");
@@ -201,21 +204,3 @@ void Server::buff_to_string(char *str)
 		throw std::string("Exiting");
 }
 
-//moved all commands to a proper file. redoing buff_to_string to properly trim the incoming strings. 31/3/25 12.11PM
-
-//Issues with CAP sometimes sends end and sometimes wont. 31/03/25 15.21 // irssi issue, moving to hexchat 01/04/25
-
-// Next step try listen multiple clients with epoll 
-
-
-
-///////////////////////////CLIENT/////////////////////////////////////////////
-void		Server::set_nick(const std::string &str){this->_nick = str;}
-void		Server::set_user(const std::string &str){this->_user = str;}
-const 		std::string	Server::get_nick()const {return (this->_nick);}
-const 		std::string	Server::get_name()const {return (this->_nick);}
-bool		Server::get_reg() const{return this->_reg;}
-void		Server::set_auth(bool i){this->auth = i;}
-void		Server::set_reg(bool i){this->_reg = i;}
-bool		Server::get_auth()const {return (this->auth);}
-//////////////////////////////////////////////////////////////////////////////
