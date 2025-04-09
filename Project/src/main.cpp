@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/08 15:31:50 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/09 11:06:45 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,21 +147,27 @@ int main(int ac, char **av)
 					std::perror("accept");
 					continue ;
 				}
-				s.addClientMap(cl_fd);
-				setNonBlocking(cl_fd);	//This should go to server class, look on the map and pul the client fd.
+				setNonBlocking(cl_fd);
 				
 				//Reg cl socket:
 				ev.events = EPOLLIN | EPOLLET;
-				ev.data.fd = cl_fd; //This should go to server class, look on the map and pul the client fd.
-			
-			
-			
-			
-			
-			
-			
-			
-			
+				ev.data.fd = cl_fd;
+				if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
+				{
+					std::perror("epoll_ctl: client fd");
+					close(cl_fd);
+					continue ;
+				}
+				else
+				{
+					s.addClientMap(cl_fd);
+					std::cout << C_Y "New client connected: fd " C_RESET << cl_fd << std::endl;
+				}
+			}
+			else
+			{
+				// handle client data
+				//need to read... 
 			}
 		}
 	}
