@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/09 11:06:45 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/09 11:09:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ int main(int ac, char **av)
 			{
 				// handle client data
 				//need to read... 
+				//should i reuse what i had before or redo? FORCED TO REDO DUE MANY EPOLL CONTROL CHANGES
 			}
 		}
 	}
