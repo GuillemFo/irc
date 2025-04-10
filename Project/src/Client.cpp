@@ -6,20 +6,14 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 11:26:54 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:05:37 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-Client::Client(int cl_fd) : _client_fd(cl_fd)
-{
-	//new[] ??? or at server
-}
+Client::Client(int cl_fd) : _client_fd(cl_fd) {}
 
-Client::~Client()
-{
-	//delete???
-}
+Client::~Client() {}
 
 Client::Client(const Client &other){*this = other;}
 
@@ -42,7 +36,7 @@ void				Client::set_user(const std::string &str){this->_user = str;}
 const std::string	Client::get_user()const {return (this->_user);}
 
 void				Client::set_auth(bool i){this->_auth = i;}
-bool				Server::get_auth()const {return (this->auth);}
+bool				Client::get_auth()const {return (this->_auth);}
 
 void				Client::set_reg(bool i){this->_reg = i;}
 bool				Client::get_reg() const{return this->_reg;}

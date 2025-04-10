@@ -6,13 +6,13 @@
 #    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/03/31 14:00:50 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/04/10 09:55:22 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
-SRC = main.cpp Server.cpp Commands.cpp
+SRC = main.cpp Server.cpp Commands.cpp Client.cpp Channel.cpp Tools.cpp
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address
 
@@ -31,7 +31,7 @@ OBJ = $(addprefix $(TMP), $(SRC_PREFIX:.cpp=.o))
 DEP = $(OBJ:.o=.d)
 
 #### PATHS FOR Guille
-SRC_G = test.cpp
+SRC_G = 
 
 SRC_F_G = src/gforns-s/
 

@@ -3,22 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:04:57 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/06 11:08:45 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/10 10:03:29 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 
-
-/// Needs to be splited properly for each command
-
-
 ///transform tmp to to_upper (only first because will be the command) and all tmp else to_lower so we can handle and protect properly dup info (except pass text & msg text!!!)
 
+
+//REDO with proper class depending of each client. will need fd and str i guess. 10/04/25 9.48
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 void Server::command_list(std::string &str)
 {
 	if (str.empty())
@@ -144,3 +157,4 @@ void Server::command_list(std::string &str)
 
 }
 
+*/

@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/09 11:09:04 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/10 10:02:16 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-
+#include "Tools.hpp"
 
 /*
 Your executable will be run as follows:
 ./ircserv <port> <password>
 */
-
-//Remember init struct sockaddr_in sv_addr and for client too and same with socklen_t for sv and client addr_lenght
 
 
 //https://www.suchprogramming.com/epoll-in-3-easy-steps/
@@ -31,7 +29,7 @@ void	setNonBlocking(int sv_fd)
 		std::perror("fcntl F_GETFL");
 		std::exit(-1);
 	}
-	if (fcntl(sv_fd, F_SETFL, flag | O_NONBLOCK == -1))
+	if (fcntl(sv_fd, F_SETFL, flag | (O_NONBLOCK == -1)))
 	{
 		std::perror("fcntl F_SETFL");
 		std::exit(-1);
@@ -42,15 +40,12 @@ void	setNonBlocking(int sv_fd)
 
 int main(int ac, char **av)
 {
-	//Needed to work
 	int sv_fd, epoll_fd;
-    struct sockaddr_in server_addr;
 
 	try
 	{
 		if (ac != 3)
 			throw std::string("Wrong arguments");
-	//////////////// TESTING //////////////
 		sv_fd = socket(AF_INET, SOCK_STREAM, 0);
 		if (sv_fd < 0)
 		{
@@ -62,10 +57,19 @@ int main(int ac, char **av)
 			std::perror("Invalid port");
 			return (-1);
 		}
+		
+
+	/*
+		10/04/25 9.58 RN we missing password check, string parsing and command control.
+	
+	
+	
+	*/
+
 		setNonBlocking(sv_fd); //set fcntl to non blocking
 		Server s(sv_fd, av[1], atoi(av[2]));
 
-		s.set_server_name("IRC Server....");
+		s.set_server_name("IRC_Server....");
 
 	
 
@@ -167,19 +171,37 @@ int main(int ac, char **av)
 			else
 			{
 				// handle client data
-				//need to read... 
-				//should i reuse what i had before or redo? FORCED TO REDO DUE MANY EPOLL CONTROL CHANGES
+				ssize_t count = read(fd, buffer, BUFFER_SIZE);
+				if (count == -1)
+				{
+                    std::perror("read");
+                    close(fd);
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+                }
+				else if (count == 0)
+				{
+					std::cout << "Client disconnected: fd " << fd << std::endl;
+					close(fd);
+					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+				}
+				else
+				{
+					buffer[count] = '\0';
+					std::cout << "Received from " << fd << ": " << buffer;
+					// Echo back
+					ssize_t sent = send(fd, buffer, count, 0);
+					if (sent == -1)
+					{
+						std::perror("send");
+						close(fd);
+						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+					}
+				}
 			}
 		}
 	}
-
-
-
-
-
-
-
 	close(s.get_serverFD());
+	close(s.get_epollFD());
 	return (0);
 	}
 	catch(std::string &e)
@@ -190,5 +212,3 @@ int main(int ac, char **av)
 }
 
 // https://www.suchprogramming.com/epoll-in-3-easy-steps/ 
-
-// Need to prepare epoll, create the user with the incoming fd and store its data.

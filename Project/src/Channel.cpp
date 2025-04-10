@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 12:07:13 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:05:52 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ Channel::Channel(std::string name) : _chName(name) {}
 
 Channel::Channel(std::string name, std::string pass) : _chName(name), _chPass(pass) {}
 
-Channel::~Channel()
-{
-	//destroy ??
-}
+Channel::~Channel() {}
 
 Channel::Channel(const Channel &other) {*this = other;}
 

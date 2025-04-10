@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/08 14:32:52 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/10 09:55:38 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,25 +144,25 @@ int	Server::rmChannelMap(std::string &str, std::string &pw)
 }
 
 
-void	Server::welcome_msg(const std::string &nickname)
-{
-	std::stringstream message;
-	message << ":" << _sv_name << " 001 " << nickname << " :Welcome to our IRC server " << nickname << "!" << std::endl;
-	this->send_out(message.str());
-	message.clear();
-}
+// void	Server::welcome_msg(const std::string &nickname)
+// {
+// 	std::stringstream message;
+// 	message << ":" << _sv_name << " 001 " << nickname << " :Welcome to our IRC server " << nickname << "!" << std::endl;
+// 	this->send_out(message.str());
+// 	message.clear();
+// }
 
-int	Server::send_out(std::string message)	//redo 08/04/25 16.29
-{
-	ssize_t bytes_sent = send(this->client_fd , message.c_str(), strlen(message.c_str()), 0);
-	if (bytes_sent < 0)
-	{
-		std::cout << "Error sending message from server to client" << std::endl;
-		close(this->_sv_fd);
-		return (1);
-	}
-	return (0);
-}
+// int	Server::send_out(std::string message)	//redo 08/04/25 16.29
+// {
+// 	ssize_t bytes_sent = send(this->client_fd , message.c_str(), strlen(message.c_str()), 0);
+// 	if (bytes_sent < 0)
+// 	{
+// 		std::cout << "Error sending message from server to client" << std::endl;
+// 		close(this->_sv_fd);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 
 //This will need to be redesigned
@@ -187,7 +187,7 @@ void Server::buff_to_string(char *str)
 			if (line[pos] == '\r' && line[pos +1] == '\n')	//change 01/04/25 12.32 line[pos +1] == '\n' to check poss contains \r first
 			{
 				content = line.substr(0, pos);
-				this->command_list(content);
+				//this->command_list(content);
 				line.erase(0, pos+2);
 				pos = line.find('\r');
 				if (!line.empty() && line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 added check for line[pos] == '\r'
@@ -198,7 +198,7 @@ void Server::buff_to_string(char *str)
 		}
 		pos = line.find('\n');
 		content = line.substr(0, pos);
-		this->command_list(content);
+		//this->command_list(content);
 	}
 	else
 		throw std::string("Exiting");
