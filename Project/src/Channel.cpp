@@ -6,60 +6,116 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 10:05:52 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 13:09:32 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-Channel::Channel(std::string name) : _chName(name) {}
+Channel::Channel(std::string name) : _Name(name) {}
 
-Channel::Channel(std::string name, std::string pass) : _chName(name), _chPass(pass) {}
+Channel::Channel(std::string channelName, Server *myserver)
+{
+	_Name = channelName;
+	_myserver = myserver;
+	_Topic = std::string();
+	_key = std::string();
+	_inviteOnly = false;
+	_protectTopic = false;
+	_clientLimit = 0;
+}
+
 
 Channel::~Channel() {}
 
 Channel::Channel(const Channel &other) {*this = other;}
 
-Channel 			&Channel::operator=(const Channel &other)
-{
-	if (this != &other)
-	{
-		this->_chName = other._chName;
-		this->_chPass = other._chPass;
-		this->_chTopic = other._chTopic;
-	}
-	return (*this);
-}
 
-const std::string	Channel::get_name() const {return (this->_chName);}
+const std::string	Channel::get_name() const {return (this->_Name);}
 
-void				Channel::set_topic(const std::string &str) {this->_chTopic = str;}
+void				Channel::set_topic(const std::string &str) {this->_Topic = str;}
 
-const std::string	Channel::get_topic() const {return (this->_chTopic);}
+const std::string	Channel::get_topic() const {return (this->_Topic);}
 
-void				Channel::set_pass(std::string &str) {this->_chPass = str;}
+void				Channel::set_pass(std::string &str) {this->_key = str;}
 
 bool 				Channel::check_pass(std::string &str)
 {
-	if (str == this->_chPass)
+	if (str == this->_key)
 	{
 		return (true);
 	}
 	return (false);
 }
 
-void				Channel::set_userLimit(int nb) {this->_userLimit = nb;}
 
-int					Channel::get_userLimit() {return (this->_userLimit);}
+Channel::~Channel()
+{
+	// remove channel from client map of channels
+	std::map<std::string, Client *>::iterator it;
+	for (it = _clients.begin(); it != _clients.end(); ++it) {
+        it->second->partChannel(_Name);  //it can be a loop********
+    }
+	for (it = _opclients.begin(); it != _opclients.end(); ++it) {
+        it->second->partChannel(_Name);  //it can be a loop********
+    }
+}
 
-void				Channel::add_client(int fd) {this->_clients.insert(fd);}
 
-std::set<int>		Channel::get_clients() const {return (_clients);}
+void	Channel::addClient(Client *theClient)
+{
+	// once the join channel is succesful --> add client to the map _clients
+	_clients[theClient->getNick()] = theClient;
+}
+void	Channel::addOperator(Client *theClient)
+{
+	_opclients[theClient->getNick()] = theClient;
+}
 
-void				Channel::add_op(int fd) {this->_operators.insert(fd);}
+void	Channel::remClient(std::string clientNick)
+{
+	int d = _clients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
+}
+void	Channel::remOperator(std::string clientNick)
+{
+	int d = _opclients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
+}
 
-std::set<int>		Channel::get_ops() const {return (_operators);}
-
-void				Channel::set_invOnly(bool nb) {this->_inviteOnly = nb;}
-
-bool				Channel::get_invOnly() const {return (this->_inviteOnly);}
+bool		Channel::isMember(std::string clientNick)
+{
+	std::map<std::string, Client *>::iterator it;
+	
+	it = _clients.find(clientNick);
+	if (it != _clients.end())
+	return true;
+	it = _opclients.find(clientNick);
+	if (it != _opclients.end())
+	return true;
+	return false;
+}
+bool		Channel::isOperator(std::string clientNick)
+{
+	std::map<std::string, Client *>::iterator it;
+	
+	it = _opclients.find(clientNick);
+	if (it != _opclients.end())
+	return true;
+	return false;
+}
+bool		Channel::isInviteOnly()
+{
+	return	_inviteOnly;
+}
+bool		Channel::isTopicProtected()
+{
+	return	_protectTopic;
+}
+bool		Channel::isChannelFull()
+{
+	if (_clientLimit > 0)
+	{
+		if ((_clients.size() + _opclients.size()) >= _clientLimit)
+			return true;
+	}
+	return false;
+}

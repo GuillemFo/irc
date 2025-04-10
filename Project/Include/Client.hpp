@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 11:21:44 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 13:39:14 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,32 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 
-//Client *clients[fd] = new Client(fd); !!!!!!!
+
+#define NICK_NOT_ALLOWED_CHARS " ,*?!@" // nick can't cotain this chars
+#define NICK_NOT_STARTING "$:"
+#define PREFIX "@" // the only channel membership allowed would be operator
+					// the char . should not be included in nickname
+#define USERLEN	64 //length of username in USER message 
+#define USER_NOT_ALLOWED_CHARS " \0\r\n"
+
+#define NICKLEN	31 // MUST BE specified, 30 or 31 are typical values 
+
 class Client
 {
 	private:
+		Server *_myServer; // to get the details and functions of the server
 		int 				_client_fd;
 		std::string 		_nick;
 		std::string 		_user;
-		//maybe we have extra info apart from user, read irc man
+		std::string 		_realname;
+		bool				_passok;	//password received and OK
+		bool				_registered; //registration process OK
+		std::map<std::string, Channel*> _channels; //list of channels joined
 
-		/////////////// This 2 down have shit names, pending to change for clarity
-		bool 				_auth;	//check if pass is ok
-		bool				_reg;	//check if nick and user are stored
 
 	public:
 		Client(int fd);	//to at least know who to send the errors
+		Client(Server *theServer, int _client_fd); 
 		~Client();
 		Client(const Client &other);
 		Client &operator=(const Client &other);
@@ -42,12 +53,20 @@ class Client
 		const std::string	get_nick() const;
 
 		void				set_user(const std::string &str);
+		void				setUser(std::string theName, std::string theReal);
 		const std::string	get_user() const;
 		
-		void				set_auth(bool i);
-		bool				get_auth() const;
+		void	setPassOK(); //set to true. In the constructor would be false
+		void	setRegistered(); //set to true. In the constructor would be false
+		void	joinChannel(std::string channelName);
+		void	partChannel(std::string channelName);
 		
-		void				set_reg(bool i);
-		bool				get_reg() const;
+		//getters
+		std::string	getNick();
+		std::string	getLowerNick();
+		std::string	getSource(); // : <nickname> [ "!" <user> ] [ "@" <host> ]
+		bool		isRegistered();
+		
+	
 
 };

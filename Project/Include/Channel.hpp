@@ -6,14 +6,21 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/07 13:03:34 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 13:09:12 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "Server.hpp"
 #include "Client.hpp"
-#include <set>	//to store client fd or nick and operators
+
+#define CHANTYPES	"&#" //Channel types prefix supported
+#define CHANNELLEN	64	 // MUST be specified
+#define CHANNEL_NOT_ALLOWED_CHARS " \a,"	//space, bell and comma
+#define CHANNELMODES "itkol"
+
+#define TOPICLEN 307	// MUST be defined. 307 is the typical value
+
 
 class Client ;
 
@@ -21,17 +28,19 @@ class Client ;
 class Channel
 {
 	private:
-		std::string		_chName;
-		std::string		_chTopic;
-		std::string		_chPass;	// if empty no pass need?
-		std::set<int>	_clients; //use .find to check if client already on channel or if its operator.
-		std::set<int>	_operators;	//might change to strigns of nicks.
+		Server		*_myserver;
+		std::string		_Name;
+		std::string		_Topic;
+		std::string		_key;	// if empty no pass need?
+		std::map<std::string, Client *> _clients; // list of regular clients 
+		std::map<std::string, Client *> _opclients; // list of operator clients 
+		bool		_protectTopic;
 		bool			_inviteOnly;
-		int				_userLimit;
+		int			_clientLimit;
 		
 	public:
 		Channel(std::string name);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		Channel(std::string name, std::string password);	//need to explore if we need more types to be irc compliant.
+		Channel(std::string channelName, Server *myserver);
 		~Channel();
 		Channel(const Channel &other);
 		Channel &operator=(const Channel &other);
@@ -47,14 +56,17 @@ class Channel
 		void				set_userLimit(int nb);
 		int					get_userLimit();
 		
-		void				add_client(int fd);
-		std::set<int>		get_clients() const;
-
-		void				add_op(int fd);
-		std::set<int>		get_ops() const;
+		void	addClient(Client *theClient);
+		void	addOperator(Client *theClient);
+		void	remClient(std::string clientNick);
+		void	remOperator(std::string clientNick);
+		bool		isMember(std::string clientNick);
+		bool		isOperator(std::string clientNick);
+		bool		isInviteOnly();
+		bool		isTopicProtected();
+		bool		isChannelFull();
 		
-		void				set_invOnly(bool);
-		bool				get_invOnly() const;
+	
 
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/08 14:40:49 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/10 14:04:13 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ class Server
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;	// int = client_fd
 		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
-		
+		//**faltaria timestamp d'inici, pel RPL_STATSUPTIME
+		//**server version and MOTD
+		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
 //Testing
 		

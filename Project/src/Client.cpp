@@ -6,12 +6,13 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 10:05:37 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 13:56:05 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 Client::Client(int cl_fd) : _client_fd(cl_fd) {}
+Client::Client(Server *theServer, int cl_fd) : _myServer(theServer) , _client_fd(cl_fd) {}
 
 Client::~Client() {}
 
@@ -35,9 +36,36 @@ const std::string	Client::get_nick()const {return (this->_nick);}
 void				Client::set_user(const std::string &str){this->_user = str;}
 const std::string	Client::get_user()const {return (this->_user);}
 
-void				Client::set_auth(bool i){this->_auth = i;}
-bool				Client::get_auth()const {return (this->_auth);}
 
-void				Client::set_reg(bool i){this->_reg = i;}
-bool				Client::get_reg() const{return this->_reg;}
+// To dev properly
+void				Client::setUser(std::string theName, std::string theReal)
+{
+
+}
+void	Client::setPassOK() //set to true. In the constructor would be false
+{
+	
+}
+void	Client::setRegistered() //set to true. In the constructor would be false
+{
+	
+}		
+//getters
+std::string	Client::getNick()
+{
+	
+}
+std::string	Client::getLowerNick()
+{
+	
+}
+std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
+{
+	
+}
+bool		Client::isRegistered()
+{
+	
+}
+
 

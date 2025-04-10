@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 11:47:09 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 14:01:17 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,6 @@ int	Server::addChannelMap(std::string &str)
 }
 
 
-
-int	Server::addChannelMap(std::string &str, std::string &pw)
-{
-	if (_ch_map.find(str) == _ch_map.end())
-	{
-		this->_ch_map.insert(std::pair<std::string, Channel*>(str, new Channel(str, pw)));
-		return (1);
-	}
-	else
-		std::cout << "Channel with name " << str << " already exists!" << std::endl;
-	return (-1);
-}
-
-
-
 int	Server::rmClientMap(int fd)
 {
 	if (_cl_map.find(fd) == _cl_map.end())
@@ -116,7 +101,7 @@ int	Server::rmClientMap(int fd)
 
 
 
-int	Server::rmChannelMap(std::string &str)
+int	Server::rmChannelMap(std::string &str) // not needed by subject
 {
 	if (_ch_map.find(str) == _ch_map.end())
 		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
@@ -130,25 +115,6 @@ int	Server::rmChannelMap(std::string &str)
 	return (-1);
 }
 
-
-
-int	Server::rmChannelMap(std::string &str, std::string &pw)
-{
-	if (_ch_map.find(str) == _ch_map.end())
-		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
-	else
-	{
-		if (check_pass(pw) == true)	//maybe we need to add a flag to overrule the check if its operator?
-		{
-			delete this->_ch_map[str];
-			this->_ch_map.erase(str);
-			return (1);
-		}
-		else
-			std::cout << "Password missmach for Channel " << str << ". Cannot delete with proper password." << std::endl;
-	}
-	return (-1);
-}
 
 
 // void	Server::welcome_msg(const std::string &nickname)
