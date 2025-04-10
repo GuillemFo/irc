@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 09:55:38 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:47:09 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,14 @@
 
 Server::Server(int sv_fd, std::string sv_pass, int port) : _sv_fd(sv_fd), _sv_pass(sv_pass), _port(port){}
 
-Server::~Server(){}
+Server::~Server()
+{
+	// loop to delete all clients and channels due new[] in each map!!
+	// delete ->second (as the exam :) )
+	// dont forget to .clear _cl_map and _ch_map
+
+
+}
 
 Server::Server(const Server &other){*this = other;}	//no need??
 
