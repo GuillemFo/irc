@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 13:09:12 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:37:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 
 class Client ;
+class Server ;
 
 //Channel *channels[channelName] = new Channel(channelName); !!!!!!!
 class Channel
@@ -56,15 +57,15 @@ class Channel
 		void				set_userLimit(int nb);
 		int					get_userLimit();
 		
-		void	addClient(Client *theClient);
-		void	addOperator(Client *theClient);
-		void	remClient(std::string clientNick);
-		void	remOperator(std::string clientNick);
-		bool		isMember(std::string clientNick);
-		bool		isOperator(std::string clientNick);
-		bool		isInviteOnly();
-		bool		isTopicProtected();
-		bool		isChannelFull();
+		void				addClient(Client *theClient);
+		void				addOperator(Client *theClient);
+		void				remClient(std::string clientNick);
+		void				remOperator(std::string clientNick);
+		bool				isMember(std::string clientNick);
+		bool				isOperator(std::string clientNick);
+		bool				isInviteOnly();
+		bool				isTopicProtected();
+		bool				isChannelFull();
 		
 	
 

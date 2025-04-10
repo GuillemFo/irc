@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 13:39:14 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:47:15 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 #define USER_NOT_ALLOWED_CHARS " \0\r\n"
 
 #define NICKLEN	31 // MUST BE specified, 30 or 31 are typical values 
+
+class Server ;
+class Channel ;
 
 class Client
 {
@@ -53,7 +56,7 @@ class Client
 		const std::string	get_nick() const;
 
 		void				set_user(const std::string &str);
-		void				setUser(std::string theName, std::string theReal);
+		void				setRealName(std::string &str);
 		const std::string	get_user() const;
 		
 		void	setPassOK(); //set to true. In the constructor would be false
@@ -62,7 +65,6 @@ class Client
 		void	partChannel(std::string channelName);
 		
 		//getters
-		std::string	getNick();
 		std::string	getLowerNick();
 		std::string	getSource(); // : <nickname> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();

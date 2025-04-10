@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 13:09:32 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:53:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ Channel::Channel(std::string channelName, Server *myserver)
 }
 
 
-Channel::~Channel() {}
-
-Channel::Channel(const Channel &other) {*this = other;}
+//Channel::Channel(const Channel &other) {*this = other;}
 
 
 const std::string	Channel::get_name() const {return (this->_Name);}
@@ -51,6 +49,7 @@ bool 				Channel::check_pass(std::string &str)
 
 Channel::~Channel()
 {
+	/*
 	// remove channel from client map of channels
 	std::map<std::string, Client *>::iterator it;
 	for (it = _clients.begin(); it != _clients.end(); ++it) {
@@ -59,19 +58,21 @@ Channel::~Channel()
 	for (it = _opclients.begin(); it != _opclients.end(); ++it) {
         it->second->partChannel(_Name);  //it can be a loop********
     }
+	*/
 }
 
 
 void	Channel::addClient(Client *theClient)
 {
 	// once the join channel is succesful --> add client to the map _clients
-	_clients[theClient->getNick()] = theClient;
+	_clients[theClient->get_nick()] = theClient;
 }
 void	Channel::addOperator(Client *theClient)
 {
-	_opclients[theClient->getNick()] = theClient;
+	_opclients[theClient->get_nick()] = theClient;
 }
 
+/*
 void	Channel::remClient(std::string clientNick)
 {
 	int d = _clients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
@@ -80,6 +81,7 @@ void	Channel::remOperator(std::string clientNick)
 {
 	int d = _opclients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
 }
+*/
 
 bool		Channel::isMember(std::string clientNick)
 {
@@ -110,12 +112,15 @@ bool		Channel::isTopicProtected()
 {
 	return	_protectTopic;
 }
+
+/*
 bool		Channel::isChannelFull()
 {
 	if (_clientLimit > 0)
 	{
 		if ((_clients.size() + _opclients.size()) >= _clientLimit)
-			return true;
+		return true;
 	}
 	return false;
 }
+*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 13:56:05 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:52:00 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ const std::string	Client::get_user()const {return (this->_user);}
 
 
 // To dev properly
-void				Client::setUser(std::string theName, std::string theReal)
-{
-
-}
+void				Client::setRealName(std::string &str) {this->_realname = str;}
 void	Client::setPassOK() //set to true. In the constructor would be false
 {
 	
@@ -50,22 +47,33 @@ void	Client::setRegistered() //set to true. In the constructor would be false
 {
 	
 }		
-//getters
-std::string	Client::getNick()
-{
-	
-}
+
+
+/*
 std::string	Client::getLowerNick()
 {
 	
 }
+*/
+
+/*
 std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
 {
 	
 }
-bool		Client::isRegistered()
+*/
+
+
+bool		Client::isRegistered() {return this->_registered;}
+
+void	partChannel(std::string &channelName) 
 {
-	
+	std::cout << channelName << std::endl;
+}
+
+void	joinChannel(std::string &channelName)
+{
+	std::cout << channelName << std::endl;
 }
 
 
