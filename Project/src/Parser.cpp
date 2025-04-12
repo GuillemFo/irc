@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/12 18:40:05 by rzhdanov         ###   ########.fr       */
+/*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
+/*   Updated: 2025/04/12 18:40:39 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parser.hpp"
-#include "Command.hpp"
+#include <sstream>
 
-int main() {
-	Parser parser;
-	Command cmd = parser.parse("PRIVMSG Bob Hello World");
-	cmd.printCommand();
-	return 0;
+Parser::Parser () {}
+
+Command Parser::parse(const std::string& line) {
+	Command cmd;
+	std::istringstream iss(line);
+	std::string word;
+	
+	if (iss >> word) {
+		cmd.setName(word);
+		while (iss >> word) {
+			cmd.addArg(word);
+		}
+	}
+
+	
+	return cmd;
 }
-
-// https://www.suchprogramming.com/epoll-in-3-easy-steps/ 

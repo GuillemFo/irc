@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Parser.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/12 18:40:05 by rzhdanov         ###   ########.fr       */
+/*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
+/*   Updated: 2025/04/12 18:40:28 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Parser.hpp"
-#include "Command.hpp"
+#ifndef PARSER_HPP
+# define PARSER_HPP
 
-int main() {
-	Parser parser;
-	Command cmd = parser.parse("PRIVMSG Bob Hello World");
-	cmd.printCommand();
-	return 0;
-}
+# include <string>
+# include "Command.hpp"
 
-// https://www.suchprogramming.com/epoll-in-3-easy-steps/ 
+class Parser {
+	public:
+		Parser();
+		Command parse(const std::string& line);
+};
+#endif
