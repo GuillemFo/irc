@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:44:56 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/12 19:01:02 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:09:35 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "Command.hpp"
 
 Command::Command() {}
-Command::~Command() {}
 Command::Command(const Command& src)
 	: _name(src._name), _args(src._args) {
 }
@@ -25,6 +24,7 @@ Command& Command::operator=(const Command& src) {
 	}
 	return *this;
 }
+Command::~Command() {}
 void Command::setName(const std::string& name) {
 	this->_name = name;
 }

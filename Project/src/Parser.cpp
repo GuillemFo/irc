@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/12 19:06:54 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:58:01 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <sstream>
 
 Parser::Parser () {}
-Parser::~Parser () {}
 Parser::Parser(const Parser& src) {
 	//just to maintain canonical form; parser will be called ad hoc and will
 	//not have any data members. cleaner this way
@@ -26,19 +25,34 @@ Parser& Parser::operator=(const Parser& src) {
 	}
 	return *this;
 }
+Parser::~Parser () {}
 
 Command Parser::parse(const std::string& line) {
 	Command cmd;
 	std::istringstream iss(line);
 	std::string word;
+	if (!(iss >> word))
+		return cmd;
 	
-	if (iss >> word) {
-		cmd.setName(word);
-		while (iss >> word) {
+	bool trailing = false;
+	std::string trailingArg;
+	
+	while (iss >> word) {
+		if (!trailing && word[0] == ':') {
+			trailing = true;
+			trailingArg = word.substr(1);
+			std::string rest;
+			std::getline(iss, rest);
+			trailingArg += rest;
+			cmd.addArg(trailingArg);
+		}
+		else if(!trailing) {
 			cmd.addArg(word);
 		}
+		else {
+			std::cout << "You are not supposed to get here! Check " <<
+			"the parsing logic!" << std::endl;
+		}
 	}
-
-	
 	return cmd;
 }
