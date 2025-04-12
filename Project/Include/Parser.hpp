@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/12 18:40:28 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:02:06 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 class Parser {
 	public:
 		Parser();
+		Parser(const Parser& src);
+		Parser& operator=(const Parser& src);
+		~Parser();
 		Command parse(const std::string& line);
 };
 #endif

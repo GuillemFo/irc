@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/12 18:40:39 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:06:54 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include <sstream>
 
 Parser::Parser () {}
+Parser::~Parser () {}
+Parser::Parser(const Parser& src) {
+	//just to maintain canonical form; parser will be called ad hoc and will
+	//not have any data members. cleaner this way
+	(void) src;
+}
+Parser& Parser::operator=(const Parser& src) {
+	if (this != &src) {
+		//nothing to do here as there are no data members in a Parser object
+	}
+	return *this;
+}
 
 Command Parser::parse(const std::string& line) {
 	Command cmd;
