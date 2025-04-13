@@ -13,6 +13,9 @@
 #pragma once
 
 /********* ERRORS ***********/
+/* Generic errors */
+#define ERR_INPUTTOOLONG		"417"
+#define ERR_UNKNOWNCOMMAND		"422"
 /* Registration/Connection Errors */
 #define ERR_NEEDMOREPARAMS		"461"  // Not enough parameters for command
 #define ERR_ALREADYREGISTERED 	"462"  // Client already registered

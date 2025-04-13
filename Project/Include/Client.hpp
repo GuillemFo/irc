@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 23:47:15 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/13 18:09:45 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ class Client
 		
 		//getters
 		std::string	getLowerNick();
-		std::string	getSource(); // : <nickname> [ "!" <user> ] [ "@" <host> ]
+		std::string	getClient(); // <nickname> [ "!" <user> ] [ "@" <host> ]
+		std::string	getSource(); // :<nickname> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();
 		
 	
