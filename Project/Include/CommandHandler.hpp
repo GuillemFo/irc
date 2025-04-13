@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Parser.hpp                                         :+:      :+:    :+:   */
+/*   CommandHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/13 14:10:13 by rzhdanov         ###   ########.fr       */
+/*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
+/*   Updated: 2025/04/13 21:23:55 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_HPP
-# define PARSER_HPP
+#ifndef COMMANDHANDLER_HPP
+# define COMMANDHANDLER_HPP
 
-# include <string>
-# include <sstream>
+# include "Parser.hpp"
 # include "Command.hpp"
+# include "Client.hpp"
 
-class Parser {
+class CommandHandler {
 	public:
-		Parser();
-		Parser(const Parser& src);
-		Parser& operator=(const Parser& src);
-		~Parser();
-		Command parse(const std::string& line);
+		virtual ~CommandHandler() {}
+		virtual void execute(const Command& cmd, Client& sender) = 0;
 };
+
 #endif

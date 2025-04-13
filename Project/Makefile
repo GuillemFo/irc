@@ -6,13 +6,14 @@
 #    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/12 18:40:52 by rzhdanov         ###   ########.fr        #
+#    Updated: 2025/04/13 22:44:55 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
-SRC = main.cpp Server.cpp  Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp
+SRC = main.cpp Server.cpp  Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
+			PrivmsgCommand.cpp JoinCommand.cpp
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address
 
