@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/13 18:09:45 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/13 20:38:01 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Client
 		std::string 		_nick;
 		std::string 		_user;
 		std::string 		_realname;
+		std::string			_host;		// or IP
 		bool				_passok;	//password received and OK
 		bool				_registered; //registration process OK
 		std::map<std::string, Channel*> _channels; //list of channels joined
@@ -58,7 +59,10 @@ class Client
 		void				set_user(const std::string &str);
 		void				setRealName(std::string &str);
 		const std::string	get_user() const;
-		
+	
+		void				set_host(const std::string &str);
+		const std::string	get_host() const;
+
 		void	setPassOK(); //set to true. In the constructor would be false
 		void	setRegistered(); //set to true. In the constructor would be false
 		void	joinChannel(std::string channelName);
@@ -66,8 +70,8 @@ class Client
 		
 		//getters
 		std::string	getLowerNick();
-		std::string	getClient(); // <nickname> [ "!" <user> ] [ "@" <host> ]
-		std::string	getSource(); // :<nickname> [ "!" <user> ] [ "@" <host> ]
+		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
+		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();
 		
 	

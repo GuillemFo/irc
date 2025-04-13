@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/13 20:15:22 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/13 20:24:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 class Command; // Forward declaration
 
-std::string ircReplyText(const std::string& code, const Command& cmd) {
+std::string ircErrorText(const std::string& code, const Command& cmd) {
 	// map 
-	static const std::map<std::string, std::string> replyFormats = {
+	static const std::map<std::string, std::string> errorFormats = {
 	// Client errors
 	{ERR_NOSUCHNICK,		"<client> <nickname> :No such nick/channel"},
 	{ERR_NOSUCHCHANNEL,	 "<client> <channel> :No such channel"},
@@ -51,8 +51,8 @@ std::string ircReplyText(const std::string& code, const Command& cmd) {
 
 	};
 
-	std::map<std::string, std::string>::iterator it = replyFormats.find(code);
-	if (it == replyFormats.end()) {
+	std::map<std::string, std::string>::iterator it = errorFormats.find(code);
+	if (it == errorFormats.end()) {
 		return ""; // Or throw an exception for unknown codes. It shouldn't happen
 	}
 	std::string reply = it->second;
