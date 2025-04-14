@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 14:02:51 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/14 14:20:53 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,8 @@ int main(int ac, char **av)
 					}
 					else if (count == 0)	//client disconnecte?? what if client has nothing to send?
 					{
-						std::cout << "Client disconnected: fd " << fd << std::endl;
+						std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
+						s.rmClientMap(fd);
 						close(fd);
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 					}
