@@ -6,13 +6,20 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 07:49:08 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/14 13:31:19 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Tools.hpp"
-
+#include "Client.hpp"
+#include "Channel.hpp"
+#include "PrivmsgCommand.hpp"
+#include "Tools.hpp"
+#include "Colors.hpp"
+#include "JoinCommand.hpp"
+#include "Parser.hpp"
+#include "Command.hpp"
 /*
 Your executable will be run as follows:
 ./ircserv <port> <password>
@@ -67,7 +74,7 @@ int main(int ac, char **av)
 	*/
 
 		setNonBlocking(sv_fd); //set fcntl to non blocking
-		Server s(sv_fd, av[1], atoi(av[2]));
+		Server s(sv_fd, atoi(av[1]), av[2]);
 
 		s.set_server_name("IRC_Server....");
 
@@ -86,48 +93,75 @@ int main(int ac, char **av)
 		//Binding: 
 		if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		{
-				std::cout << "bind" << std::endl;
-				close(s.get_serverFD());
-				return (-1);
+			std::cout << "bind" << std::endl;
+			close(s.get_serverFD());
+			return (-1);
 		}
 
 		//Listen:
 		if(listen(s.get_serverFD(), HOLD_NON_ACCEPTED) < 0)
 		{
-				std::cout << "listen" << std::endl;
-				close(s.get_serverFD());
-				return (-1);
+			std::cout << "listen" << std::endl;
+			close(s.get_serverFD());
+			return (-1);
 		}
 
 		//Creating epoll instance
 		epoll_fd = epoll_create1(0);
 		if (epoll_fd < 0)
 		{
-				std::cout << "epoll_create1" << std::endl;
-				close(s.get_serverFD());
-				return (-1);
+			std::cout << "epoll_create1" << std::endl;
+			close(s.get_serverFD());
+			return (-1);
 		}
+
 		s.set_epollFD(epoll_fd);
 		struct epoll_event ev;
 		ev.events = EPOLLIN;
 		ev.data.fd = s.get_serverFD();
+		
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, s.get_serverFD(), &ev) < 0)
 		{
-				std::cout << "epoll_ctl: server_fd" << std::endl;
-				close(s.get_serverFD());
-				return (-1);
+			std::cout << "epoll_ctl: server_fd" << std::endl;
+			close(s.get_serverFD());
+			return (-1);
 		}
 
 		std::cout << "Server started on port " << C_R << s.get_port() << C_RESET << std::endl;
+		std::cout << "Server started on pass " << C_R << av[2] << C_RESET << std::endl;
 
 		/*
-				MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
-				BUFFER_SIZE → how many bytes you read from a socket at once.
+			MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
+			BUFFER_SIZE → how many bytes you read from a socket at once.
 		*/
 		#define MAX_EVENTS 64
 		#define BUFFER_SIZE 1024
 		struct epoll_event events[MAX_EVENTS];
 		char buffer[BUFFER_SIZE];
+
+
+
+
+
+		// Create a welcome channel to test.
+		
+		
+		/*
+		Page 25 modern-ircdocs ... pdf
+
+		001 NICK :Welcome to the Internet Relay Network NICK!user@host
+		002 NICK :Your host is ...
+		003 NICK :This server was created ...
+		004 NICK :server version info
+		(More optional MOTD or notices...)
+		375 NICK :- server Message of the Day -
+		372 NICK :- Welcome to this IRC server!
+		376 NICK :End of /MOTD command.
+		*/
+
+
+
+
 
 		//Event loop
 		while (true)
@@ -176,7 +210,7 @@ int main(int ac, char **av)
 						close(fd);
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 					}
-					else if (count == 0)
+					else if (count == 0)	//client disconnecte?? what if client has nothing to send?
 					{
 						std::cout << "Client disconnected: fd " << fd << std::endl;
 						close(fd);
@@ -187,6 +221,7 @@ int main(int ac, char **av)
 						buffer[count] = '\0';
 						std::cout << "Received from " << fd << ": " << buffer;
 						// Echo back
+						// Implement commands?
 						ssize_t sent = send(fd, buffer, count, 0);
 						if (sent == -1)
 						{
