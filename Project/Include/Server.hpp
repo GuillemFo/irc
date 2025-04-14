@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 14:04:13 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/14 08:43:00 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ class Server
 	private:
 		int									_sv_fd;
 		int									_epoll_fd;
-		std::string							_sv_pass;
 		int									_port;
+		std::string							_sv_pass;
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;	// int = client_fd
 		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
@@ -63,7 +63,7 @@ class Server
 		
 		int					send_out(std::string message);
 
-		Server(int sv_fd, std::string sv_pass, int port);
+		Server(int sv_fd, int port, std::string sv_pass);
 		~Server();
 		Server(const Server &other);
 		Server				&operator=(const Server &other);
