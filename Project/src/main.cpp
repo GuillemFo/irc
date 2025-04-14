@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 13:31:19 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/14 13:52:23 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,12 @@ int main(int ac, char **av)
 					{
 						buffer[count] = '\0';
 						std::cout << "Received from " << fd << ": " << buffer;
+
+						//Take buffer only when /r/n found.
+						//Protect if pass not set, nick not set, name not set
+						//create and allocate properly on each map with the incoming info
+						//after all stored and valid client, parser buffer and look for commands.
+
 						// Echo back
 						// Implement commands?
 						ssize_t sent = send(fd, buffer, count, 0);
