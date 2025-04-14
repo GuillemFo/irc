@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 13:52:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/14 14:02:51 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,10 @@ int main(int ac, char **av)
 			return (-1);
 		}
 		
-
-	/*
-		10/04/25 9.58 RN we missing password check, string parsing and command control.
-	
-	
-	
-	*/
-
 		setNonBlocking(sv_fd); //set fcntl to non blocking
 		Server s(sv_fd, atoi(av[1]), av[2]);
 
 		s.set_server_name("IRC_Server....");
-
-	
-
-	
-	
-	
 
 		struct sockaddr_in server_addr;
 		memset(&server_addr, 0, sizeof(server_addr));
@@ -139,13 +125,8 @@ int main(int ac, char **av)
 		struct epoll_event events[MAX_EVENTS];
 		char buffer[BUFFER_SIZE];
 
-
-
-
-
 		// Create a welcome channel to test.
-		
-		
+	
 		/*
 		Page 25 modern-ircdocs ... pdf
 
@@ -158,10 +139,6 @@ int main(int ac, char **av)
 		372 NICK :- Welcome to this IRC server!
 		376 NICK :End of /MOTD command.
 		*/
-
-
-
-
 
 		//Event loop
 		while (true)
@@ -247,7 +224,7 @@ int main(int ac, char **av)
 	{
 		std::cout << e << std::endl;
 	}
-	
+	return (0);
 }
 
 // https://www.suchprogramming.com/epoll-in-3-easy-steps/ 
