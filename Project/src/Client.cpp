@@ -3,16 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 23:52:00 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/14 21:25:11 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-Client::Client(int cl_fd) : _client_fd(cl_fd) {}
-Client::Client(Server *theServer, int cl_fd) : _myServer(theServer) , _client_fd(cl_fd) {}
+Client::Client(int cl_fd) : _client_fd(cl_fd) {
+	_nick = std::string();
+	_user = std::string();
+	_realname = std::string();
+	_host = std::string();
+	_passok = false;
+	_registered = false;
+}
+Client::Client(Server *theServer, int cl_fd) : _myServer(theServer) , _client_fd(cl_fd) {
+	_nick = std::string();
+	_user = std::string();
+	_realname = std::string();
+	_host = std::string();
+	_passok = false;
+	_registered = false;
+}
 
 Client::~Client() {}
 
@@ -36,15 +50,18 @@ const std::string	Client::get_nick()const {return (this->_nick);}
 void				Client::set_user(const std::string &str){this->_user = str;}
 const std::string	Client::get_user()const {return (this->_user);}
 
+void				Client::set_host(const std::string &str){this->_user = str;}
+const std::string	Client::get_host()const {return (this->_user);}
 
 // To dev properly
 void				Client::setRealName(std::string &str) {this->_realname = str;}
 void	Client::setPassOK() //set to true. In the constructor would be false
 {
-	
+	_passok = true;
 }
 void	Client::setRegistered() //set to true. In the constructor would be false
 {
+	_registered = true;
 	
 }		
 
