@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/13 13:42:36 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:39:39 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ Command Parser::parse(const std::string& line) {
 	std::string word;
 	if (!(iss >> word))
 		return cmd;
+	// uncomment for raw input testing
+	// if (word[0] == '/')
+	// 	word = word.substr(1);
 	
+	cmd.setName(word);
+
 	bool trailing = false;
 	std::string trailingArg;
 	
