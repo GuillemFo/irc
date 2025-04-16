@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 13:39:30 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:53:34 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,9 @@ void	setNonBlocking(int sv_fd)
 							{ // Not working as expected. Need to work properly to set epollin epollout epollet!!!
 								buffer[count] = '\0';
 								std::cout << "Received from " << fd << ": " << buffer;
+								Parser parser;
+								Command testInputsCmd = parser.parse(buffer);
+								testInputsCmd.printCommand();
 								ssize_t sent = send(fd, buffer, count, 0);
 								if (sent == -1 && (errno != EAGAIN && errno != EWOULDBLOCK))
 								{
