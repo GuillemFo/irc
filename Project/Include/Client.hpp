@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 17:12:21 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/16 22:21:52 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class Client
 		std::string 		_nick;
 		std::string 		_user;
 		std::string 		_realname;
-		std::string			_host;		// or IP
+		std::string			_host;		// or IP Maximum 63 chars. If longer --> IP
 		bool				_passok;	//password received and OK
 		bool				_registered; //registration process OK
 		std::map<std::string, Channel*> _channels; //list of channels joined

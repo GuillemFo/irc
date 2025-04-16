@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/13 20:25:20 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:47:47 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 /* Generic errors */
 #define ERR_INPUTTOOLONG		"417"
 #define ERR_UNKNOWNCOMMAND		"422"
+
+/* Capability Errors */
+#define ERR_INVALIDCAPCMD		"410"  // Not supported parameters for CAP
+
 /* Registration/Connection Errors */
 #define ERR_NEEDMOREPARAMS		"461"  // Not enough parameters for command
 #define ERR_ALREADYREGISTERED 	"462"  // Client already registered

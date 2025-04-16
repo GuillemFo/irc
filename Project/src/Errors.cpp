@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/13 20:24:29 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:46:37 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ class Command; // Forward declaration
 std::string ircErrorText(const std::string& code, const Command& cmd) {
 	// map 
 	static const std::map<std::string, std::string> errorFormats = {
+	// Capability errot
+	{ERR_INVALIDCAPCMD,		"<client> <subcommand> :No such nick/channel"},
 	// Client errors
 	{ERR_NOSUCHNICK,		"<client> <nickname> :No such nick/channel"},
 	{ERR_NOSUCHCHANNEL,	 "<client> <channel> :No such channel"},
@@ -78,6 +80,11 @@ std::string ircErrorText(const std::string& code, const Command& cmd) {
 	// Replace <command>
 	if ((pos = reply.find("<command>")) != std::string::npos) {
 		reply.replace(pos, 9, cmd.getCommand());
+	}
+		
+	// Replace <subcommand>
+	if ((pos = reply.find("<command>")) != std::string::npos) {
+		reply.replace(pos, 9, cmd.getSubCommand()); //first parameter
 	}
 		
 	// Replace <target> (for ERR_TOOMANYTARGETS) wich would be the 2n parameter in PRIVMSG
