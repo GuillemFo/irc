@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 21:25:11 by josegar2         ###   ########.fr       */
-=======
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:29:07 by gforns-s         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/04/16 17:17:04 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-<<<<<<< HEAD
-Client::Client(int cl_fd) : _client_fd(cl_fd) {
-	_nick = std::string();
-	_user = std::string();
-	_realname = std::string();
-	_host = std::string();
-	_passok = false;
-	_registered = false;
-}
-Client::Client(Server *theServer, int cl_fd) : _myServer(theServer) , _client_fd(cl_fd) {
-	_nick = std::string();
-	_user = std::string();
-	_realname = std::string();
-	_host = std::string();
-	_passok = false;
-	_registered = false;
-=======
 Client::Client(int cl_fd) : _client_fd(cl_fd) 
 {
 	this->_nick = std::string();
@@ -52,7 +28,6 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 	this->_realname = std::string();
 	this->_passok = false;
 	this->_registered = false;
->>>>>>> origin/main
 }
 
 Client::~Client() {}
