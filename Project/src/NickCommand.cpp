@@ -6,14 +6,12 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 08:01:45 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:05:44 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "NickCommand.hpp"
 # include <iostream>
-
-///Under dev 16/04/25 08.01AM
 
 NickCommand::NickCommand() : _server(NULL) {}
 NickCommand::NickCommand(const NickCommand& src) {
@@ -35,9 +33,29 @@ bool NickCommand::isValidNick(const std::string& name) {
 			<< std::endl;
 		return false;
 	}
-	if (this->_server->check_Nick(name) == true)
-		return true;
-	return false;
+	/////////////////////////////////////////////////////	Need to filter whats valid for nick! josegar2
+	if (name.length() > 50) {
+		std::cout << "Aborting NICK: Nick contains over 50"
+			<< " symbols." << std::endl;
+		return false;
+	}
+	for (size_t i = 0; i < name.length(); ++i) {
+		char c = name[i];
+		if (c == ' ' || c == ',' || c < 32) {
+			std::cout << "Aborting Nick: Nicks contains invalid"
+				<< " symbols." << std::endl;
+			return false;
+		}
+	}
+	///////////////////////////////////////////////////////////
+	std::map<int, Client*>::const_iterator it;
+	for (it = _server->getClientMap().begin(); it != _server->getClientMap().end(); ++it)
+	{
+		Client *client = it->second;
+		if (client && client->get_nick() == name)
+			return false;
+	}
+	return true;
 }
 
 void NickCommand::execute(const Command& cmd, Client& sender) {
@@ -51,8 +69,8 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 	}
 	const std::string& Nick = args[0];
 	if (NickCommand::isValidNick(Nick)) {
-		sender.setNickOK();
-		std::cout << "Executing Nick command. Cient authorized" << std::endl;
+		sender.set_nick(Nick);
+		std::cout << "Executing Nick command. Nick: " << Nick << "assigned to client: " << sender.get_clientFD() << std::endl;
 	}
 	else {
 		return ;

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 07:58:03 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 09:35:42 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ class Server
 		//Add client Remove client		// will do new[] and delete
 		//Add channel Remove channel	// will do new[] and delete
 
+
+		const std::map<int, Client*>	&getClientMap() const;
+		const std::map<std::string, Channel*>	&getChannelMap() const;
+		
 		int					addClientMap(int fd);
 		int					addChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
 		int					addChannelMap(std::string &str, std::string &pw);

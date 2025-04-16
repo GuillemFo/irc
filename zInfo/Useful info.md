@@ -92,7 +92,7 @@ example:
 
 nc -C ip port to send and test \r\n
 
-PROTECT control 4 inside NC !!
+PROTECT control 4 inside NC !! Signals!! like minishell (should be the same as control \)
 
 
 Hexchat seems a better idea to work than irssi 01/04/25 9.09am

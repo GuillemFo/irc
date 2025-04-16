@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 23:52:00 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/16 10:14:16 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 Client::Client(int cl_fd) : _client_fd(cl_fd) {}
-Client::Client(Server *theServer, int cl_fd) : _myServer(theServer) , _client_fd(cl_fd) {}
+Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd) {}
 
 Client::~Client() {}
 

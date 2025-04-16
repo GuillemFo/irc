@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/10 23:53:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/16 10:13:53 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 Channel::Channel(std::string name) : _Name(name) {}
 
-Channel::Channel(std::string channelName, Server *myserver)
+Channel::Channel(std::string channelName, Server *server)
 {
 	_Name = channelName;
-	_myserver = myserver;
+	_server = server;
 	_Topic = std::string();
 	_key = std::string();
 	_inviteOnly = false;

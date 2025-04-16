@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 14:20:53 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 09:44:08 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void	setNonBlocking(int sv_fd)
 	int flag = fcntl(sv_fd, F_GETFL, 0);
 	if (flag == -1)
 	{
-		std::cout << "fcntl F_GETFL" << std::endl;
+		std::cout << "fcntl F_GETFL error" << std::endl;
 		std::exit(-1);
 	}
 	if (fcntl(sv_fd, F_SETFL, flag | (O_NONBLOCK == -1)))
 	{
-		std::cout << "fcntl F_SETFL" << std::endl;
+		std::cout << "fcntl F_SETFL error" << std::endl;
 		std::exit(-1);
 	}
 }
@@ -56,7 +56,7 @@ int main(int ac, char **av)
 		sv_fd = socket(AF_INET, SOCK_STREAM, 0);
 		if (sv_fd < 0)
 		{
-			std::cout << "socket" << std::endl;
+			std::cout << "socket error" << std::endl;
 			return (-1);
 		}
 		if (valid_port(av[1]) == false)
@@ -79,7 +79,7 @@ int main(int ac, char **av)
 		//Binding: 
 		if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		{
-			std::cout << "bind" << std::endl;
+			std::cout << "bind error" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -87,7 +87,7 @@ int main(int ac, char **av)
 		//Listen:
 		if(listen(s.get_serverFD(), HOLD_NON_ACCEPTED) < 0)
 		{
-			std::cout << "listen" << std::endl;
+			std::cout << "listen error" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -96,7 +96,7 @@ int main(int ac, char **av)
 		epoll_fd = epoll_create1(0);
 		if (epoll_fd < 0)
 		{
-			std::cout << "epoll_create1" << std::endl;
+			std::cout << "epoll_create1 error" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -108,7 +108,7 @@ int main(int ac, char **av)
 		
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, s.get_serverFD(), &ev) < 0)
 		{
-			std::cout << "epoll_ctl: server_fd" << std::endl;
+			std::cout << "epoll_ctl: server_fd error" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -146,7 +146,7 @@ int main(int ac, char **av)
 			int num_fd_ready = epoll_wait(s.get_epollFD(), events, MAX_EVENTS, -1);
 			if (num_fd_ready < 0)
 			{
-				std::cout << "epoll_wait" << std::endl;
+				std::cout << "epoll_wait error" << std::endl;
 				break ;
 			}
 			for (int i = 0; i < num_fd_ready; ++i)
@@ -158,7 +158,7 @@ int main(int ac, char **av)
 					int cl_fd = accept(s.get_serverFD(), NULL, NULL);
 					if (cl_fd < 0)
 					{
-						std::cout << "accept" << std::endl;
+						std::cout << "accept error" << std::endl;
 						continue ;
 					}
 					setNonBlocking(cl_fd);
@@ -167,7 +167,7 @@ int main(int ac, char **av)
 					ev.data.fd = cl_fd;
 					if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
 					{
-						std::cout << "epoll_ctl: client fd" << std::endl;
+						std::cout << "epoll_ctl: client fd error" << std::endl;
 						close(cl_fd);
 						continue ;
 					}
@@ -183,7 +183,7 @@ int main(int ac, char **av)
 					ssize_t count = read(fd, buffer, BUFFER_SIZE);
 					if (count == -1)
 					{
-						std::cout << "read" << std::endl;
+						std::cout << "read error" << std::endl;
 						close(fd);
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 					}
@@ -209,7 +209,7 @@ int main(int ac, char **av)
 						ssize_t sent = send(fd, buffer, count, 0);
 						if (sent == -1)
 						{
-							std::cout << "send" << std::endl;
+							std::cout << "send error" << std::endl;
 							close(fd);
 							epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 						}

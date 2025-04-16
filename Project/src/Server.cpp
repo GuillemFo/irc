@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 07:57:47 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 09:37:46 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,10 @@ int	Server::rmChannelMap(std::string &str) // not needed by subject
 	}
 	return (-1);
 }
+
+const std::map<int, Client*>	&Server::getClientMap() const {return _cl_map;}
+
+const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch_map;}
 
 
 
