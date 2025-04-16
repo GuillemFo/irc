@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 09:35:42 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/17 00:49:20 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "Tools.hpp"
+#include "Command.hpp"
+#include "CommandHandler.hpp"
+#include "CommandDispatcher.hpp"
+#include "Parser.hpp"
+#include "PrivmsgCommand.hpp"
+#include "JoinCommand.hpp"
+
 
 #define HOLD_NON_ACCEPTED 10 //this will set the ammount of connections in hold before start rejecting them if they are not accepted.
 
@@ -52,6 +59,7 @@ class Server
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;	// int = client_fd
 		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
+		CommandDispatcher					_dispatcher;
 		//**faltaria timestamp d'inici, pel RPL_STATSUPTIME
 		//**server version and MOTD
 		//**LOC1, LOC2, ADMINEMAIL per les seve replies
@@ -93,6 +101,7 @@ class Server
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);
 		void				welcome_msg(const std::string &nickname);
+		void				registerAllCommands();
 
 };
 
