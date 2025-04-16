@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 13:42:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 07:57:47 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Server::set_server_name(const std::string &s){this->_sv_name = s;}
 
 int	Server::get_port()const {return (this->_port);}
 
-bool	Server::check_pass(std::string &str)
+bool	Server::check_pass(const std::string &str)
 {
 	if (str == this->_sv_pass)
 	{

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 14:02:57 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 07:58:03 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ class Server
 		
 		int					get_port() const;
 		
-		bool 				check_pass(std::string &str);
+		bool 				check_pass(const std::string &str);
 		
 		//Add client Remove client		// will do new[] and delete
 		//Add channel Remove channel	// will do new[] and delete
