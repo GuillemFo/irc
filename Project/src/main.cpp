@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 13:07:26 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:18:28 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ void	setNonBlocking(int sv_fd)
 								break;
 							}
 							else
-							{ //broken after (echo -n "Part 1 of message"; sleep 1; echo -n " Part 2 of message"; sleep 1; echo " Part 3 of message") | nc -v localhost 1234 It will hang that fd.
+							{ // Not working as expected. Need to work properly to set epollin epollout epollet!!!
 								buffer[count] = '\0';
 								std::cout << "Received from " << fd << ": " << buffer;
 								ssize_t sent = send(fd, buffer, count, 0);
