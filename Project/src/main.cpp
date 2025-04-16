@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 13:52:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:44:05 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Your executable will be run as follows:
 
 //https://www.suchprogramming.com/epoll-in-3-easy-steps/
 
-void	setNonBlocking(int sv_fd)
+void	setNonBlocking(int sv_fd)  //*** Perhaps a Server member to be call after the creation and called with try catch
 {
 	int flag = fcntl(sv_fd, F_GETFL, 0);
 	if (flag == -1)
@@ -91,6 +91,7 @@ int main(int ac, char **av)
 		server_addr.sin_port = htons(s.get_port()); // convert port to network byte order
 
 		//Binding: 
+		//*** Perhahps a member function with throw
 		if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		{
 			std::cout << "bind" << std::endl;

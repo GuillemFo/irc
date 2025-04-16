@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
 /*   Updated: 2025/04/13 20:38:01 by josegar2         ###   ########.fr       */
+=======
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/04/16 10:14:29 by gforns-s         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +38,7 @@ class Channel ;
 class Client
 {
 	private:
-		Server *_myServer; // to get the details and functions of the server
+		Server *_server; // to get the details and functions of the server
 		int 				_client_fd;
 		std::string 		_nick;
 		std::string 		_user;
@@ -44,7 +51,7 @@ class Client
 
 	public:
 		Client(int fd);	//to at least know who to send the errors
-		Client(Server *theServer, int _client_fd); 
+		Client(Server *server, int _client_fd); 
 		~Client();
 		Client(const Client &other);
 		Client &operator=(const Client &other);
