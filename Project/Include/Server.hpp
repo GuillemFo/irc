@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 09:35:42 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:59:11 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include <map>
 #include <sstream>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <cstdio> //perror
 
