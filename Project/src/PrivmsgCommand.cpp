@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 00:56:11 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:59:43 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <iostream>
 
 PrivmsgCommand::PrivmsgCommand() : _server(NULL) {}
+PrivmsgCommand::PrivmsgCommand(Server* server) : _server(server) {}
 PrivmsgCommand::PrivmsgCommand(const PrivmsgCommand& src) {
 	this->_server = src._server;
 }

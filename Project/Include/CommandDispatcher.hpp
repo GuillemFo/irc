@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 00:59:19 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:03:34 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 # define COMMANDISPATCHER_HPP
 
 # include "Parser.hpp"
-# include "Command.hpp"
 # include "CommandHandler.hpp"
-# include "Client.hpp"
 # include <map>
 # include <string>
 
-class CommandHandler;
+class Client;
+class Command;
+
 class CommandDispatcher {
 	private:
 		std::map<std::string, CommandHandler*> _handlers;
