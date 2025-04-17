@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:13:53 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:45:45 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,12 @@ Channel::~Channel()
 void	Channel::addClient(Client *theClient)
 {
 	// once the join channel is succesful --> add client to the map _clients
-	_clients[theClient->get_nick()] = theClient;
+	this->_clients[theClient->get_nick()] = theClient;
 }
 void	Channel::addOperator(Client *theClient)
 {
-	_opclients[theClient->get_nick()] = theClient;
+	// the logic of it has to be normal or operator should be outside
+	this->_opclients[theClient->get_nick()] = theClient;
 }
 
 /*
@@ -87,11 +88,11 @@ bool		Channel::isMember(std::string clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
-	it = _clients.find(clientNick);
-	if (it != _clients.end())
+	it = this->_clients.find(clientNick);
+	if (it != this->_clients.end())
 	return true;
-	it = _opclients.find(clientNick);
-	if (it != _opclients.end())
+	it = this->_opclients.find(clientNick);
+	if (it != this->_opclients.end())
 	return true;
 	return false;
 }
@@ -99,28 +100,36 @@ bool		Channel::isOperator(std::string clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
-	it = _opclients.find(clientNick);
-	if (it != _opclients.end())
+	it = this->_opclients.find(clientNick);
+	if (it != this->_opclients.end())
 	return true;
 	return false;
 }
 bool		Channel::isInviteOnly()
 {
-	return	_inviteOnly;
+	return	this->_inviteOnly;
 }
 bool		Channel::isTopicProtected()
 {
-	return	_protectTopic;
+	return	this->_protectTopic;
 }
 
-/*
+
 bool		Channel::isChannelFull()
 {
-	if (_clientLimit > 0)
+	if (this->_clientLimit > 0)
 	{
-		if ((_clients.size() + _opclients.size()) >= _clientLimit)
+		if ((this->_clients.size() + this->_opclients.size()) >= this->_clientLimit)
+		return true;
+}
+return false;
+}
+
+bool		Channel::isChannelEmpty()
+{
+	if ((this->_clients.size() + this->_opclients.size()) == 0)
+	{
 		return true;
 	}
 	return false;
 }
-*/

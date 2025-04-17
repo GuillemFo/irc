@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 17:17:04 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:41:41 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,19 @@ std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
 */
 
 
-bool		Client::isRegistered() {return this->_registered;}
+bool	Client::isRegistered() {return this->_registered;}
 
-void	partChannel(std::string &channelName) 
+void	Client::partChannel(std::string &channelName) 
 {
 	std::cout << channelName << std::endl;
 }
 
-void	joinChannel(std::string &channelName)
+void	Client::joinChannel(std::string &channelName)
 {
 	std::cout << channelName << std::endl;
 }
 
-
+void	Client::sendMessage(std::string &theMessage)
+{
+	this->_out.addMessage(theMessage);
+}

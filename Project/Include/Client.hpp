@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 22:21:52 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:41:10 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "Server.hpp"
 #include "Channel.hpp"
+#include "OutBuffer.hpp"
 
 
 #define NICK_NOT_ALLOWED_CHARS " ,*?!@" // nick can't cotain this chars
@@ -32,6 +33,7 @@ class Client
 {
 	private:
 		Server *_server; // to get the details and functions of the server
+		OutBuffer			_out;
 		int 				_client_fd;
 		std::string 		_nick;
 		std::string 		_user;
@@ -65,14 +67,16 @@ class Client
 
 		void	setPassOK(); //set to true. In the constructor would be false
 		void	setRegistered(); //set to true. In the constructor would be false
-		void	joinChannel(std::string channelName);
-		void	partChannel(std::string channelName);
+		void	joinChannel(std::string &channelName);
+		void	partChannel(std::string &channelName);
 		
 		//getters
 		std::string	getLowerNick();
 		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
 		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();
+
+		void		sendMessage(std::string &theMessage);
 		
 	
 
