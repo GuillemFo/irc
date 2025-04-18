@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/17 22:41:10 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:29:25 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ class Client
 
 		std::string			_string_buff;	//store buffer until \r \n and permission to send. keep storing and remove the part sent. maybe need an int to check the lenght of the string so its easier to cut and to confirm from the server??
 
+		static bool			isNickCorrect(std::string theNick);
+
 		int					get_clientFD();
 
 		void				set_nick(const std::string &str);
@@ -68,6 +70,7 @@ class Client
 		void	setPassOK(); //set to true. In the constructor would be false
 		void	setRegistered(); //set to true. In the constructor would be false
 		void	joinChannel(std::string &channelName);
+		void	joinChannel(std::string &channelName, std::string &channelPwd);
 		void	partChannel(std::string &channelName);
 		
 		//getters

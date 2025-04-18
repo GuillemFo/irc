@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 14:09:03 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:04:35 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ class Channel
 		Server		*_server;
 		std::string		_Name;
 		std::string		_Topic;
-		std::string		_key;	// if empty no pass need?
-		std::map<std::string, Client *> _clients; // list of regular clients 
+		std::string		_key;	// if empty no pass needed
+		std::map<std::string, Client *> _clients; // list of all clients 
 		std::map<std::string, Client *> _opclients; // list of operator clients 
-		bool		_protectTopic;
+		bool			_protectTopic;
 		bool			_inviteOnly;
 		size_t			_clientLimit;
 		
@@ -67,5 +67,5 @@ class Channel
 		bool				isTopicProtected();
 		bool				isChannelFull();
 		bool				isChannelEmpty();
-		static bool			isNameCorrect();
+		static bool			isNameCorrect(std::string theName);
 };

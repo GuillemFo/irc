@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 09:35:42 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:25:26 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,14 @@ class Server
 		
 		int					addClientMap(int fd);
 		int					addChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		int					addChannelMap(std::string &str, std::string &pw);
+		int					addChannelMap(std::string &str, std::string &pw); // the pw will be in the channel object
 		
 		int					rmClientMap(int fd);
 		int					rmChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		int					rmChannelMap(std::string &str, std::string &pw);
+		int					rmChannelMap(std::string &str, std::string &pw); // josegar2: the channels aren't removed
 
+		bool				channelExists(std::string &theChannel);
+		
 		void				set_server_name(const std::string &s);
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);

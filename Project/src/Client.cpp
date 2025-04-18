@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/17 22:41:41 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:35:10 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ Client &Client::operator=(const Client &other)	//do we need this??
 	return (*this);
 }
 
+bool Client::isNickCorrect(std::string theNick)
+{
+	if (theNick.empty() ||
+		theNick.size() > NICKLEN ||
+		strchr(NICK_NOT_STARTING, theNick[0]) ||
+		theNick.find(' ') != std::string::npos ||
+		theNick.find('\0') != std::string::npos ||
+		theNick.find('\r') != std::string::npos ||
+		theNick.find('\n') != std::string::npos)
+		return false;
+	return true;
+}
+
 int					Client::get_clientFD(){return (this->_client_fd);}
 
 void				Client::set_nick(const std::string &str){this->_nick = str;}
@@ -57,10 +70,12 @@ const std::string	Client::get_host()const {return (this->_user);}
 
 // To dev properly
 void				Client::setRealName(std::string &str) {this->_realname = str;}
+
 void	Client::setPassOK() //set to true. In the constructor would be false
 {
 	_passok = true;
 }
+
 void	Client::setRegistered() //set to true. In the constructor would be false
 {
 	_registered = true;
@@ -93,6 +108,11 @@ void	Client::partChannel(std::string &channelName)
 void	Client::joinChannel(std::string &channelName)
 {
 	std::cout << channelName << std::endl;
+}
+
+void	Client::joinChannel(std::string &channelName, std::string &channelPwd)
+{
+	std::cout << channelName << " - pwd : " << channelPwd << std::endl;
 }
 
 void	Client::sendMessage(std::string &theMessage)

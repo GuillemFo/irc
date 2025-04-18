@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 14:21:15 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:36:23 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,80 +65,88 @@ Channel::~Channel()
 void	Channel::addClient(Client *theClient)
 {
 	// once the join channel is succesful --> add client to the map _clients
-	this->_clients[theClient->get_nick()] = theClient;
+	if (this->_clients.size() == 0) // if no clients in channel add as operator
+		this->addOperator(theClient);
+	this->_clients[name_tolower(theClient->get_nick())] = theClient;
 }
 void	Channel::addOperator(Client *theClient)
 {
 	// the logic of it has to be normal or operator should be outside
-	this->_opclients[theClient->get_nick()] = theClient;
+	this->_opclients[name_tolower(theClient->get_nick())] = theClient;
 }
 
-/*
+
 void	Channel::remClient(std::string clientNick)
 {
-	int d = _clients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
+	std::map<std::string, Client *>::iterator it;
+
+	// in the partchannel will be checked that client isMember
+	it = this->_clients.find(name_tolower(clientNick));
+	if (it == this->_clients.end())  // it must not happen
+		return;
+	this->_clients.erase(it);
+	// remove from operators
+	it = this->_opclients.find(name_tolower(clientNick));
+	if (it == this->_opclients.end())
+		return;
+	this->_opclients.erase(it);
+
 }
 void	Channel::remOperator(std::string clientNick)
 {
-	int d = _opclients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
+	// It will be called just if isOperator after a MOD -o
+	// another way to remove from map
+	int d = this->_opclients.erase(name_tolower(clientNick));
+	(void) d;
 }
-*/
 
 bool		Channel::isMember(std::string clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
-	it = this->_clients.find(clientNick);
+	it = this->_clients.find(name_tolower(clientNick));
 	if (it != this->_clients.end())
-	return true;
-	it = this->_opclients.find(clientNick);
-	if (it != this->_opclients.end())
-	return true;
+		return true;
 	return false;
 }
 bool		Channel::isOperator(std::string clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
-	it = this->_opclients.find(clientNick);
+	it = this->_opclients.find(name_tolower(clientNick));
 	if (it != this->_opclients.end())
 	return true;
 	return false;
 }
+
 bool		Channel::isInviteOnly()
 {
 	return	this->_inviteOnly;
 }
+
 bool		Channel::isTopicProtected()
 {
 	return	this->_protectTopic;
 }
 
-
 bool		Channel::isChannelFull()
 {
-	if (this->_clientLimit > 0)
-	{
-		if ((this->_clients.size() + this->_opclients.size()) >= this->_clientLimit)
+	if (this->_clientLimit > 0 &&
+		(this->_clients.size() >= this->_clientLimit))
 		return true;
-}
-return false;
+	return false;
 }
 
 bool		Channel::isChannelEmpty()
 {
-	if ((this->_clients.size() + this->_opclients.size()) == 0)
-	{
-		return true;
-	}
-	return false;
+	return (this->_clients.size() == 0);
 }
 
-int Channel::isNameCorrect(std::string theName)
+bool Channel::isNameCorrect(std::string theName)
 {
 	if (theName.empty() ||
 		theName.size() > CHANNELLEN ||
-		CHANTYPES.find(theName[0]) == std::string::npos ||
+		!strchr(CHANTYPES, theName[0]) ||
 		theName.find(' ') != std::string::npos ||
 		theName.find('\a') != std::string::npos ||
 		theName.find(',') != std::string::npos)

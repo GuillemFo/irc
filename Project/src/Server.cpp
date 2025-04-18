@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 09:37:46 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:34:26 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,11 @@ const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch
 // 	}
 // 	return (0);
 // }
+
+bool	Server::channelExists(std::string &theChannel)
+{
+	return this->_ch_map.find(name_tolower(theChannel)) != this->_ch_map.end();
+}
 
 
 //This will need to be redesigned
