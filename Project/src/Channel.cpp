@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/17 21:45:45 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:21:15 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,4 +132,16 @@ bool		Channel::isChannelEmpty()
 		return true;
 	}
 	return false;
+}
+
+int Channel::isNameCorrect(std::string theName)
+{
+	if (theName.empty() ||
+		theName.size() > CHANNELLEN ||
+		CHANTYPES.find(theName[0]) == std::string::npos ||
+		theName.find(' ') != std::string::npos ||
+		theName.find('\a') != std::string::npos ||
+		theName.find(',') != std::string::npos)
+		return false;
+	return true;
 }
