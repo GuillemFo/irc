@@ -6,15 +6,17 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 22:29:25 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:47:24 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include <stdexcept>
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "OutBuffer.hpp"
+
 
 
 #define NICK_NOT_ALLOWED_CHARS " ,*?!@" // nick can't cotain this chars
@@ -32,7 +34,7 @@ class Channel ;
 class Client
 {
 	private:
-		Server *_server; // to get the details and functions of the server
+		Server 				*_server; // to get the details and functions of the server
 		OutBuffer			_out;
 		int 				_client_fd;
 		std::string 		_nick;
@@ -72,6 +74,7 @@ class Client
 		void	joinChannel(std::string &channelName);
 		void	joinChannel(std::string &channelName, std::string &channelPwd);
 		void	partChannel(std::string &channelName);
+		void	partAllChannels();
 		
 		//getters
 		std::string	getLowerNick();

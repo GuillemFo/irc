@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 21:04:35 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:34:08 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class Channel
 		const std::string	get_topic() const;
 		
 		void				set_pass(std::string &str);
+		bool				isPassRequired();
 		bool				check_pass(std::string &str);
 		
 		void				set_userLimit(int nb);

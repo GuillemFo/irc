@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 16:25:26 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:45:32 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 #include "Colors.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Codes.hpp"
 #include "Tools.hpp"
 
 #define HOLD_NON_ACCEPTED 10 //this will set the ammount of connections in hold before start rejecting them if they are not accepted.
@@ -90,6 +91,7 @@ class Server
 		int					rmChannelMap(std::string &str, std::string &pw); // josegar2: the channels aren't removed
 
 		bool				channelExists(std::string &theChannel);
+		Channel				*getChannel(std::string &theChannel);
 		
 		void				set_server_name(const std::string &s);
 		void				buff_to_string(char *str);

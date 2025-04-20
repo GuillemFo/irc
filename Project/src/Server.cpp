@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 22:34:26 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:18:39 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ int	Server::addClientMap(int fd)
 
 int	Server::addChannelMap(std::string &str)
 {
-	if (_ch_map.find(str) == _ch_map.end())
+	if (_ch_map.find(name_tolower(str)) == _ch_map.end())
 	{
-		this->_ch_map.insert(std::pair<std::string, Channel*>(str, new Channel(str)));
+		this->_ch_map.insert(std::pair<std::string, Channel*>(name_tolower(str), new Channel(str)));
 		return (1);
 	}
 	else
@@ -103,13 +103,13 @@ int	Server::rmClientMap(int fd)
 
 int	Server::rmChannelMap(std::string &str) // not needed by subject
 {
-	if (_ch_map.find(str) == _ch_map.end())
+	if (_ch_map.find(name_tolower(str)) == _ch_map.end())
 		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
 	else
 	{
 		
-		delete this->_ch_map[str];
-		this->_ch_map.erase(str);
+		delete this->_ch_map[name_tolower(str)];
+		this->_ch_map.erase(name_tolower(str));
 		return (1);
 	}
 	return (-1);
@@ -145,6 +145,19 @@ bool	Server::channelExists(std::string &theChannel)
 {
 	return this->_ch_map.find(name_tolower(theChannel)) != this->_ch_map.end();
 }
+
+Channel	*Server::getChannel(std::string &theChannel)
+{
+	std::map<std::string, Channel *>::iterator it;
+
+	it = this->_ch_map.find(name_tolower(theChannel));
+	if (it == this->_ch_map.end())
+	{
+		return NULL;
+	}
+	return it->second;
+}
+
 
 
 //This will need to be redesigned

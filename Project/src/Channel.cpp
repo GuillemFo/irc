@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 22:36:23 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:32:56 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,9 @@ const std::string	Channel::get_topic() const {return (this->_Topic);}
 
 void				Channel::set_pass(std::string &str) {this->_key = str;}
 
-bool 				Channel::check_pass(std::string &str)
-{
-	if (str == this->_key)
-	{
-		return (true);
-	}
-	return (false);
-}
+bool				Channel::isPassRequired() {return (!this->_key.empty());}
+
+bool 				Channel::check_pass(std::string &str) {return (str == this->_key);}
 
 
 Channel::~Channel()
