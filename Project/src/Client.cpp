@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/20 21:40:44 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:53:06 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,36 @@ bool	Client::isRegistered() {return this->_registered;}
 
 void	Client::partChannel(std::string &channelName) 
 {
-	std::cout << channelName << std::endl;
+	std::cout << "Part CHannel" << std::endl;
+	Channel * pChannel;
+	// check if channelName is not empty or doesn't exist
+	if ((channelName.empty()) ||
+	! this->_server->channelExists(channelName))
+		throw std::runtime_error(ERR_NOSUCHCHANNEL);
+		// Get pointer to channel object
+	pChannel = this->_server->getChannel(channelName);
+	if (! pChannel)
+		throw std::runtime_error(ERR_NOSUCHCHANNEL); // it shouldn't happen
+	// check if in channel
+	if (! pChannel->isMember(this->_nick))
+		throw std::runtime_error(ERR_NOTONCHANNEL);
+	// remove client from client map in channel and from channel map in client
+	pChannel->remClient(this->get_nick());
+	this->_channels.erase(name_tolower(channelName));
 }
 
 // Leave all channels after receiving a JOIN 0
 void	Client::partAllChannels()
 {
-	
+	std::map<std::string, Channel *>::iterator it;
+	for (it = this->_channels.begin(); 
+		 it != this->_channels.end(); ++it)
+	{
+		try {
+			this->partChannel(it->first);
+		} catch (...) {}	// no errors should be thrown from partChannel
+	}
+	this->_channels.clear();  // no memebers should be left
 }
 
 // channelName should be shorter or equal to CHANNELLEN

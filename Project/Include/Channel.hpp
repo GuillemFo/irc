@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/20 20:34:08 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:25:34 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ class Channel
 		
 		void				addClient(Client *theClient);
 		void				addOperator(Client *theClient);
-		void				remClient(std::string clientNick);
-		void				remOperator(std::string clientNick);
-		bool				isMember(std::string clientNick);
-		bool				isOperator(std::string clientNick);
+		void				remClient(std::string &clientNick);
+		void				remOperator(std::string &clientNick);
+		bool				isMember(std::string &clientNick);
+		bool				isOperator(std::string &clientNick);
 		bool				isInviteOnly();
 		bool				isTopicProtected();
 		bool				isChannelFull();

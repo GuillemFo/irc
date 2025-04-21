@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/20 21:32:56 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:53:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	Channel::addOperator(Client *theClient)
 }
 
 
-void	Channel::remClient(std::string clientNick)
+void	Channel::remClient(std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 
@@ -87,7 +87,7 @@ void	Channel::remClient(std::string clientNick)
 	this->_opclients.erase(it);
 
 }
-void	Channel::remOperator(std::string clientNick)
+void	Channel::remOperator(std::string &clientNick)
 {
 	// It will be called just if isOperator after a MOD -o
 	// another way to remove from map
@@ -95,7 +95,7 @@ void	Channel::remOperator(std::string clientNick)
 	(void) d;
 }
 
-bool		Channel::isMember(std::string clientNick)
+bool		Channel::isMember(std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
@@ -104,7 +104,7 @@ bool		Channel::isMember(std::string clientNick)
 		return true;
 	return false;
 }
-bool		Channel::isOperator(std::string clientNick)
+bool		Channel::isOperator(std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
