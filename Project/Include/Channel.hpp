@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/21 18:25:34 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:17:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,20 @@ class Channel
 		
 		void				set_pass(std::string &str);
 		bool				isPassRequired();
-		bool				check_pass(std::string &str);
+		bool				check_pass(const std::string &str);
 		
 		void				set_userLimit(int nb);
 		int					get_userLimit();
 		
 		void				addClient(Client *theClient);
 		void				addOperator(Client *theClient);
-		void				remClient(std::string &clientNick);
-		void				remOperator(std::string &clientNick);
-		bool				isMember(std::string &clientNick);
-		bool				isOperator(std::string &clientNick);
+		void				remClient(const std::string &clientNick);
+		void				remOperator(const std::string &clientNick);
+		bool				isMember(const std::string &clientNick);
+		bool				isOperator(const std::string &clientNick);
 		bool				isInviteOnly();
 		bool				isTopicProtected();
 		bool				isChannelFull();
 		bool				isChannelEmpty();
-		static bool			isNameCorrect(std::string theName);
+		static bool			isNameCorrect(const std::string theName);
 };

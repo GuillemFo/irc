@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/21 18:53:06 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:09:27 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
 
 bool	Client::isRegistered() {return this->_registered;}
 
-void	Client::partChannel(std::string &channelName) 
+void	Client::partChannel(const std::string &channelName) 
 {
 	std::cout << "Part CHannel" << std::endl;
 	Channel * pChannel;
@@ -135,7 +135,7 @@ void	Client::partAllChannels()
 }
 
 // channelName should be shorter or equal to CHANNELLEN
-void	Client::joinChannel(std::string &channelName)
+void	Client::joinChannel(const std::string &channelName)
 {
 	std::cout << "Join Channel without password" << std::endl;
 	if (channelName == "0") // it should be checked in the command handler to avoid JOIN 0,#chan or #chan,0
@@ -175,7 +175,7 @@ void	Client::joinChannel(std::string &channelName)
 	// add client to the map of clients in channel
 	pChannel->addClient(this);}
 
-void	Client::joinChannel(std::string &channelName, std::string &channelPwd)
+void	Client::joinChannel(const std::string &channelName, const std::string &channelPwd)
 {
 	std::cout << "Join Channel with password" << std::endl;
 	if (channelName == "0")

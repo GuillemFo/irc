@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/20 21:18:39 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:15:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ Server &Server::operator=(const Server &other)	//no need??
 }
 
 ///////////////////////////// OUR FUNCTIONS ////////////////////////////////////
-
-
 
 int	Server::get_serverFD() {return (this->_sv_fd);}
 
@@ -73,7 +71,7 @@ int	Server::addClientMap(int fd)
 
 
 
-int	Server::addChannelMap(std::string &str)
+int	Server::addChannelMap(const std::string &str)
 {
 	if (_ch_map.find(name_tolower(str)) == _ch_map.end())
 	{
@@ -141,12 +139,12 @@ const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch
 // 	return (0);
 // }
 
-bool	Server::channelExists(std::string &theChannel)
+bool	Server::channelExists(const std::string &theChannel)
 {
 	return this->_ch_map.find(name_tolower(theChannel)) != this->_ch_map.end();
 }
 
-Channel	*Server::getChannel(std::string &theChannel)
+Channel	*Server::getChannel(const std::string &theChannel)
 {
 	std::map<std::string, Channel *>::iterator it;
 

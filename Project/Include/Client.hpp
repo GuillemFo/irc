@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/20 20:47:24 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:09:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ class Client
 
 		void	setPassOK(); //set to true. In the constructor would be false
 		void	setRegistered(); //set to true. In the constructor would be false
-		void	joinChannel(std::string &channelName);
-		void	joinChannel(std::string &channelName, std::string &channelPwd);
-		void	partChannel(std::string &channelName);
+		void	joinChannel(const std::string &channelName);
+		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
+		void	partChannel(const std::string &channelName);
 		void	partAllChannels();
 		
 		//getters
