@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/16 14:17:34 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:53:17 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ Command Parser::parse(const std::string& line) {
 	std::string word;
 	if (!(iss >> word))
 		return cmd;
+// uncomment for raw input testing
+	// if (word[0] == '/')
+	// 	word = word.substr(1);
+	
+	cmd.setName(word);
 
 	
 	bool trailing = false;
