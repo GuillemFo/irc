@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 14:54:33 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:47:28 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,6 @@ int main(int ac, char **av)
 	{
 		std::cout << e << std::endl;
 	}
-	return (0);
 }	
 
 // https://www.suchprogramming.com/epoll-in-3-easy-steps/ 

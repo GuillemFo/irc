@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/16 21:39:39 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:53:17 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ Command Parser::parse(const std::string& line) {
 	bool trailing = false;
 	std::string trailingArg;
 	
+	std::cout << "here1: " << word << " line: " << line << std::endl; //command gets lost here!!! 
 	while (iss >> word) {
 		if (!trailing && word[0] == ':') {
 			trailing = true;
@@ -52,6 +53,7 @@ Command Parser::parse(const std::string& line) {
 		}
 		else if(!trailing) {
 			cmd.addArg(word);
+			std::cout << "here2: " << word << " line: " << line << std::endl; 
 		}
 		else {
 			std::cout << "You are not supposed to get here! Check " <<
