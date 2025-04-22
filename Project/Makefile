@@ -13,7 +13,7 @@
 NAME = ircserv
 
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
-		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
+		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp\
 
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address

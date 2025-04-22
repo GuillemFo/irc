@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 21:02:45 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:23:55 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 # define COMMANDHANDLER_HPP
 
 # include "Parser.hpp"
-
-class Command;
-class Client;
+# include "Command.hpp"
+# include "Client.hpp"
 
 class CommandHandler {
 	public:

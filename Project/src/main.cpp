@@ -20,8 +20,6 @@
 #include "JoinCommand.hpp"
 #include "Parser.hpp"
 #include "Command.hpp"
-#include "CommandDispatcher.hpp"
-#include <iostream>
 /*
 Your executable will be run as follows:
 ./ircserv <port> <password>
