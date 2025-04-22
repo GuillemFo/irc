@@ -196,3 +196,36 @@ void Server::buff_to_string(char *str)
 	else
 		throw std::string("Exiting");
 }
+
+// this command should be called from server.init() function
+// the commented lines below should be uncommented for each new command handler
+// that will be implemented
+void Server::registerAllCommands() {
+	_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
+	_dispatcher.registerHandler("JOIN", new JoinCommand(this));
+	// _dispatcher.registerHandler("NICK", new NickCommand(this));
+	// _dispatcher.registerHandler("USER", new UserCommand(this));
+	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
+	// _dispatcher.registerHandler("PING", new PingCommand(this));
+	// _dispatcher.registerHandler("PONG", new PongCommand(this));
+	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this));
+	// _dispatcher.registerHandler("PART", new PartCommand(this));
+	// _dispatcher.registerHandler("KICK", new KickCommand(this));
+	// _dispatcher.registerHandler("MODE", new ModeCommand(this));
+	// _dispatcher.registerHandler("TOPIC", new TopicCommand(this));
+	// _dispatcher.registerHandler("INVITE", new InviteCommand(this));
+	std::cout << "All command handlers have been registered." << std::endl;
+	
+	// TODO: add error handling, so that if empty string is given or non-existing
+	// handler, the program exits cleanly (this is a whole other set of functions
+	// that we will need to implement)
+	// in this particular case maybe make this funciton return a bool
+	// and make all other functions return a bool. then we can do
+	//return _dispatcher.registerHandler("JOIN", new JoinCommand(this)) &&
+	//		_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this)) && ...
+	// and in the server.init() we put:
+	// if (!registerAllCommands) {
+	//	clean_up();
+	//}
+}
+

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
 /*   Updated: 2025/04/22 15:01:25 by gforns-s         ###   ########.fr       */
@@ -20,6 +20,8 @@
 #include "JoinCommand.hpp"
 #include "Parser.hpp"
 #include "Command.hpp"
+#include "CommandDispatcher.hpp"
+#include <iostream>
 /*
 Your executable will be run as follows:
 ./ircserv <port> <password>
