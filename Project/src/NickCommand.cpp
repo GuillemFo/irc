@@ -6,14 +6,16 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:05:44 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:04:26 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "NickCommand.hpp"
+# include "CommandHandler.hpp"
 # include <iostream>
 
 NickCommand::NickCommand() : _server(NULL) {}
+NickCommand::NickCommand (Server* server) : _server(server) {}
 NickCommand::NickCommand(const NickCommand& src) {
 	this->_server = src._server;
 }
@@ -25,7 +27,6 @@ NickCommand& NickCommand::operator=(const NickCommand& src) {
 }
 
 NickCommand::~NickCommand () {}
-NickCommand::NickCommand (Server* server) : _server(server) {}
 
 bool NickCommand::isValidNick(const std::string& name) {
 	if (name.empty()) {
@@ -70,7 +71,7 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 	const std::string& Nick = args[0];
 	if (NickCommand::isValidNick(Nick)) {
 		sender.set_nick(Nick);
-		std::cout << "Executing Nick command. Nick: " << Nick << "assigned to client: " << sender.get_clientFD() << std::endl;
+		std::cout << "Executing Nick command. Nick: " << Nick << " assigned to client: " << sender.get_clientFD() << std::endl;
 	}
 	else {
 		return ;
