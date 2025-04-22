@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/17 00:49:20 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:59:11 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@
 #include <map>
 #include <sstream>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <cstdio> //perror
 
 #include "Colors.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Codes.hpp"
 #include "Tools.hpp"
 #include "Command.hpp"
 #include "CommandHandler.hpp"
@@ -90,13 +92,16 @@ class Server
 		const std::map<std::string, Channel*>	&getChannelMap() const;
 		
 		int					addClientMap(int fd);
-		int					addChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		int					addChannelMap(std::string &str, std::string &pw);
+		int					addChannelMap(const std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
+		int					addChannelMap(const std::string &str, const std::string &pw); // the pw will be in the channel object
 		
 		int					rmClientMap(int fd);
 		int					rmChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		int					rmChannelMap(std::string &str, std::string &pw);
+		int					rmChannelMap(std::string &str, std::string &pw); // josegar2: the channels aren't removed
 
+		bool				channelExists(const std::string &theChannel);
+		Channel				*getChannel(const std::string &theChannel);
+		
 		void				set_server_name(const std::string &s);
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);

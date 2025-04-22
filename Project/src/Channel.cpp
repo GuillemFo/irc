@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:13:53 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:16:49 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,9 @@ const std::string	Channel::get_topic() const {return (this->_Topic);}
 
 void				Channel::set_pass(std::string &str) {this->_key = str;}
 
-bool 				Channel::check_pass(std::string &str)
-{
-	if (str == this->_key)
-	{
-		return (true);
-	}
-	return (false);
-}
+bool				Channel::isPassRequired() {return (!this->_key.empty());}
+
+bool 				Channel::check_pass(const std::string &str) {return (str == this->_key);}
 
 
 Channel::~Channel()
@@ -65,62 +60,91 @@ Channel::~Channel()
 void	Channel::addClient(Client *theClient)
 {
 	// once the join channel is succesful --> add client to the map _clients
-	_clients[theClient->get_nick()] = theClient;
+	if (this->_clients.size() == 0) // if no clients in channel add as operator
+		this->addOperator(theClient);
+	this->_clients[name_tolower(theClient->get_nick())] = theClient;
 }
 void	Channel::addOperator(Client *theClient)
 {
-	_opclients[theClient->get_nick()] = theClient;
+	// the logic of it has to be normal or operator should be outside
+	this->_opclients[name_tolower(theClient->get_nick())] = theClient;
 }
 
-/*
-void	Channel::remClient(std::string clientNick)
-{
-	int d = _clients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
-}
-void	Channel::remOperator(std::string clientNick)
-{
-	int d = _opclients.erase(clientNick);  // perhaps is better a *theClient to avoid case problems
-}
-*/
 
-bool		Channel::isMember(std::string clientNick)
+void	Channel::remClient(const std::string &clientNick)
+{
+	std::map<std::string, Client *>::iterator it;
+
+	// in the partchannel will be checked that client isMember
+	it = this->_clients.find(name_tolower(clientNick));
+	if (it == this->_clients.end())  // it must not happen
+		return;
+	this->_clients.erase(it);
+	// remove from operators
+	it = this->_opclients.find(name_tolower(clientNick));
+	if (it == this->_opclients.end())
+		return;
+	this->_opclients.erase(it);
+
+}
+void	Channel::remOperator(const std::string &clientNick)
+{
+	// It will be called just if isOperator after a MOD -o
+	// another way to remove from map
+	int d = this->_opclients.erase(name_tolower(clientNick));
+	(void) d;
+}
+
+bool		Channel::isMember(const std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
-	it = _clients.find(clientNick);
-	if (it != _clients.end())
-	return true;
-	it = _opclients.find(clientNick);
-	if (it != _opclients.end())
-	return true;
+	it = this->_clients.find(name_tolower(clientNick));
+	if (it != this->_clients.end())
+		return true;
 	return false;
 }
-bool		Channel::isOperator(std::string clientNick)
+bool		Channel::isOperator(const std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 	
-	it = _opclients.find(clientNick);
-	if (it != _opclients.end())
+	it = this->_opclients.find(name_tolower(clientNick));
+	if (it != this->_opclients.end())
 	return true;
 	return false;
 }
+
 bool		Channel::isInviteOnly()
 {
-	return	_inviteOnly;
-}
-bool		Channel::isTopicProtected()
-{
-	return	_protectTopic;
+	return	this->_inviteOnly;
 }
 
-/*
+bool		Channel::isTopicProtected()
+{
+	return	this->_protectTopic;
+}
+
 bool		Channel::isChannelFull()
 {
-	if (_clientLimit > 0)
-	{
-		if ((_clients.size() + _opclients.size()) >= _clientLimit)
+	if (this->_clientLimit > 0 &&
+		(this->_clients.size() >= this->_clientLimit))
 		return true;
-	}
 	return false;
 }
-*/
+
+bool		Channel::isChannelEmpty()
+{
+	return (this->_clients.size() == 0);
+}
+
+bool Channel::isNameCorrect(const std::string theName)
+{
+	if (theName.empty() ||
+		theName.size() > CHANNELLEN ||
+		!strchr(CHANTYPES, theName[0]) ||
+		theName.find(' ') != std::string::npos ||
+		theName.find('\a') != std::string::npos ||
+		theName.find(',') != std::string::npos)
+		return false;
+	return true;
+}
