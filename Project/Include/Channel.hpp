@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:13:28 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:17:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ class Channel
 		Server		*_server;
 		std::string		_Name;
 		std::string		_Topic;
-		std::string		_key;	// if empty no pass need?
-		std::map<std::string, Client *> _clients; // list of regular clients 
+		std::string		_key;	// if empty no pass needed
+		std::map<std::string, Client *> _clients; // list of all clients 
 		std::map<std::string, Client *> _opclients; // list of operator clients 
-		bool		_protectTopic;
+		bool			_protectTopic;
 		bool			_inviteOnly;
-		int			_clientLimit;
+		size_t			_clientLimit;
 		
 	public:
 		Channel(std::string name);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
@@ -52,23 +52,21 @@ class Channel
 		const std::string	get_topic() const;
 		
 		void				set_pass(std::string &str);
-		bool				check_pass(std::string &str);
+		bool				isPassRequired();
+		bool				check_pass(const std::string &str);
 		
 		void				set_userLimit(int nb);
 		int					get_userLimit();
 		
 		void				addClient(Client *theClient);
 		void				addOperator(Client *theClient);
-		void				remClient(std::string clientNick);
-		void				remOperator(std::string clientNick);
-		bool				isMember(std::string clientNick);
-		bool				isOperator(std::string clientNick);
+		void				remClient(const std::string &clientNick);
+		void				remOperator(const std::string &clientNick);
+		bool				isMember(const std::string &clientNick);
+		bool				isOperator(const std::string &clientNick);
 		bool				isInviteOnly();
 		bool				isTopicProtected();
 		bool				isChannelFull();
-		
-	
-
-
-
+		bool				isChannelEmpty();
+		static bool			isNameCorrect(const std::string theName);
 };

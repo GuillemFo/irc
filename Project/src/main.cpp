@@ -257,7 +257,6 @@ int main(int ac, char **av)
 	{
 		std::cout << e << std::endl;
 	}
-	return (0);
 }	
 
 // https://www.suchprogramming.com/epoll-in-3-easy-steps/ 

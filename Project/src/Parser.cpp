@@ -32,13 +32,12 @@ Command Parser::parse(const std::string& line) {
 	std::string word;
 	if (!(iss >> word))
 		return cmd;
-// uncomment for raw input testing
+	// uncomment for raw input testing
 	// if (word[0] == '/')
 	// 	word = word.substr(1);
 	
 	cmd.setName(word);
 
-	
 	bool trailing = false;
 	std::string trailingArg;
 	
