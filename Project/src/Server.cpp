@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:01:33 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:26:43 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("NICK", new NickCommand(this));
 	_dispatcher.registerHandler("USER", new UserCommand(this));
 	_dispatcher.registerHandler("PASS", new PassCommand(this));
+	_dispatcher.registerHandler("Cap", new CapCommand(this));
 	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
 	// _dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));
