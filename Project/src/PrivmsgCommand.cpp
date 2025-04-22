@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 20:59:43 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:47:20 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	//}
 	// TODO: send the message to the client found by name.
 	// recepient->sendMessage(sender.getSource(), message);
+	
 	std::cout << "Command tested: PRIVMSG" << std::endl;
 	std::cout << "Target is: " << target << ", message is: " << message
 	<< std::endl;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 00:54:02 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:50:00 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		//TODO: implement channel joining functionality
 	}
 	else {
+		std::cout << "ERROR::Executing JOIN command. "
+			<< channelName << " not valid" << std::endl;
 		return ;
 	}
 }

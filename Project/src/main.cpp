@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 16:05:15 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:03:15 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ void	setNonBlocking(int sv_fd)
 		std::exit(-1);
 	}
 }
+
+
+void cleanupClient(Server &s, int fd)
+{
+	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
+	close(fd);
+	s.rmClientMap(fd);
+}
+
+
 
 void handleNewConnection(Server &s)
 {
@@ -105,11 +115,11 @@ void handleClientRead(Server &s, int fd)
 			std::cout << "Received from " << fd << ": " << buffer;
 
 			Parser parser;
-			Command cmd = parser.parse(buffer);
+			Command cmd = parser.parse(buffer);	// trying to understand how to execute command :(
 			cmd.printCommand();
 
 			// Store response in a write buffer associated with the client and enable EPOLLOUT only when needed
-			s.queueWrite(fd, std::string(buffer, count));	//write on a buffer for this client (known by its fd) need to check how u handle buffers
+			//s.queueWrite(fd, std::string(buffer, count));	//write on a buffer for this client (known by its fd) need to check how u handle buffers
 
 			struct epoll_event ev;
 			ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
@@ -119,7 +129,7 @@ void handleClientRead(Server &s, int fd)
 	}
 }
 
-void handleClientWrite(Server &s, std::string &msg, int fd)
+void handleClientSend(Server &s, std::string &msg, int fd)
 {
 	
 	ssize_t sent = send(fd, msg.c_str(), msg.size(), 0); // this function will be called from server channels to send to all the clients the buffer specified.
@@ -142,12 +152,6 @@ void handleClientWrite(Server &s, std::string &msg, int fd)
 	}
 }
 
-void cleanupClient(Server &s, int fd)
-{
-	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
-	close(fd);
-	s.rmClientMap(fd);
-}
 
 
 
@@ -224,7 +228,6 @@ int main(int ac, char **av)
 		std::cout << "Server started on pass " << C_R << av[2] << C_RESET << std::endl;
 
 		struct epoll_event events[MAX_EVENTS];
-		char buffer[BUFFER_SIZE +1];
 
 		//Event loop
 		while (true)
@@ -248,8 +251,8 @@ int main(int ac, char **av)
 						handleClientRead(s, fd);
 					if (ev & EPOLLOUT)
 					{
-						std::string msg;//just for compilation
-						handleClientWrite(s, msg, fd);
+						std::string msg = "//just for compilation";
+						handleClientSend(s, msg, fd);
 					}
 				}
 			}
