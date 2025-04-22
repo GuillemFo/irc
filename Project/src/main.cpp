@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 14:47:28 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:01:25 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ Your executable will be run as follows:
 
 
 //https://www.suchprogramming.com/epoll-in-3-easy-steps/
+/*
+	MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
+	BUFFER_SIZE → how many bytes you read from a socket at once.
+*/
+#define MAX_EVENTS 64
+#define BUFFER_SIZE 1024
 
 void	setNonBlocking(int sv_fd)
 {
@@ -215,12 +221,6 @@ int main(int ac, char **av)
 		std::cout << "Server started on port " << C_R << s.get_port() << C_RESET << std::endl;
 		std::cout << "Server started on pass " << C_R << av[2] << C_RESET << std::endl;
 
-		/*
-			MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
-			BUFFER_SIZE → how many bytes you read from a socket at once.
-		*/
-		#define MAX_EVENTS 64
-		#define BUFFER_SIZE 1024
 		struct epoll_event events[MAX_EVENTS];
 		char buffer[BUFFER_SIZE +1];
 
