@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/21 19:41:16 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 20:11:46 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 
 Client::~Client() {
 	this->partAllChannels();
+	// has to be removed from client map in Server
 }
 
 Client::Client(const Client &other){*this = other;}
