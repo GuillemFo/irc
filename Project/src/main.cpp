@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 15:01:25 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:05:15 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void handleNewConnection(Server &s)
 	}
 }
 
-//Need to investigate...
+//Need to investigate... Basically want to know if this is the correct way
 void handleClientRead(Server &s, int fd)
 {
 	char buffer[BUFFER_SIZE + 1];
@@ -109,7 +109,7 @@ void handleClientRead(Server &s, int fd)
 			cmd.printCommand();
 
 			// Store response in a write buffer associated with the client and enable EPOLLOUT only when needed
-			s.queueWrite(fd, std::string(buffer, count));	//write on a buffer for this client (known by its fd)
+			s.queueWrite(fd, std::string(buffer, count));	//write on a buffer for this client (known by its fd) need to check how u handle buffers
 
 			struct epoll_event ev;
 			ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
@@ -119,10 +119,10 @@ void handleClientRead(Server &s, int fd)
 	}
 }
 
-void handleClientWrite(Server &s, int fd)
+void handleClientWrite(Server &s, std::string &msg, int fd)
 {
-	std::string &msg = s.getWriteBuffer(fd); //the buffer that we need to send
-	ssize_t sent = send(fd, msg.c_str(), msg.size(), 0);
+	
+	ssize_t sent = send(fd, msg.c_str(), msg.size(), 0); // this function will be called from server channels to send to all the clients the buffer specified.
 	if (sent == -1)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -247,7 +247,10 @@ int main(int ac, char **av)
 					if (ev & EPOLLIN)
 						handleClientRead(s, fd);
 					if (ev & EPOLLOUT)
-						handleClientWrite(s, fd);
+					{
+						std::string msg;//just for compilation
+						handleClientWrite(s, msg, fd);
+					}
 				}
 			}
 		}
