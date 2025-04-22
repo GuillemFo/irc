@@ -52,7 +52,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 	const std::string& User = args[0]; // need to check the other args?? 
 	if (UserCommand::isValidUser(User)) {
 		sender.set_user(User);
-		std::cout << "Executing User command. User: " << User << "assigned to client: " << sender.get_clientFD() << std::endl;
+		std::cout << "Executing User command. User: " << User << " assigned to client: " << sender.get_clientFD() << std::endl;
 	}
 	else {
 		return ;
