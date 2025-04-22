@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:25:45 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:30:46 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 	}
 	const std::string& Cap = args[0];
 	if (true) {
+		(void)Cap;
 		std::cout << "Executing Cap command. Cient authorized" << std::endl;
 	}
 	else {

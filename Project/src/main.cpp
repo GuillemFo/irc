@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:22:14 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:41:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,13 @@ void handleClientRead(Server &s, int fd)
 			std::cout << "Received from " << fd << ": " << buffer;
 
 			Parser parser;
+			//TODO go through a loop until all \r\n are processed
+			// each \r\n is a new line
+			// call parser.parse on each line
+			// while (buffer) {
+			// std::isstring line << 
+			// NB decide on wheter the epoll is to be called outside or within the loop
+			//}
 			Command cmd = parser.parse(buffer);
 			Client *clientfd = s.getClient(fd);
 
