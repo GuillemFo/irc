@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 09:37:46 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:12:08 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,4 +180,3 @@ void Server::buff_to_string(char *str)
 	else
 		throw std::string("Exiting");
 }
-
