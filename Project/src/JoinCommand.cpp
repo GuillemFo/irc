@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/13 22:55:17 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:50:00 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "JoinCommand.hpp"
+# include "CommandHandler.hpp"
 # include <iostream>
 
 JoinCommand::JoinCommand() : _server(NULL) {}
@@ -70,6 +71,8 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		//TODO: implement channel joining functionality
 	}
 	else {
+		std::cout << "ERROR::Executing JOIN command. "
+			<< channelName << " not valid" << std::endl;
 		return ;
 	}
 }
