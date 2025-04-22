@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:14:29 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:09:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include <stdexcept>
 #include "Server.hpp"
 #include "Channel.hpp"
+#include "OutBuffer.hpp"
+
 
 
 #define NICK_NOT_ALLOWED_CHARS " ,*?!@" // nick can't cotain this chars
@@ -31,11 +34,13 @@ class Channel ;
 class Client
 {
 	private:
-		Server *_server; // to get the details and functions of the server
+		Server 				*_server; // to get the details and functions of the server
+		OutBuffer			_out;
 		int 				_client_fd;
 		std::string 		_nick;
 		std::string 		_user;
 		std::string 		_realname;
+		std::string			_host;		// or IP Maximum 63 chars. If longer --> IP
 		bool				_passok;	//password received and OK
 		bool				_registered; //registration process OK
 		std::map<std::string, Channel*> _channels; //list of channels joined
@@ -50,6 +55,8 @@ class Client
 
 		std::string			_string_buff;	//store buffer until \r \n and permission to send. keep storing and remove the part sent. maybe need an int to check the lenght of the string so its easier to cut and to confirm from the server??
 
+		static bool			isNickCorrect(std::string theNick);
+
 		int					get_clientFD();
 
 		void				set_nick(const std::string &str);
@@ -58,16 +65,24 @@ class Client
 		void				set_user(const std::string &str);
 		void				setRealName(std::string &str);
 		const std::string	get_user() const;
-		
+	
+		void				set_host(const std::string &str);
+		const std::string	get_host() const;
+
 		void	setPassOK(); //set to true. In the constructor would be false
 		void	setRegistered(); //set to true. In the constructor would be false
-		void	joinChannel(std::string channelName);
-		void	partChannel(std::string channelName);
+		void	joinChannel(const std::string &channelName);
+		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
+		void	partChannel(const std::string &channelName);
+		void	partAllChannels();
 		
 		//getters
 		std::string	getLowerNick();
-		std::string	getSource(); // : <nickname> [ "!" <user> ] [ "@" <host> ]
+		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
+		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();
+
+		void		sendMessage(std::string &theMessage);
 		
 	
 

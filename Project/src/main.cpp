@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 09:44:08 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:44:05 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ Your executable will be run as follows:
 
 //https://www.suchprogramming.com/epoll-in-3-easy-steps/
 
-void	setNonBlocking(int sv_fd)
+void	setNonBlocking(int sv_fd)  //*** Perhaps a Server member to be call after the creation and called with try catch
 {
 	int flag = fcntl(sv_fd, F_GETFL, 0);
 	if (flag == -1)
 	{
-		std::cout << "fcntl F_GETFL error" << std::endl;
+		std::cout << "fcntl F_GETFL" << std::endl;
 		std::exit(-1);
 	}
 	if (fcntl(sv_fd, F_SETFL, flag | (O_NONBLOCK == -1)))
 	{
-		std::cout << "fcntl F_SETFL error" << std::endl;
+		std::cout << "fcntl F_SETFL" << std::endl;
 		std::exit(-1);
 	}
 }
@@ -56,7 +56,7 @@ int main(int ac, char **av)
 		sv_fd = socket(AF_INET, SOCK_STREAM, 0);
 		if (sv_fd < 0)
 		{
-			std::cout << "socket error" << std::endl;
+			std::cout << "socket" << std::endl;
 			return (-1);
 		}
 		if (valid_port(av[1]) == false)
@@ -65,10 +65,24 @@ int main(int ac, char **av)
 			return (-1);
 		}
 		
+
+	/*
+		10/04/25 9.58 RN we missing password check, string parsing and command control.
+	
+	
+	
+	*/
+
 		setNonBlocking(sv_fd); //set fcntl to non blocking
 		Server s(sv_fd, atoi(av[1]), av[2]);
 
 		s.set_server_name("IRC_Server....");
+
+	
+
+	
+	
+	
 
 		struct sockaddr_in server_addr;
 		memset(&server_addr, 0, sizeof(server_addr));
@@ -77,9 +91,10 @@ int main(int ac, char **av)
 		server_addr.sin_port = htons(s.get_port()); // convert port to network byte order
 
 		//Binding: 
+		//*** Perhahps a member function with throw
 		if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		{
-			std::cout << "bind error" << std::endl;
+			std::cout << "bind" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -87,7 +102,7 @@ int main(int ac, char **av)
 		//Listen:
 		if(listen(s.get_serverFD(), HOLD_NON_ACCEPTED) < 0)
 		{
-			std::cout << "listen error" << std::endl;
+			std::cout << "listen" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -96,7 +111,7 @@ int main(int ac, char **av)
 		epoll_fd = epoll_create1(0);
 		if (epoll_fd < 0)
 		{
-			std::cout << "epoll_create1 error" << std::endl;
+			std::cout << "epoll_create1" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -108,7 +123,7 @@ int main(int ac, char **av)
 		
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, s.get_serverFD(), &ev) < 0)
 		{
-			std::cout << "epoll_ctl: server_fd error" << std::endl;
+			std::cout << "epoll_ctl: server_fd" << std::endl;
 			close(s.get_serverFD());
 			return (-1);
 		}
@@ -125,8 +140,13 @@ int main(int ac, char **av)
 		struct epoll_event events[MAX_EVENTS];
 		char buffer[BUFFER_SIZE];
 
+
+
+
+
 		// Create a welcome channel to test.
-	
+		
+		
 		/*
 		Page 25 modern-ircdocs ... pdf
 
@@ -140,13 +160,17 @@ int main(int ac, char **av)
 		376 NICK :End of /MOTD command.
 		*/
 
+
+
+
+
 		//Event loop
 		while (true)
 		{
 			int num_fd_ready = epoll_wait(s.get_epollFD(), events, MAX_EVENTS, -1);
 			if (num_fd_ready < 0)
 			{
-				std::cout << "epoll_wait error" << std::endl;
+				std::cout << "epoll_wait" << std::endl;
 				break ;
 			}
 			for (int i = 0; i < num_fd_ready; ++i)
@@ -158,7 +182,7 @@ int main(int ac, char **av)
 					int cl_fd = accept(s.get_serverFD(), NULL, NULL);
 					if (cl_fd < 0)
 					{
-						std::cout << "accept error" << std::endl;
+						std::cout << "accept" << std::endl;
 						continue ;
 					}
 					setNonBlocking(cl_fd);
@@ -167,7 +191,7 @@ int main(int ac, char **av)
 					ev.data.fd = cl_fd;
 					if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
 					{
-						std::cout << "epoll_ctl: client fd error" << std::endl;
+						std::cout << "epoll_ctl: client fd" << std::endl;
 						close(cl_fd);
 						continue ;
 					}
@@ -183,14 +207,13 @@ int main(int ac, char **av)
 					ssize_t count = read(fd, buffer, BUFFER_SIZE);
 					if (count == -1)
 					{
-						std::cout << "read error" << std::endl;
+						std::cout << "read" << std::endl;
 						close(fd);
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 					}
 					else if (count == 0)	//client disconnecte?? what if client has nothing to send?
 					{
-						std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
-						s.rmClientMap(fd);
+						std::cout << "Client disconnected: fd " << fd << std::endl;
 						close(fd);
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 					}
@@ -209,7 +232,7 @@ int main(int ac, char **av)
 						ssize_t sent = send(fd, buffer, count, 0);
 						if (sent == -1)
 						{
-							std::cout << "send error" << std::endl;
+							std::cout << "send" << std::endl;
 							close(fd);
 							epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
 						}
@@ -225,7 +248,7 @@ int main(int ac, char **av)
 	{
 		std::cout << e << std::endl;
 	}
-	return (0);
+	
 }
 
 // https://www.suchprogramming.com/epoll-in-3-easy-steps/ 

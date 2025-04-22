@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:07:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/14 13:06:39 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:53:32 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,29 @@ std::string replace_tool(std::string str, std::string to_replace, std::string _n
 	return (str);
 }
 
+// convert to lowercase nicknames and channel names
+std::string name_tolower(const std::string& name) {
+	std::string result;
+		
+	for (size_t i = 0; i < name.size(); ++i) {
+		unsigned char c = name[i]; // Handle potential negative chars
+		
+		// RFC 1459 special case folding
+		switch (c) {
+			case '[':  result += '{'; break;
+			case ']':  result += '}'; break;
+			case '\\': result += '|'; break;
+			case '^':  result += '~'; break; // Common extension
+			case '{':  // These prevent double-folding
 
+			default:
+				// Standard ASCII folding
+				if (c >= 'A' && c <= 'Z') {
+					result += c + ('a' - 'A');
+				} else {
+					result += c;
+				}
+		}
+	}
+	return result;
+}

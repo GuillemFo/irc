@@ -3,17 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/14 14:13:50 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/04/17 22:42:34 by josegar2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
-		PrivmsgCommand.cpp JoinCommand.cpp
+		PrivmsgCommand.cpp JoinCommand.cpp \
+		OutBuffer.cpp
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address
 
