@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 14:12:08 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:26:43 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,18 @@ Channel	*Server::getChannel(const std::string &theChannel)
 	return it->second;
 }
 
+Client	*Server::getClient(const int &fd)
+{
+	std::map<int, Client *>::iterator it;
+
+	it = this->_cl_map.find(fd);
+	if (it == this->_cl_map.end())
+	{
+		return NULL; // need to expand for proper error!
+	}
+	return it->second;
+}
+
 
 
 //This will need to be redesigned
@@ -203,8 +215,10 @@ void Server::buff_to_string(char *str)
 void Server::registerAllCommands() {
 	_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
 	_dispatcher.registerHandler("JOIN", new JoinCommand(this));
-	// _dispatcher.registerHandler("NICK", new NickCommand(this));
-	// _dispatcher.registerHandler("USER", new UserCommand(this));
+	_dispatcher.registerHandler("NICK", new NickCommand(this));
+	_dispatcher.registerHandler("USER", new UserCommand(this));
+	_dispatcher.registerHandler("PASS", new PassCommand(this));
+	_dispatcher.registerHandler("Cap", new CapCommand(this));
 	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
 	// _dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));

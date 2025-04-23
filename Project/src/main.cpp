@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 17:03:15 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:41:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,21 @@ void handleClientRead(Server &s, int fd)
 			std::cout << "Received from " << fd << ": " << buffer;
 
 			Parser parser;
-			Command cmd = parser.parse(buffer);	// trying to understand how to execute command :(
-			cmd.printCommand();
+			//TODO go through a loop until all \r\n are processed
+			// each \r\n is a new line
+			// call parser.parse on each line
+			// while (buffer) {
+			// std::isstring line << 
+			// NB decide on wheter the epoll is to be called outside or within the loop
+			//}
+			Command cmd = parser.parse(buffer);
+			Client *clientfd = s.getClient(fd);
+
+			//Check if client set pass nick and user before exec anything? add a checker before any command?
+			
+			s._dispatcher.dispatch(cmd, *clientfd);
 
 			// Store response in a write buffer associated with the client and enable EPOLLOUT only when needed
-			//s.queueWrite(fd, std::string(buffer, count));	//write on a buffer for this client (known by its fd) need to check how u handle buffers
 
 			struct epoll_event ev;
 			ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
@@ -150,11 +160,9 @@ void handleClientSend(Server &s, std::string &msg, int fd)
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 	}
+	else
+		std::cout << "Error mid send" << std::endl;
 }
-
-
-
-
 
 
 int main(int ac, char **av)
@@ -178,7 +186,8 @@ int main(int ac, char **av)
 		
 		setNonBlocking(sv_fd); //set fcntl to non blocking
 		Server s(sv_fd, atoi(av[1]), av[2]);
-
+		
+		s.registerAllCommands();
 		s.set_server_name("IRC_Server....");
 
 		struct sockaddr_in server_addr;
@@ -251,7 +260,7 @@ int main(int ac, char **av)
 						handleClientRead(s, fd);
 					if (ev & EPOLLOUT)
 					{
-						std::string msg = "//just for compilation";
+						std::string msg = "-\n";//just for compilation
 						handleClientSend(s, msg, fd);
 					}
 				}

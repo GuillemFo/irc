@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 10:59:11 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:26:58 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@
 #include "Parser.hpp"
 #include "PrivmsgCommand.hpp"
 #include "JoinCommand.hpp"
+#include "NickCommand.hpp"
+#include "PassCommand.hpp"
+#include "UserCommand.hpp"
+#include "CapCommand.hpp"
+
 
 
 #define HOLD_NON_ACCEPTED 10 //this will set the ammount of connections in hold before start rejecting them if they are not accepted.
@@ -61,11 +66,11 @@ class Server
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;	// int = client_fd
 		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
-		CommandDispatcher					_dispatcher;
 		//**faltaria timestamp d'inici, pel RPL_STATSUPTIME
 		//**server version and MOTD
 		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
+		CommandDispatcher					_dispatcher;
 //Testing
 		
 		int					send_out(std::string message);
@@ -101,6 +106,7 @@ class Server
 
 		bool				channelExists(const std::string &theChannel);
 		Channel				*getChannel(const std::string &theChannel);
+		Client			*getClient(const int &fd);
 		
 		void				set_server_name(const std::string &s);
 		void				buff_to_string(char *str);

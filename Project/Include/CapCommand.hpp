@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   NickCommand.hpp                                    :+:      :+:    :+:   */
+/*   CapCommand.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 07:59:32 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 18:58:12 by gforns-s         ###   ########.fr       */
+/*   Created: 2025/04/22 19:22:45 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/04/22 19:30:14 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NICKCOMMAND_HPP
-# define NICKCOMMAND_HPP
+#ifndef CAPCOMMAND_HPP
+# define CAPCOMMAND_HPP
 
 # include "CommandHandler.hpp"
 # include "Server.hpp"
 
-class NickCommand : public CommandHandler {
+class CapCommand : public CommandHandler {
 	private:
 		Server * _server;
 	
 	public:
-		NickCommand();
-		NickCommand(const NickCommand& src);
-		NickCommand& operator=(const NickCommand& src);
-		virtual ~NickCommand();
+		CapCommand();
+		CapCommand(const CapCommand& src);
+		CapCommand& operator=(const CapCommand& src);
+		virtual ~CapCommand();
 
-		NickCommand(Server* server);
+		CapCommand(Server* server);
 
-		bool isValidNick(const std::string& name);
 		virtual void execute(const Command& cmd, Client& sender);
 };
 
