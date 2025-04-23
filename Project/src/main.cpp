@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:41:10 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/23 03:12:14 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,12 @@ void handleNewConnection(Server &s)
 //Need to investigate... Basically want to know if this is the correct way
 void handleClientRead(Server &s, int fd)
 {
-	char buffer[BUFFER_SIZE + 1];
+	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
+	Client *client = s.getClient(fd);
+	if (!client) {
+		std::cout << "Invalid client fd: " << fd << std::endl; // probably change to std::cerr
+		return;
+	}
 	while (true)
 	{
 		ssize_t count = read(fd, buffer, BUFFER_SIZE);
@@ -99,7 +104,7 @@ void handleClientRead(Server &s, int fd)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
-			std::cout << "read error on fd: " << fd << std::endl;
+			std::cout << "read error on fd: " << fd << std::endl; // probably change to std::cerr
 			cleanupClient(s, fd);
 			break;
 		}
@@ -111,6 +116,7 @@ void handleClientRead(Server &s, int fd)
 		}
 		else
 		{
+			//TODO: we need to put what we have read from the buffer into the client's inbuffer
 			buffer[count] = '\0';
 			std::cout << "Received from " << fd << ": " << buffer;
 
