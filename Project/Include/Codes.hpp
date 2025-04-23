@@ -6,13 +6,15 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/23 10:26:23 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:46:11 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #pragma once
 #include <map>
+#include "Command.hpp"
+#include "Client.hpp"
 
 /********* ERRORS ***********/
 /* Generic errors */
@@ -40,6 +42,9 @@
 #define ERR_CHANNELISFULL		"471"  // Channel is at user limit (+l)
 #define ERR_INVITEONLYCHAN		"473"  // Channel is invite-only (+i)
 #define ERR_BADCHANMASK			"476"  // Invalid channel name format
+
+/* Channel Permission Errors */
+#define ERR_USERONCHANNEL		"443"  // nick already present on channel
 
 /* Channel Permission Errors */
 #define ERR_NOTONCHANNEL		"442"  // Client not in channel
