@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/21 19:41:16 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:50:22 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ Client::Client(int cl_fd) : _client_fd(cl_fd)
 	this->_realname = std::string();
 	this->_passok = false;
 	this->_registered = false;
+	this->_capNegotiationDone = false;
 	
 }
 
@@ -28,6 +29,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 	this->_realname = std::string();
 	this->_passok = false;
 	this->_registered = false;
+	this->_capNegotiationDone = false;
 }
 
 Client::~Client() {
@@ -221,4 +223,29 @@ void	Client::joinChannel(const std::string &channelName, const std::string &chan
 void	Client::sendMessage(std::string &theMessage)
 {
 	this->_out.addMessage(theMessage);
+}
+
+void Client::appendToOutBuffer(const std::string& message) {
+	std::string temp = message;
+	this->_out.addMessage(temp);
+}
+
+std::string Client::getNextOutBufferChunk() {
+	return this->_out.getMessage();
+}
+
+void Client::advanceOutBufferOffset(size_t bytesSent) {
+	this->_out.addOffset(bytesSent);
+}
+
+bool Client::isOutBufferEmpty() const {
+	return this->_out.isEmpty();
+}
+
+void Client::clearOutBuffer() {
+	this->_out.clear();
+}
+
+const OutBuffer& Client::getOutBuffer() const {
+	return this->_out;
 }
