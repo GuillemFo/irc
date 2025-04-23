@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/16 21:47:47 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:26:23 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,3 +76,5 @@
 /* Invite Reply */
 #define RPL_INVITING			"341"  // Successfully invited user
 
+std::string ircErrorText(const std::string& code, const Command& cmd, const Client& sender);
+std::string ircReplyText(const std::string& code, const Command& cmd, const Client& sender);

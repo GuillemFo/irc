@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PassCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 07:49:13 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 07:59:06 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:31:27 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ void PassCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		std::cout << "No arguments in the Pass command. Aborting."
+		std::cout << ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender)
 			<< std::endl;
+		
 		return ;
 	}
 	const std::string& Pass = args[0];

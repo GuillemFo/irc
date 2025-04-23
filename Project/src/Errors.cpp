@@ -6,18 +6,17 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/16 21:46:37 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:26:27 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "Client.hpp"
+#include "Command.hpp"
 #include "Codes.hpp"
 
-class Command; // Forward declaration
-
-std::string ircErrorText(const std::string& code, const Command& cmd) {
+std::string ircErrorText(const std::string& code, const Command& cmd, const Client& sender) {
 	// map 
 	static const std::map<std::string, std::string> errorFormats = {
 	// Capability errot

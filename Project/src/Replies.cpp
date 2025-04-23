@@ -6,18 +6,17 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/13 22:35:22 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:31:25 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "Client.hpp"
+#include "Command.hpp"
 #include "Codes.hpp"
 
-class Command; // Forward declaration
-
-std::string ircReplyText(const std::string& code, const Command& cmd) {
+std::string ircReplyText(const std::string& code, const Command& cmd, const Client& sender) {
 	// map 
 	static const std::map<std::string, std::string> replyFormats = {
 		// Registration
