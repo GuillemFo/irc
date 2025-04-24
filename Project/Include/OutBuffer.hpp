@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   OutBuffer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:46:43 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/22 16:43:30 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:11:40 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class OutBuffer
 	public:
 		OutBuffer();
 		~OutBuffer();
-		void addMessage(std::string &theMessage);
+		void addMessage(const std::string &theMessage);
 		std::string getMessage();
 		void addOffset(size_t charsSent);
 		bool isEmpty() const;
