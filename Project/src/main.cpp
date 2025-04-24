@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:41:10 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:18:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void handleNewConnection(Server &s)
 }
 
 //Need to investigate... Basically want to know if this is the correct way
-void handleClientRead(Server &s, int fd)
+void handleRead(Server &s, int fd)
 {
 	char buffer[BUFFER_SIZE + 1];
 	while (true)
@@ -139,7 +139,7 @@ void handleClientRead(Server &s, int fd)
 	}
 }
 
-void handleClientSend(Server &s, std::string &msg, int fd)
+void handleSend(Server &s, std::string &msg, int fd)
 {
 	
 	ssize_t sent = send(fd, msg.c_str(), msg.size(), 0); // this function will be called from server channels to send to all the clients the buffer specified.
@@ -148,7 +148,7 @@ void handleClientSend(Server &s, std::string &msg, int fd)
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
 			return; // try again later
 		std::cout << "send error" << std::endl;
-		cleanupClient(s, fd);
+		cleanupClient(s, fd); // not sure if too agressive
 		return;
 	}
 	msg.erase(0, sent);
@@ -257,11 +257,11 @@ int main(int ac, char **av)
 				else
 				{
 					if (ev & EPOLLIN)
-						handleClientRead(s, fd);
+						handleRead(s, fd);	// inside here we need to create or add to the buffer all text incoming.
 					if (ev & EPOLLOUT)
 					{
 						std::string msg = "-\n";//just for compilation
-						handleClientSend(s, msg, fd);
+						handleSend(s, msg, fd);	// inside here we need to write from buffer.
 					}
 				}
 			}
