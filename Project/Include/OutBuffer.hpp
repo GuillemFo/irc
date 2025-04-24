@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   OutBuffer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:46:43 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/22 16:43:30 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:17:36 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ class OutBuffer
 {
 	private:
 		std::queue<std::string> _queue;
-    	size_t _offset;
+		size_t _offset;
 	public:
 		OutBuffer();
 		~OutBuffer();
