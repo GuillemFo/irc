@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 15:54:07 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/24 16:57:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ void Client::clearOutBuffer() {
 }
 
 const OutBuffer& Client::getOutBuffer() const {
-	return this->_out;
+	return this->_out;}
 
 
 void	Client::cl_Epoll_In()
