@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:49:53 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 00:56:22 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:31:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class PrivmsgCommand : public CommandHandler {
 		virtual ~PrivmsgCommand();
 
 		PrivmsgCommand(Server* server);
+		Server				*getServer() const;
 		virtual void execute(const Command& cmd, Client& sender);
 };
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/22 16:47:20 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:38:44 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ PrivmsgCommand& PrivmsgCommand::operator=(const PrivmsgCommand& src) {
 	return *this;
 }
 PrivmsgCommand::~PrivmsgCommand() {}
+Server				*Client::getServer() const{return (this->_server);}
 
 void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	(void) sender;
@@ -61,7 +62,13 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	// TODO: send the message to the client found by name.
 	// recepient->sendMessage(sender.getSource(), message);
 	
-	std::cout << "Command tested: PRIVMSG" << std::endl;
-	std::cout << "Target is: " << target << ", message is: " << message
-	<< std::endl;
+	std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+	std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
+	// from this->getServer()->getClient(target).addbuffer(privmsgline); // need to create a getClient(target) so we can find a client by its nick.
+	// also this->getServer()->getClient(target) to set the epoll in and out
+
+
+	//std::cout << "Command tested: PRIVMSG" << std::endl;
+	//std::cout << "Target is: " << target << ", message is: " << message
+	//<< std::endl;
 }

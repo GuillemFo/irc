@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 14:22:04 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:35:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ Client	*Server::getClient(const int &fd)
 }
 
 
-
 //This will need to be redesigned
 
 void Server::buff_to_string(char *str)
@@ -219,7 +218,7 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("NICK", new NickCommand(this));
 	_dispatcher.registerHandler("USER", new UserCommand(this));
 	_dispatcher.registerHandler("PASS", new PassCommand(this));
-	_dispatcher.registerHandler("Cap", new CapCommand(this));
+	_dispatcher.registerHandler("CAP", new CapCommand(this));
 	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
 	// _dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));
