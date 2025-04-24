@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 17:35:03 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/24 18:02:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,18 @@ Client	*Server::getClient(const int &fd)
 		return NULL; // need to expand for proper error!
 	}
 	return it->second;
+}
+
+Client			*Server::getClientByNick(const std::string &s)
+{
+	std::map<int, Client *>::iterator it;
+
+	for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
+	{
+		if (it->second->get_nick() == s)
+			return it->second;
+	}
+	return NULL;
 }
 
 

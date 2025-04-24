@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/24 17:38:44 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/24 18:12:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ PrivmsgCommand& PrivmsgCommand::operator=(const PrivmsgCommand& src) {
 	return *this;
 }
 PrivmsgCommand::~PrivmsgCommand() {}
-Server				*Client::getServer() const{return (this->_server);}
+Server				*PrivmsgCommand::getServer() const{return (this->_server);}
 
 void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	(void) sender;
@@ -53,19 +53,17 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	else {
 		message = args[1];
 	}
-	// TODO: find the client by name in the server.clients_map
+	
 	// if not found, send back error CLIENT NOT FOUND
-	// Client *recipient = this->_server.findClientByNick(target);
+	
 	// if(!recipient) {
 	// sender.sendError("Nick not found on the server.")
 	//}
-	// TODO: send the message to the client found by name.
-	// recepient->sendMessage(sender.getSource(), message);
 	
 	std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
 	std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
-	// from this->getServer()->getClient(target).addbuffer(privmsgline); // need to create a getClient(target) so we can find a client by its nick.
-	// also this->getServer()->getClient(target) to set the epoll in and out
+	this->getServer()->getClientByNick(target)->_out.addMessage(privmsgLine);
+	this->getServer()->getClientByNick(target)->cl_Epoll_In_Out(); //to set the epoll in and out
 
 
 	//std::cout << "Command tested: PRIVMSG" << std::endl;
