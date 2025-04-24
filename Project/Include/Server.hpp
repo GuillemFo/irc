@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:26:58 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:07:07 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ class Server
 		Client			*getClient(const int &fd);
 		
 		void				set_server_name(const std::string &s);
+		std::string			getServerName() const;
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);
 		void				welcome_msg(const std::string &nickname);

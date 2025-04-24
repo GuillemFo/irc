@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 03:12:14 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:46:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Your executable will be run as follows:
 	BUFFER_SIZE → how many bytes you read from a socket at once.
 */
 #define MAX_EVENTS 64
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 512
 
 void	setNonBlocking(int sv_fd)
 {
@@ -88,8 +88,9 @@ void handleNewConnection(Server &s)
 	}
 }
 
-//Need to investigate... Basically want to know if this is the correct way
-void handleClientRead(Server &s, int fd)
+
+
+void handleRead(Server &s, int fd)
 {
 	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
 	Client *client = s.getClient(fd);
@@ -99,8 +100,8 @@ void handleClientRead(Server &s, int fd)
 	}
 	while (true)
 	{
-		ssize_t count = read(fd, buffer, BUFFER_SIZE);
-		if (count == -1)
+		ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0); // the idea is to read all until the socket is drained of info.
+		if (bytes == -1)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
@@ -108,7 +109,7 @@ void handleClientRead(Server &s, int fd)
 			cleanupClient(s, fd);
 			break;
 		}
-		else if (count == 0)
+		else if (bytes == 0)
 		{
 			std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
 			cleanupClient(s, fd);
@@ -116,8 +117,7 @@ void handleClientRead(Server &s, int fd)
 		}
 		else
 		{
-			//TODO: we need to put what we have read from the buffer into the client's inbuffer
-			buffer[count] = '\0';
+			buffer[bytes] = '\0';
 			std::cout << "Received from " << fd << ": " << buffer;
 
 			Parser parser;
@@ -138,31 +138,33 @@ void handleClientRead(Server &s, int fd)
 			// Store response in a write buffer associated with the client and enable EPOLLOUT only when needed
 
 			struct epoll_event ev;
-			ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+			ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
 			ev.data.fd = fd;
 			epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 		}
 	}
 }
 
-void handleClientSend(Server &s, std::string &msg, int fd)
+void handleSend(Server &s, int fd)
 {
-	
-	ssize_t sent = send(fd, msg.c_str(), msg.size(), 0); // this function will be called from server channels to send to all the clients the buffer specified.
-	if (sent == -1)
+	//need to extract the out buffer here and use send
+	std::string msg = s.getClient(fd)->_out.getMessage();
+	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  //send(fd, data, len, MSG_NOSIGNAL) nosignal to protect from  sending to a close socket
+	if (sent_bytes == -1)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return; // try again later
+			return; // try again later, wait for epollout
 		std::cout << "send error" << std::endl;
 		cleanupClient(s, fd);
 		return;
 	}
-	msg.erase(0, sent);
-	if (msg.empty())
+	msg.erase(0, sent_bytes); // with the count of sent bytes we remove that number from the out buffer and continue
+	s.getClient(fd)->_out.addOffset(sent_bytes);
+	if (s.getClient(fd)->_out.isEmpty())
 	{
-		// Disable EPOLLOUT
+		// Disable EPOLLOUT (from the server??) need to investigate. 24.04.25 04.04 pm
 		struct epoll_event ev;
-		ev.events = EPOLLIN | EPOLLET;
+		ev.events = EPOLLIN; //| EPOLLET;
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 	}
@@ -262,12 +264,11 @@ int main(int ac, char **av)
 					handleNewConnection(s);
 				else
 				{
-					if (ev & EPOLLIN)
-						handleClientRead(s, fd);
-					if (ev & EPOLLOUT)
+					if (ev & EPOLLIN) // & bitwise operator
+						handleRead(s, fd);	// inside here we need to create or add to the buffer all text incoming.
+					if (ev & EPOLLOUT) // & bitwise operator
 					{
-						std::string msg = "-\n";//just for compilation
-						handleClientSend(s, msg, fd);
+						handleSend(s, fd);	// inside here we need to write from buffer.
 					}
 				}
 			}

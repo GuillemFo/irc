@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:00:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/23 04:19:31 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:11:54 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ OutBuffer::OutBuffer() : _offset(0) {}
 
 OutBuffer::~OutBuffer() {}
 
-void OutBuffer::addMessage(std::string &theMessage)
+void OutBuffer::addMessage(const std::string &theMessage)
 {
 	this->_queue.push(theMessage);
 }

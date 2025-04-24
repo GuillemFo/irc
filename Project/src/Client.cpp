@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 07:25:41 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:47:55 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 
 Client::~Client() {
 	this->partAllChannels();
+	// has to be removed from client map in Server
 }
 
 Client::Client(const Client &other){*this = other;}
@@ -59,6 +60,7 @@ bool Client::isNickCorrect(std::string theNick)
 }
 
 int					Client::get_clientFD(){return (this->_client_fd);}
+Server				*Client::getServer() const{return (this->_server);}
 
 void				Client::set_nick(const std::string &str){this->_nick = str;}
 const std::string	Client::get_nick()const {return (this->_nick);}
