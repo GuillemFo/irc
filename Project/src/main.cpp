@@ -92,7 +92,12 @@ void handleNewConnection(Server &s)
 
 void handleRead(Server &s, int fd)
 {
-	char buffer[BUFFER_SIZE + 1];
+	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
+	Client *client = s.getClient(fd);
+	if (!client) {
+		std::cout << "Invalid client fd: " << fd << std::endl; // probably change to std::cerr
+		return;
+	}
 	while (true)
 	{
 		ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0); // the idea is to read all until the socket is drained of info.
@@ -100,7 +105,7 @@ void handleRead(Server &s, int fd)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
-			std::cout << "read error on fd: " << fd << std::endl;
+			std::cout << "read error on fd: " << fd << std::endl; // probably change to std::cerr
 			cleanupClient(s, fd);
 			break;
 		}
@@ -112,6 +117,8 @@ void handleRead(Server &s, int fd)
 		}
 		else
 		{
+			//TODO: we need to put what we have read from the buffer into the client's inbuffer
+
 			buffer[bytes] = '\0';
 			std::cout << "Received from " << fd << ": " << buffer;
 

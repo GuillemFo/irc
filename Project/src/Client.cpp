@@ -17,8 +17,7 @@ Client::Client(int cl_fd) : _client_fd(cl_fd)
 	this->_user = std::string();
 	this->_realname = std::string();
 	this->_passok = false;
-	this->_registered = false;
-	
+	this->_registered = false;	
 }
 
 Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
@@ -224,6 +223,30 @@ void	Client::sendMessage(std::string &theMessage)
 {
 	this->_out.addMessage(theMessage);
 }
+
+void Client::appendToOutBuffer(const std::string& message) {
+	std::string temp = message;
+	this->_out.addMessage(temp);
+}
+
+std::string Client::getNextOutBufferChunk() {
+	return this->_out.getMessage();
+}
+
+void Client::advanceOutBufferOffset(size_t bytesSent) {
+	this->_out.addOffset(bytesSent);
+}
+
+bool Client::isOutBufferEmpty() const {
+	return this->_out.isEmpty();
+}
+
+void Client::clearOutBuffer() {
+	this->_out.clear();
+}
+
+const OutBuffer& Client::getOutBuffer() const {
+	return this->_out;
 
 
 void	Client::cl_Epoll_In()

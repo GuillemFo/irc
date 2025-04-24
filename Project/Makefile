@@ -95,6 +95,19 @@ $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
 	$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
 
+#### CapTests (sorry for the mess)
+CapTests: \
+    src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp
+	g++ -std=c++98 -IInclude \
+    src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+    -o CapTests
+
 -include $(DEP)
 
 re: fclean all
@@ -104,7 +117,7 @@ clean:
 	@echo "$(CYAN)$(NAME) $(YELLOW)- $(RED)Obj deleted$(RESET)"
 
 fclean: clean
-	@rm -rf $(NAME)
+	@rm -rf $(NAME) CapTests
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 
 .PHONY: all re clean fclean g r

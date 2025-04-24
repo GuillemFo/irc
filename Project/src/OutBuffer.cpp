@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   OutBuffer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:00:55 by josegar2          #+#    #+#             */
 /*   Updated: 2025/04/23 15:11:54 by josegar2         ###   ########.fr       */
@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "OutBuffer.hpp"
+#include <iostream>
 
 OutBuffer::OutBuffer() : _offset(0) {}
 
@@ -32,6 +33,13 @@ std::string OutBuffer::getMessage()
 
 void OutBuffer::addOffset(size_t charsSent)
 {
+	if (this->_queue.empty()) //avoid accessing an empty queue
+	{
+		std::cout << "Trying to access an empty queue. Stopping AddOffset" <<
+			std::endl;
+		return ;
+	}
+	
 	this->_offset += charsSent;
 	if (this->_offset >= this->_queue.front().size())
 	{

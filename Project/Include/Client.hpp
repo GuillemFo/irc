@@ -87,6 +87,13 @@ class Client
 		bool		isRegistered();
 
 		void		sendMessage(std::string &theMessage);
+
+		void		appendToOutBuffer(const std::string& message);
+		std::string	getNextOutBufferChunk();
+		void		advanceOutBufferOffset(size_t bytesSent);
+		bool		isOutBufferEmpty() const;
+		void		clearOutBuffer();
+		const		OutBuffer& getOutBuffer() const;
 		void		cl_Epoll_In_Out();
 		void		cl_Epoll_In();
 		
