@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 17:50:21 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/23 23:57:24 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ class Client
 		std::string			_host;		// or IP Maximum 63 chars. If longer --> IP
 		bool				_passok;	//password received and OK
 		bool				_registered; //registration process OK
-		bool				_capNegotiationDone; //flag for CAP command
 		std::map<std::string, Channel*> _channels; //list of channels joined
 
 
@@ -89,7 +88,5 @@ class Client
 		void		advanceOutBufferOffset(size_t bytesSent);
 		bool		isOutBufferEmpty() const;
 		void		clearOutBuffer();
-		void		setCapNegotiationDone(bool done);
-		bool		isCapNegotiationDone() const;
 		const		OutBuffer& getOutBuffer() const;
 };
