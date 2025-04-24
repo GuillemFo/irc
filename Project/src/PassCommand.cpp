@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PassCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 07:49:13 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 15:09:20 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:45:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ void PassCommand::execute(const Command& cmd, Client& sender) {
 	else {
 		sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
 		std::cout << sender._out.getMessage() << std::endl;
+		struct epoll_event ev;
+		ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
+		ev.data.fd = sender.get_clientFD();
+		epoll_ctl(sender.getServer()->get_epollFD(), EPOLL_CTL_MOD, sender.get_clientFD(), &ev);
 
 		return ;
 	}

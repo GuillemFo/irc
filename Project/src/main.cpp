@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 14:51:02 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/24 15:46:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,9 +140,10 @@ void handleRead(Server &s, int fd)
 	}
 }
 
-void handleSend(Server &s, std::string &msg, int fd)
+void handleSend(Server &s, int fd)
 {
-	//need to extract the out buffer here and use send 
+	//need to extract the out buffer here and use send
+	std::string msg = s.getClient(fd)->_out.getMessage();
 	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  //send(fd, data, len, MSG_NOSIGNAL) nosignal to protect from  sending to a close socket
 	if (sent_bytes == -1)
 	{
@@ -153,7 +154,8 @@ void handleSend(Server &s, std::string &msg, int fd)
 		return;
 	}
 	msg.erase(0, sent_bytes); // with the count of sent bytes we remove that number from the out buffer and continue
-	if (msg.empty())
+	s.getClient(fd)->_out.addOffset(sent_bytes);
+	if (s.getClient(fd)->_out.isEmpty())
 	{
 		// Disable EPOLLOUT (from the server??) need to investigate. 24.04.25 04.04 pm
 		struct epoll_event ev;
@@ -261,8 +263,7 @@ int main(int ac, char **av)
 						handleRead(s, fd);	// inside here we need to create or add to the buffer all text incoming.
 					if (ev & EPOLLOUT) // & bitwise operator
 					{
-						std::string msg = "-\n";//just for compilation
-						handleSend(s, msg, fd);	// inside here we need to write from buffer.
+						handleSend(s, fd);	// inside here we need to write from buffer.
 					}
 				}
 			}
