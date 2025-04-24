@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 01:32:00 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/24 06:55:42 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		//TODO send err here
+		std::string errorMsg = ":irc.server.name 410 "
+			+ sender.get_nick() + " :CAP command requires arguments\r\n";
+		sender.appendToOutBuffer(errorMsg);
+		return;
 		std::cout << "No arguments in the Cap command. Aborting."
 			<< std::endl;
 		return ;

@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 23:55:53 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/24 07:25:41 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ Client::Client(int cl_fd) : _client_fd(cl_fd)
 	this->_user = std::string();
 	this->_realname = std::string();
 	this->_passok = false;
-	this->_registered = false;
-	this->_capNegotiationDone = false;
-	
+	this->_registered = false;	
 }
 
 Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
