@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 14:12:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:01:20 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ class Client
 {
 	private:
 		Server 				*_server; // to get the details and functions of the server
-		OutBuffer			_out;
 		int 				_client_fd;
 		std::string 		_nick;
 		std::string 		_user;
@@ -44,9 +43,12 @@ class Client
 		bool				_passok;	//password received and OK
 		bool				_registered; //registration process OK
 		std::map<std::string, Channel*> _channels; //list of channels joined
-
-
+		
+		
 	public:
+		// made public to be able to call its member functions
+		OutBuffer			_out;
+
 		Client(int fd);	//to at least know who to send the errors
 		Client(Server *server, int _client_fd); 
 		~Client();
@@ -58,6 +60,8 @@ class Client
 		static bool			isNickCorrect(std::string theNick);
 
 		int					get_clientFD();
+
+		Server				*getServer() const;
 
 		void				set_nick(const std::string &str);
 		const std::string	get_nick() const;
