@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 14:25:01 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/24 14:51:02 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void handleSend(Server &s, std::string &msg, int fd)
 	{
 		// Disable EPOLLOUT (from the server??) need to investigate. 24.04.25 04.04 pm
 		struct epoll_event ev;
-		ev.events = EPOLLIN | EPOLLET;
+		ev.events = EPOLLIN; //| EPOLLET;
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 	}
