@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 15:46:13 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/24 16:03:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ void handleRead(Server &s, int fd)
 void handleSend(Server &s, int fd)
 {
 	//need to extract the out buffer here and use send
+	if (s.getClient(fd)->_out.isEmpty())
+		return ;
 	std::string msg = s.getClient(fd)->_out.getMessage();
 	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  //send(fd, data, len, MSG_NOSIGNAL) nosignal to protect from  sending to a close socket
 	if (sent_bytes == -1)
@@ -162,6 +164,7 @@ void handleSend(Server &s, int fd)
 		ev.events = EPOLLIN; //| EPOLLET;
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
+		return ;
 	}
 	else
 		std::cout << "Error mid send" << std::endl;

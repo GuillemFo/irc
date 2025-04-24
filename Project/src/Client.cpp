@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 13:47:55 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:54:07 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,4 +223,21 @@ void	Client::joinChannel(const std::string &channelName, const std::string &chan
 void	Client::sendMessage(std::string &theMessage)
 {
 	this->_out.addMessage(theMessage);
+}
+
+
+void	Client::cl_Epoll_In()
+{
+	struct epoll_event ev;
+	ev.events = EPOLLIN; //| EPOLLET;
+	ev.data.fd = this->get_clientFD();
+	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);
+}
+
+void	Client::cl_Epoll_In_Out()
+{
+	struct epoll_event ev;
+	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
+	ev.data.fd = this->get_clientFD();
+	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	
 }
