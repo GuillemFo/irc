@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 15:48:35 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:32:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 			{
 				if (sender.getServer()->getChannel(target)->isMember(sender.get_nick()))
 				{
-					std::string groupPrefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+					std::string groupPrefix = ":" + sender.get_nick() + "!~" + sender.get_user() + "@" + "localhost";
 					std::string groupLine = groupPrefix + " PRIVMSG " + target + " :" + message + "\r\n";
 					//loop all channel members, addMessage etc...
 					//_out.addMessage(privmsgLine);
@@ -93,11 +93,6 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 			std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
 			this->getServer()->getClientByNick(target)->_out.addMessage(privmsgLine);
 			this->getServer()->getClientByNick(target)->cl_Epoll_In_Out();
-
-			std::string prefix2 = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
-			std::string privmsgLine2 = prefix2 + " PRIVMSG " + target + " :" + message + "\r\n";
-			sender._out.addMessage(privmsgLine2); // if double tabs open is most likely that the client does not know himself due registering by hand when we have to do the /nick /user manually due no parsing \r\n
-			sender.cl_Epoll_In_Out();
 		}
 		else 
 		{

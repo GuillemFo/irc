@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 15:59:02 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 19:54:05 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void handleRead(Server &s, int fd)
 	}
 	while (true)
 	{
+		buffer[0] = '\0';
 		ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0); // the idea is to read all until the socket is drained of info.
 		if (bytes == -1)
 		{
@@ -118,9 +119,13 @@ void handleRead(Server &s, int fd)
 		else
 		{
 			//TODO: we need to put what we have read from the buffer into the client's inbuffer
-
 			buffer[bytes] = '\0';
-			std::cout << "Received from " << fd << ": " << buffer;
+			client->_in.append(buffer);
+			
+			std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n");
+			while (client->_in.hasCompleteCommand())
+			{
+
 
 			Parser parser;
 			//TODO go through a loop until all \r\n are processed
@@ -130,12 +135,13 @@ void handleRead(Server &s, int fd)
 			// std::isstring line << 
 			// NB decide on wheter the epoll is to be called outside or within the loop
 			//}
-			Command cmd = parser.parse(buffer);
+			Command cmd = parser.parse(client->_in.extractCommand());
 			Client *clientfd = s.getClient(fd);
 
 			//Check if client set pass nick and user before exec anything? add a checker before any command?
 			
 			s._dispatcher.dispatch(cmd, *clientfd);
+			}
 
 			// Store response in a write buffer associated with the client and enable EPOLLOUT only when needed
 
@@ -150,6 +156,10 @@ void handleRead(Server &s, int fd)
 void handleSend(Server &s, int fd)
 {
 	//need to extract the out buffer here and use send
+	if (s.getClient(fd) == NULL)
+	{
+		return ; //testing 25.04.25 17.36
+	}
 	if (s.getClient(fd)->_out.isEmpty())
 		return ;
 	std::string msg = s.getClient(fd)->_out.getMessage();

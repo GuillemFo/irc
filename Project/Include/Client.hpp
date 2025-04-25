@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 15:34:41 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:55:53 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "OutBuffer.hpp"
+#include "InBuffer.hpp"
 
 
 
@@ -49,6 +50,7 @@ class Client
 	public:
 		// made public to be able to call its member functions
 		OutBuffer			_out;
+		InBuffer			_in;
 
 		Client(int fd);	//to at least know who to send the errors
 		Client(Server *server, int _client_fd); 
