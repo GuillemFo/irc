@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 16:57:32 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 15:37:32 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ Client::Client(int cl_fd) : _client_fd(cl_fd)
 	this->_realname = std::string();
 	this->_passok = false;
 	this->_registered = false;	
+	this->_okLogin = false;
 }
 
 Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
@@ -27,6 +28,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 	this->_realname = std::string();
 	this->_passok = false;
 	this->_registered = false;
+	this->_okLogin = false;
 }
 
 Client::~Client() {
@@ -71,18 +73,24 @@ const std::string	Client::get_user()const {return (this->_user);}
 void				Client::set_host(const std::string &str){this->_user = str;}
 const std::string	Client::get_host()const {return (this->_user);}
 
-// To dev properly
 void				Client::setRealName(std::string &str) {this->_realname = str;}
 
-void	Client::setPassOK() //set to true. In the constructor would be false
+void	Client::setPassOK()
 {
 	_passok = true;
 }
 
-void	Client::setRegistered() //set to true. In the constructor would be false
+bool	Client::getPassOK()
+{
+	return this->_passok;
+}
+
+void	Client::setOkLogin() {this->_okLogin = true;}
+bool	Client::getOkLogin() {return this->_okLogin;}
+
+void	Client::setRegistered()
 {
 	_registered = true;
-	
 }		
 
 
@@ -102,6 +110,7 @@ std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
 
 
 bool	Client::isRegistered() {return this->_registered;}
+
 
 void	Client::partChannel(const std::string &channelName) 
 {
