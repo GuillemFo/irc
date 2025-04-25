@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 14:40:49 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:50:50 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	Server::addChannelMap(const std::string &str)
 }
 
 
-int	Server::rmClientMap(int fd)	//dont know if still segfault
+int	Server::rmClientMap(int fd) // still segfault
 {
 	std::map<int, Client*>::iterator it = _cl_map.find(fd);
 	if (it == _cl_map.end())
