@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 15:45:31 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:01:24 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		}
 		else if (!sender.getServer()->getChannel(channel)->isMember(sender.get_nick()))
 		{
-			sender._out.addMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender));
+			sender._out.addMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender)); //dont know if this is needed.
 			std::cout << sender._out.getMessage() << std::endl;
 			sender.cl_Epoll_In_Out();
 			return ;
