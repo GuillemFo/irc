@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 14:36:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:45:21 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 	}
 	else
 	{
-		sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); //this will segfault
+		sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
 		//loop all clients of that channel to notify that client left.
-		std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+		std::string prefix = ":*!" + sender.get_user() + "@" + "localhost"; // we send ":*!" so tell its server who says something
 		std::string partLine = prefix + " PRIVMSG " + channel + " :" + sender.get_nick() + " has left"+ "\r\n";
 		sender._out.addMessage(partLine);
 		sender.cl_Epoll_In_Out();

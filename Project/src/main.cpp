@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 14:00:54 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:41:30 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void cleanupClient(Server &s, int fd)
 {
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
-	s.rmClientMap(fd); //segfault here!!
+	s.rmClientMap(fd); //might still segfault here!!
 }
 
 
