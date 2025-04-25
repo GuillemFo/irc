@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/24 13:03:33 by codespace        ###   ########.fr        #
+#    Updated: 2025/04/25 09:42:18 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,7 @@ NAME = ircserv
 
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
 		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
-		CapCommand.cpp \
-		Errors.cpp Replies.cpp
+		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp
 
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD #-pedantic -pedantic-errors -g -fsanitize=address commented due codespace issues with fsanitize

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 18:02:12 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 09:30:57 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("PASS", new PassCommand(this));
 	_dispatcher.registerHandler("CAP", new CapCommand(this));
 	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
-	// _dispatcher.registerHandler("PING", new PingCommand(this));
+	_dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));
 	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this));
 	// _dispatcher.registerHandler("PART", new PartCommand(this));

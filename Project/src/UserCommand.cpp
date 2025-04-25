@@ -56,7 +56,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 		
 		
 		///	testing 25.04.25 09.26 am
-		std::string welcome_msg = ":irc.example.com 001 " + sender.get_nick() + " :Welcome to the IRC Network, " + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost" + "\r\n" + ":irc.example.com 002 " + sender.get_nick() + " :Text 2" +"\r\n" + ":irc.example.com 003 " + sender.get_nick() + " :Text 3" +"\r\n" + ":irc.example.com 004 " + sender.get_nick() + " :Text 4" +"\r\n" + ":irc.example.com 375 " + sender.get_nick() + " :msg of the day" +"\r\n" + ":irc.example.com 372 " + sender.get_nick() + " :- Welcome" +"\r\n" + ":irc.example.com 376 " + sender.get_nick() + " :End of /MOTD command." +"\r\n";
+		std::string welcome_msg = ":" + sender.getServer()->getServerName() + " 001 " + sender.get_nick() + " :Welcome to the IRC Network, " + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost" + "\r\n" + ":" + sender.getServer()->getServerName() + " 002 " + sender.get_nick() + " :Your host is " + sender.getServer()->getServerName() + ", running version 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 003 "+ sender.get_nick() + " :Text 3" +"\r\n" + ":" + sender.getServer()->getServerName() + " 004 " + sender.get_nick() + " " + sender.getServer()->getServerName() + " 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 375 " + sender.get_nick() + " :msg of the day" +"\r\n" + ":" + sender.getServer()->getServerName() +" 372 " + sender.get_nick() + " :- Welcome" +"\r\n" + ":" + sender.getServer()->getServerName() +" 376 " + sender.get_nick() + " :End of /MOTD command." +"\r\n";
 		sender._out.addMessage(welcome_msg);
 		sender.cl_Epoll_In_Out();
 		///

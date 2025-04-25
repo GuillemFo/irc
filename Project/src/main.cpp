@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 16:03:04 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 11:16:07 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,7 @@ int main(int ac, char **av)
 		Server s(sv_fd, atoi(av[1]), av[2]);
 		
 		s.registerAllCommands();
-		s.set_server_name("IRC_Server....");
-
+		s.set_server_name("127.0.0.1");
 		struct sockaddr_in server_addr;
 		memset(&server_addr, 0, sizeof(server_addr));
 		server_addr.sin_family = AF_INET; // set IPv4 family
