@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 13:23:25 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:42:24 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 				//loop all channel members, addMessage etc...
 				//_out.addMessage(privmsgLine);
 				//cl_Epoll_In_Out();
+
 				sender._out.addMessage(groupLine);
 				sender.cl_Epoll_In_Out();
 				return ;

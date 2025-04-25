@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 13:04:20 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:55:21 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,34 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 				if (!sender.getServer()->getChannel(channelName)->check_pass(pass))
 				{
 					sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
-					std::cout << sender._out.getMessage() << std::endl;
 					sender.cl_Epoll_In_Out();
 					return ;
 				}
+			}
+			else if (sender.getServer()->getChannel(channelName)->isMember(sender.get_nick()))
+			{
+				sender._out.addMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
+				sender.cl_Epoll_In_Out();
+				return ;
+			}
+			else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
+			{
+				sender._out.addMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
+				sender.cl_Epoll_In_Out();
+				return ;
+
+			}
+			else if (sender.getServer()->getChannel(channelName)->isChannelFull())
+			{
+				sender._out.addMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
+				std::cout << sender._out.getMessage() << std::endl;
+				sender.cl_Epoll_In_Out();
+				return ;
 			}
 			sender.getServer()->getChannel(channelName)->addClient(&sender);
 			sender._out.addMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN :" + channelName + "\r\n");
 			sender.cl_Epoll_In_Out();
 			return ;
-
 		}
 		else
 		{

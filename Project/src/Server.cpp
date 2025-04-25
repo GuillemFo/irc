@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 09:30:57 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:07:48 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	Server::rmClientMap(int fd)
 	else
 	{
 		delete this->_cl_map[fd];
-		this->_cl_map.erase(fd);
+		this->_cl_map.erase(fd); //segfault here!!
 		return (1);
 	}
 	return (-1);
@@ -235,7 +235,7 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));
 	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this));
-	// _dispatcher.registerHandler("PART", new PartCommand(this));
+	_dispatcher.registerHandler("PART", new PartCommand(this));
 	// _dispatcher.registerHandler("KICK", new KickCommand(this));
 	// _dispatcher.registerHandler("MODE", new ModeCommand(this));
 	// _dispatcher.registerHandler("TOPIC", new TopicCommand(this));
