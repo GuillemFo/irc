@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 09:12:40 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:39:15 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	
 	if(this->getServer()->getClientByNick(target) == NULL)
 	{
-		std::cout << "Target not found" << std::endl;
+		sender._out.addMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
+		std::cout << sender._out.getMessage() << std::endl;
+		sender.cl_Epoll_In_Out();
 		return;
 	}
 	std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
