@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/25 17:33:28 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:37:58 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #define ERR_INVALIDCAPCMD		"410"  // Not supported parameters for CAP
 
 /* Registration/Connection Errors */
+#define ERR_NOTREGISTERED		"451"  // You have not registered
 #define ERR_NEEDMOREPARAMS		"461"  // Not enough parameters for command
 #define ERR_ALREADYREGISTERED 	"462"  // Client already registered
 #define ERR_PASSWDMISMATCH		"464"  // Incorrect password

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/25 17:33:48 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:40:06 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 static std::map<std::string, std::string> createErrorFormats() {
     std::map<std::string, std::string> m;
     
-    // Capability error
+    // Capability error. Not in RFC but usual in some servers
     m.insert(std::make_pair(ERR_INVALIDCAPCMD, "<client> <subcommand> :No such nick/channel"));
     
     // Client errors
+    m.insert(std::make_pair(ERR_NOTREGISTERED, "<client> <command> :You have not registered"));
     m.insert(std::make_pair(ERR_NOSUCHNICK, "<client> <nickname> :No such nick/channel"));
     m.insert(std::make_pair(ERR_NOSUCHCHANNEL, "<client> <channel> :No such channel"));
     m.insert(std::make_pair(ERR_CANNOTSENDTOCHAN, "<client> <channel> :Cannot send to channel"));
