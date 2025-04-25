@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 11:39:15 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:23:25 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,27 +54,52 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 		message = args[1];
 	}
 	
-	// if not found, send back error CLIENT NOT FOUND
+	if (target[0] == '#' || target[0] == '&')
+	{
+		if (sender.getServer()->channelExists(target))
+		{
+			if (sender.getServer()->getChannel(target)->isMember(sender.get_nick()))
+			{
+				std::string groupPrefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+				std::string groupLine = groupPrefix + " PRIVMSG " + target + " :" + message + "\r\n";
+				//loop all channel members, addMessage etc...
+				//_out.addMessage(privmsgLine);
+				//cl_Epoll_In_Out();
+				sender._out.addMessage(groupLine);
+				sender.cl_Epoll_In_Out();
+				return ;
+			}
+			else
+			{
+				sender._out.addMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender));
+				sender.cl_Epoll_In_Out();
+				return;
+			}
+		}
+		else
+		{
+			sender._out.addMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
+			sender.cl_Epoll_In_Out();
+			return;
+		}
+	}
 	
-	if(this->getServer()->getClientByNick(target) == NULL)
+	else if(!(this->getServer()->getClientByNick(target) == NULL))
+	{
+		std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+		std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
+		this->getServer()->getClientByNick(target)->_out.addMessage(privmsgLine);
+		this->getServer()->getClientByNick(target)->cl_Epoll_In_Out();
+
+		std::string prefix2 = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+		std::string privmsgLine2 = prefix2 + " PRIVMSG " + target + " :" + message + "\r\n";
+		sender._out.addMessage(privmsgLine2); // if double tabs open is most likely that the client does not know himself due registering by hand when we have to do the /nick /user manually due no parsing \r\n
+		sender.cl_Epoll_In_Out();
+	}
+	else 
 	{
 		sender._out.addMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
 		sender.cl_Epoll_In_Out();
 		return;
 	}
-	std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
-	std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
-	this->getServer()->getClientByNick(target)->_out.addMessage(privmsgLine);
-	this->getServer()->getClientByNick(target)->cl_Epoll_In_Out(); //to set the epoll in and out
-
-
-	std::string prefix2 = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
-	std::string privmsgLine2 = prefix2 + " PRIVMSG " + target + " :" + message + "\r\n";
-	sender._out.addMessage(privmsgLine2); // if double tabs open is most likely that the client does not know himself due registering by hand when we have to do the /nick /user manually due no parsing \r\n
-	sender.cl_Epoll_In_Out();
-
-	//std::cout << "Command tested: PRIVMSG" << std::endl;
-	//std::cout << "Target is: " << target << ", message is: " << message
-	//<< std::endl;
 }
