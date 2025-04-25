@@ -49,12 +49,26 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 			<< std::endl;
 		return ;
 	}
-	const std::string& User = args[0]; // need to check the other args?? 
-	if (UserCommand::isValidUser(User)) {
-		sender.set_user(User);
-		std::cout << "Executing User command. User: " << User << " assigned to client: " << sender.get_clientFD() << std::endl;
+	if (sender.isRegistered())
+	{
+		const std::string& User = args[0]; // need to check the other args?? 
+		if (UserCommand::isValidUser(User)) {
+			sender.set_user(User);
+			sender.setOkLogin();
+			std::cout << "Executing User command. User: " << User << " assigned to client: " << sender.get_clientFD() << std::endl;
+		
+		
+			///	testing 25.04.25 09.26 am
+			std::string welcome_msg = ":" + sender.getServer()->getServerName() + " 001 " + sender.get_nick() + " :Welcome to the IRC Network, " + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost" + "\r\n" + ":" + sender.getServer()->getServerName() + " 002 " + sender.get_nick() + " :Your host is " + sender.getServer()->getServerName() + ", running version 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 003 "+ sender.get_nick() + " :Text 3" +"\r\n" + ":" + sender.getServer()->getServerName() + " 004 " + sender.get_nick() + " " + sender.getServer()->getServerName() + " 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 375 " + sender.get_nick() + " :msg of the day" +"\r\n" + ":" + sender.getServer()->getServerName() +" 372 " + sender.get_nick() + " :- Welcome" +"\r\n" + ":" + sender.getServer()->getServerName() +" 376 " + sender.get_nick() + " :End of /MOTD command." +"\r\n";
+			sender._out.addMessage(welcome_msg);
+			sender.cl_Epoll_In_Out();
+			return ;
+			///
+		}
 	}
 	else {
+		sender._out.addMessage(ircErrorText(ERR_NONICKNAMEGIVEN, cmd, sender));
+		sender.cl_Epoll_In_Out();
 		return ;
 	}
 }

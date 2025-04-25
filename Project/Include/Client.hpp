@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 15:01:20 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:34:41 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ class Client
 		std::string 		_realname;
 		std::string			_host;		// or IP Maximum 63 chars. If longer --> IP
 		bool				_passok;	//password received and OK
-		bool				_registered; //registration process OK
+		bool				_registered; //nick OK
+		bool				_okLogin;	// pass ok and nick ok
 		std::map<std::string, Channel*> _channels; //list of channels joined
 		
 		
@@ -74,7 +75,10 @@ class Client
 		const std::string	get_host() const;
 
 		void	setPassOK(); //set to true. In the constructor would be false
+		bool	getPassOK();
 		void	setRegistered(); //set to true. In the constructor would be false
+		void	setOkLogin();
+		bool	getOkLogin();
 		void	joinChannel(const std::string &channelName);
 		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
 		void	partChannel(const std::string &channelName);
@@ -87,6 +91,15 @@ class Client
 		bool		isRegistered();
 
 		void		sendMessage(std::string &theMessage);
+
+		void		appendToOutBuffer(const std::string& message);
+		std::string	getNextOutBufferChunk();
+		void		advanceOutBufferOffset(size_t bytesSent);
+		bool		isOutBufferEmpty() const;
+		void		clearOutBuffer();
+		const		OutBuffer& getOutBuffer() const;
+		void		cl_Epoll_In_Out();
+		void		cl_Epoll_In();
 		
 	
 

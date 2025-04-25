@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+         #
+#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/23 10:40:20 by josegar2         ###   ########.fr        #
+#    Updated: 2025/04/25 14:10:09 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,10 @@ NAME = ircserv
 
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
 		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
-		CapCommand.cpp \
-		Errors.cpp Replies.cpp
+		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp
 
 
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD #-pedantic -pedantic-errors -g -fsanitize=address commented due codespace issues with fsanitize
 
 SRC_F = src/
 
@@ -95,6 +94,19 @@ $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
 	$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
 
+#### CapTests (sorry for the mess)
+CapTests: \
+    src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp
+	g++ -std=c++98 -IInclude \
+    src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+    -o CapTests
+
 -include $(DEP)
 
 re: fclean all
@@ -104,7 +116,7 @@ clean:
 	@echo "$(CYAN)$(NAME) $(YELLOW)- $(RED)Obj deleted$(RESET)"
 
 fclean: clean
-	@rm -rf $(NAME)
+	@rm -rf $(NAME) CapTests
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 
 .PHONY: all re clean fclean g r

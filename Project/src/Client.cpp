@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 13:47:55 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:37:32 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ Client::Client(int cl_fd) : _client_fd(cl_fd)
 	this->_user = std::string();
 	this->_realname = std::string();
 	this->_passok = false;
-	this->_registered = false;
-	
+	this->_registered = false;	
+	this->_okLogin = false;
 }
 
 Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
@@ -28,6 +28,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 	this->_realname = std::string();
 	this->_passok = false;
 	this->_registered = false;
+	this->_okLogin = false;
 }
 
 Client::~Client() {
@@ -72,18 +73,24 @@ const std::string	Client::get_user()const {return (this->_user);}
 void				Client::set_host(const std::string &str){this->_user = str;}
 const std::string	Client::get_host()const {return (this->_user);}
 
-// To dev properly
 void				Client::setRealName(std::string &str) {this->_realname = str;}
 
-void	Client::setPassOK() //set to true. In the constructor would be false
+void	Client::setPassOK()
 {
 	_passok = true;
 }
 
-void	Client::setRegistered() //set to true. In the constructor would be false
+bool	Client::getPassOK()
+{
+	return this->_passok;
+}
+
+void	Client::setOkLogin() {this->_okLogin = true;}
+bool	Client::getOkLogin() {return this->_okLogin;}
+
+void	Client::setRegistered()
 {
 	_registered = true;
-	
 }		
 
 
@@ -103,6 +110,7 @@ std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
 
 
 bool	Client::isRegistered() {return this->_registered;}
+
 
 void	Client::partChannel(const std::string &channelName) 
 {
@@ -223,4 +231,45 @@ void	Client::joinChannel(const std::string &channelName, const std::string &chan
 void	Client::sendMessage(std::string &theMessage)
 {
 	this->_out.addMessage(theMessage);
+}
+
+void Client::appendToOutBuffer(const std::string& message) {
+	std::string temp = message;
+	this->_out.addMessage(temp);
+}
+
+std::string Client::getNextOutBufferChunk() {
+	return this->_out.getMessage();
+}
+
+void Client::advanceOutBufferOffset(size_t bytesSent) {
+	this->_out.addOffset(bytesSent);
+}
+
+bool Client::isOutBufferEmpty() const {
+	return this->_out.isEmpty();
+}
+
+void Client::clearOutBuffer() {
+	this->_out.clear();
+}
+
+const OutBuffer& Client::getOutBuffer() const {
+	return this->_out;}
+
+
+void	Client::cl_Epoll_In()
+{
+	struct epoll_event ev;
+	ev.events = EPOLLIN; //| EPOLLET;
+	ev.data.fd = this->get_clientFD();
+	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);
+}
+
+void	Client::cl_Epoll_In_Out()
+{
+	struct epoll_event ev;
+	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
+	ev.data.fd = this->get_clientFD();
+	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	
 }

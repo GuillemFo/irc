@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PrivmsgCommand.hpp                                 :+:      :+:    :+:   */
+/*   PingCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 13:49:53 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/24 17:31:17 by codespace        ###   ########.fr       */
+/*   Created: 2025/04/25 09:28:11 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/04/25 09:28:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRIVMSGCOMMAND_HPP
-#define PRIVMSGCOMMAND_HPP
+#ifndef PINGCOMMAND_HPP
+# define PINGCOMMAND_HPP
 
 # include "CommandHandler.hpp"
 # include "Server.hpp"
 
-class PrivmsgCommand : public CommandHandler {
+class PingCommand : public CommandHandler {
 	private:
-		Server* _server;
-
+		Server * _server;
+	
 	public:
-		PrivmsgCommand();
-		PrivmsgCommand(const PrivmsgCommand& src);
-		PrivmsgCommand& operator=(const PrivmsgCommand& src);
-		virtual ~PrivmsgCommand();
+		PingCommand();
+		PingCommand(const PingCommand& src);
+		PingCommand& operator=(const PingCommand& src);
+		virtual ~PingCommand();
 
-		PrivmsgCommand(Server* server);
-		Server				*getServer() const;
+		PingCommand(Server* server);
+
 		virtual void execute(const Command& cmd, Client& sender);
 };
 

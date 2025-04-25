@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PrivmsgCommand.hpp                                 :+:      :+:    :+:   */
+/*   PartCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 13:49:53 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/24 17:31:17 by codespace        ###   ########.fr       */
+/*   Created: 2025/04/25 14:05:43 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/04/25 14:06:15 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRIVMSGCOMMAND_HPP
-#define PRIVMSGCOMMAND_HPP
+#ifndef PARTCOMMAND_HPP
+# define PARTCOMMAND_HPP
 
 # include "CommandHandler.hpp"
 # include "Server.hpp"
 
-class PrivmsgCommand : public CommandHandler {
+class PartCommand : public CommandHandler {
 	private:
-		Server* _server;
-
+		Server * _server;
+	
 	public:
-		PrivmsgCommand();
-		PrivmsgCommand(const PrivmsgCommand& src);
-		PrivmsgCommand& operator=(const PrivmsgCommand& src);
-		virtual ~PrivmsgCommand();
+		PartCommand();
+		PartCommand(const PartCommand& src);
+		PartCommand& operator=(const PartCommand& src);
+		virtual ~PartCommand();
 
-		PrivmsgCommand(Server* server);
-		Server				*getServer() const;
+		PartCommand(Server* server);
+
 		virtual void execute(const Command& cmd, Client& sender);
 };
 

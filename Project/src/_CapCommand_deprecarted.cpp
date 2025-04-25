@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CapCommand.cpp                                     :+:      :+:    :+:   */
+/*   _CapCommand_deprecarted.cpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 06:55:42 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/24 00:18:30 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,42 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		std::string errorMsg = ":irc.server.name 410 "
-			+ sender.get_nick() + " :CAP command requires arguments\r\n";
-		sender.appendToOutBuffer(errorMsg);
-		return;
 		std::cout << "No arguments in the Cap command. Aborting."
 			<< std::endl;
 		return ;
 	}
 	const std::string& subcmd = args[0];
-	if (subcmd == "LS" and args.size() >= 2) {
-		//TODO: remove the cout message before submitting the project.
-		std::cout << "Your CAP Command would be processed here if the subject "
-			<< "required it :)" << std::endl;
+	if (subcmd == "LS") {
+		sender.appendToOutBuffer("CAP * LS :multi-prefix sasl\r\n");
 	}
+	else if (subcmd == "REQ") {
+		if (args.size() < 2) {
+			sender.appendToOutBuffer("CAP * NAK :Missing capability list\r\n");
+			return ;
+		}
+		sender.appendToOutBuffer("CAP * ACK :" + args[1] + "\r\n");
+	}
+	else if (subcmd == "END") {
+		sender.setCapNegotiationDone(true);
+	}
+	else {
+		sender.appendToOutBuffer("CAP * NAK :Unknown subcommand\r\n");
+	}
+	if (!sender.getOutBuffer().isEmpty()) {
+		struct epoll_event ev;
+		ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+		ev.data.fd = sender.get_clientFD();
+		if (epoll_ctl(_server->get_epollFD(), EPOLL_CTL_MOD,
+			sender.get_clientFD(), &ev) == -1) {
+				std::cout << "epoll_ctl failed for CAP response" << std::endl;
+			}
+	}
+}
+
+void Client::setCapNegotiationDone(bool done) {
+	_capNegotiationDone = done;
+}
+
+bool Client::isCapNegotiationDone() const {
+	return _capNegotiationDone;
 }

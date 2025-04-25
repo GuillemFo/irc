@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/23 13:07:07 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:07:36 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 #include "PassCommand.hpp"
 #include "UserCommand.hpp"
 #include "CapCommand.hpp"
+#include "PingCommand.hpp"
+#include "PartCommand.hpp"
 
 
 
@@ -107,6 +109,7 @@ class Server
 		bool				channelExists(const std::string &theChannel);
 		Channel				*getChannel(const std::string &theChannel);
 		Client			*getClient(const int &fd);
+		Client			*getClientByNick(const std::string &s);
 		
 		void				set_server_name(const std::string &s);
 		std::string			getServerName() const;
