@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 20:45:24 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:57:48 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ bool		Channel::isChannelEmpty()
 	return (this->_clients.size() == 0);
 }
 
-bool Channel::isNameCorrect(const std::string theName)
+bool Channel::isNameCorrect(const std::string &theName)
 {
 	if (theName.empty() ||
 		theName.size() > CHANNELLEN ||
@@ -151,4 +151,14 @@ bool Channel::isNameCorrect(const std::string theName)
 		theName.find(',') != std::string::npos)
 		return false;
 	return true;
+}
+
+void Channel::broadcast(const std::string &msg)
+{
+	std::map<std::string, Client *>::iterator it;
+	for(it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		it->second->sendMessage(msg);
+		it->second->cl_Epoll_In_Out();
+	}
 }

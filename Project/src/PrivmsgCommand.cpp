@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 18:32:10 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 22:00:02 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 					//loop all channel members, addMessage etc...
 					//_out.addMessage(privmsgLine);
 					//cl_Epoll_In_Out();
-
-					sender._out.addMessage(groupLine);
-					sender.cl_Epoll_In_Out();
+					sender.getServer()->getChannel(target)->broadcast(groupLine);
+					// sender._out.addMessage(groupLine);
+					// sender.cl_Epoll_In_Out();
 					return ;
 				}
 				else

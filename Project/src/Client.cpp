@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 15:37:32 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:55:04 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ void	Client::joinChannel(const std::string &channelName, const std::string &chan
 	pChannel->addClient(this);
 }
 
-void	Client::sendMessage(std::string &theMessage)
+void	Client::sendMessage(const std::string &theMessage)
 {
 	this->_out.addMessage(theMessage);
 }

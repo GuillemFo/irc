@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 15:45:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 22:53:53 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 	}
 	else 
 	{
-		sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
+		sender._out.addMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
 		std::cout << sender._out.getMessage() << std::endl;
 		sender.cl_Epoll_In_Out();
 		return ;

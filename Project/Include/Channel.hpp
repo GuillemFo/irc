@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 20:33:50 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:45:20 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ class Channel
 		bool				isTopicProtected();
 		bool				isChannelFull();
 		bool				isChannelEmpty();
-		static bool			isNameCorrect(const std::string theName);
+		static bool			isNameCorrect(const std::string &theName);
+		void				broadcast(const std::string &msg);
 };

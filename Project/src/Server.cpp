@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 14:50:50 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:09:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	Server::addChannelMap(const std::string &str)
 {
 	if (_ch_map.find(name_tolower(str)) == _ch_map.end())
 	{
-		this->_ch_map.insert(std::pair<std::string, Channel*>(name_tolower(str), new Channel(str)));
+		this->_ch_map.insert(std::pair<std::string, Channel*>(name_tolower(str), new Channel(str, this)));
 		return (1);
 	}
 	else
