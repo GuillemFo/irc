@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PassCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 07:49:13 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 15:54:45 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 11:46:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@ PassCommand::~PassCommand () {}
 PassCommand::PassCommand (Server* server) : _server(server) {}
 
 bool PassCommand::isValidPass(const std::string& name) {
-/*	if (name.empty()) {
-		std::cout << "Aborting Pass: Pass is empty."
-			<< std::endl;
-		return false;
-	} */
 	if (this->_server->check_pass(name) == true)
 		return true;
 	return false;

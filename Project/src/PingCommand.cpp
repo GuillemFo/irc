@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:29:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 11:16:00 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:45:27 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void PingCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	const std::string& Ping = args[0];
-	std::cout << "test:" << Ping << ":" << std::endl;
 	//std::string pong_out =  ":" + sender.get_nick() + " PONG " + sender.getServer()->getServerName() + " " + Ping + "\r\n"; // no need to send server name
 	std::string pong_out =  ":" + sender.get_nick() + " PONG " + " " + Ping + "\r\n";
 	sender._out.addMessage(pong_out);
