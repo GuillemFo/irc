@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:26:58 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 09:31:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 #include "PassCommand.hpp"
 #include "UserCommand.hpp"
 #include "CapCommand.hpp"
+#include "PingCommand.hpp"
 
 
 
@@ -107,8 +108,10 @@ class Server
 		bool				channelExists(const std::string &theChannel);
 		Channel				*getChannel(const std::string &theChannel);
 		Client			*getClient(const int &fd);
+		Client			*getClientByNick(const std::string &s);
 		
 		void				set_server_name(const std::string &s);
+		std::string			getServerName() const;
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);
 		void				welcome_msg(const std::string &nickname);

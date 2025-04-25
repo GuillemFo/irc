@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/21 19:17:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:33:50 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ class Channel
 		
 		void				set_userLimit(int nb);
 		int					get_userLimit();
+
+		void				setProtectTopic();
+		void				resetProtectTopic();
+		void				setInviteOnly();
+		void				resetInviteOnly();
 		
 		void				addClient(Client *theClient);
 		void				addOperator(Client *theClient);

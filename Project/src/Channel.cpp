@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 16:45:07 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:45:24 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ bool				Channel::isPassRequired() {return (!this->_key.empty());}
 
 bool 				Channel::check_pass(const std::string &str) {return (str == this->_key);}
 
+void				Channel::setProtectTopic() {this->_protectTopic = true;}
+void				Channel::resetProtectTopic() {this->_protectTopic = false;}
+void				Channel::setInviteOnly() {this->_inviteOnly = true;}
+void				Channel::resetInviteOnly() {this->_inviteOnly = false;}
 
 Channel::~Channel()
 {

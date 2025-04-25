@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PassCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 07:49:13 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/16 07:59:06 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:54:45 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,23 @@ PassCommand::~PassCommand () {}
 PassCommand::PassCommand (Server* server) : _server(server) {}
 
 bool PassCommand::isValidPass(const std::string& name) {
-	if (name.empty()) {
+/*	if (name.empty()) {
 		std::cout << "Aborting Pass: Pass is empty."
 			<< std::endl;
 		return false;
-	}
+	} */
 	if (this->_server->check_pass(name) == true)
 		return true;
 	return false;
 }
 
 void PassCommand::execute(const Command& cmd, Client& sender) {
-	(void) sender;
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		std::cout << "No arguments in the Pass command. Aborting."
-			<< std::endl;
+		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
+		std::cout << sender._out.getMessage() << std::endl;
+		sender.cl_Epoll_In_Out();
 		return ;
 	}
 	const std::string& Pass = args[0];
@@ -53,6 +53,10 @@ void PassCommand::execute(const Command& cmd, Client& sender) {
 		std::cout << "Executing Pass command. Cient authorized" << std::endl;
 	}
 	else {
+		sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
+		std::cout << sender._out.getMessage() << std::endl;
+		sender.cl_Epoll_In_Out();
+
 		return ;
 	}
 }

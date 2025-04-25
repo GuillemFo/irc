@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:26:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 09:30:57 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	Server::set_epollFD(int nb) {this->_epoll_fd = nb;}
 int	Server::get_epollFD() {return (this->_epoll_fd);}
 
 void	Server::set_server_name(const std::string &s){this->_sv_name = s;}
+std::string			Server::getServerName() const {return this->_sv_name;}
 
 
 int	Server::get_port()const {return (this->_port);}
@@ -61,7 +62,7 @@ int	Server::addClientMap(int fd)
 {
 	if (_cl_map.find(fd) == _cl_map.end())
 	{
-		this->_cl_map.insert(std::pair<int, Client*>(fd, new Client(fd)));
+		this->_cl_map.insert(std::pair<int, Client*>(fd, new Client(this, fd)));
 		return (1);
 	}
 	else
@@ -168,6 +169,17 @@ Client	*Server::getClient(const int &fd)
 	return it->second;
 }
 
+Client			*Server::getClientByNick(const std::string &s)
+{
+	std::map<int, Client *>::iterator it;
+
+	for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
+	{
+		if (it->second->get_nick() == s)
+			return it->second;
+	}
+	return NULL;
+}
 
 
 //This will need to be redesigned
@@ -218,9 +230,9 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("NICK", new NickCommand(this));
 	_dispatcher.registerHandler("USER", new UserCommand(this));
 	_dispatcher.registerHandler("PASS", new PassCommand(this));
-	_dispatcher.registerHandler("Cap", new CapCommand(this));
+	_dispatcher.registerHandler("CAP", new CapCommand(this));
 	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
-	// _dispatcher.registerHandler("PING", new PingCommand(this));
+	_dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));
 	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this));
 	// _dispatcher.registerHandler("PART", new PartCommand(this));
