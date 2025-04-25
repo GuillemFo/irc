@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/24 18:12:30 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/25 07:47:04 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,16 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	
 	// if not found, send back error CLIENT NOT FOUND
 	
-	// if(!recipient) {
-	// sender.sendError("Nick not found on the server.")
-	//}
+	if(this->getServer()->getClientByNick(target) == NULL)
+	{
+		std::cout << "Target not found" << std::endl;
+		return;
+	}
 	
 	std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
 	std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
 	this->getServer()->getClientByNick(target)->_out.addMessage(privmsgLine);
+	sender._out.addMessage(privmsgLine); // we need also to store it on sender so it opens the same tab for both and message is not lost on main channel i think. under dev /testing 25.04.25 07.47am
 	this->getServer()->getClientByNick(target)->cl_Epoll_In_Out(); //to set the epoll in and out
 
 
