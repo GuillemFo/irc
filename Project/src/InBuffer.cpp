@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   InBuffer.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/23 04:12:06 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/25 19:55:35 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InBuffer.hpp"
+#include <iostream>
+#include "Colors.hpp"
 
 InBuffer::InBuffer() : _buffer() {}
 InBuffer::InBuffer(const InBuffer& src) : _buffer(src._buffer) {}
@@ -33,12 +35,19 @@ bool InBuffer::hasCompleteCommand() const {
 std::string InBuffer::extractCommand() {
 	size_t pos = this->_buffer.find("\r\n");
 	if (pos == std::string::npos)
-		return "";
+		return std::string();
 	
 	std::string line = this->_buffer.substr(0, pos);
 	this->_buffer.erase(0, pos + 2);
 
-	if (line.length() > 512)
+// 	/////////////
+// 	if (_buffer.length() == 0)
+// 	{
+// 		this->clear();
+// 		std::cout << "Buffer empty" << std::endl;
+// 	}
+// //////////////////////
+	if (line.length() > 510) // -2 because whe removed \r\n
 	{
 		throw std::runtime_error("IRC command is longer that 512 characters. \
 Aborting");
