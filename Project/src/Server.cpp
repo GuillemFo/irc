@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 09:30:57 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:40:49 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,19 @@ int	Server::addChannelMap(const std::string &str)
 }
 
 
-int	Server::rmClientMap(int fd)
+int	Server::rmClientMap(int fd)	//dont know if still segfault
 {
-	if (_cl_map.find(fd) == _cl_map.end())
-		std::cout << "Client with fd " << fd << " does not exists!" << std::endl;
-	else
+	std::map<int, Client*>::iterator it = _cl_map.find(fd);
+	if (it == _cl_map.end())
 	{
-		delete this->_cl_map[fd];
-		this->_cl_map.erase(fd);
-		return (1);
+		std::cout << "Client with fd " << fd << " does not exist!" << std::endl;
+		return (-1);
 	}
-	return (-1);
+	delete it->second;
+	_cl_map.erase(it);
+	return (1);
 }
+
 
 
 
@@ -235,7 +236,7 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("PING", new PingCommand(this));
 	// _dispatcher.registerHandler("PONG", new PongCommand(this));
 	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this));
-	// _dispatcher.registerHandler("PART", new PartCommand(this));
+	_dispatcher.registerHandler("PART", new PartCommand(this));
 	// _dispatcher.registerHandler("KICK", new KickCommand(this));
 	// _dispatcher.registerHandler("MODE", new ModeCommand(this));
 	// _dispatcher.registerHandler("TOPIC", new TopicCommand(this));
