@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 14:41:30 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:59:02 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void handleRead(Server &s, int fd)
 		else if (bytes == 0)
 		{
 			std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
-			cleanupClient(s, fd);
+			cleanupClient(s, fd); //segfault
 			break;
 		}
 		else

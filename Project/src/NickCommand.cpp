@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 19:04:26 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:55:23 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,41 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 			<< std::endl;
 		return ;
 	}
-	const std::string& Nick = args[0];
-	if (NickCommand::isValidNick(Nick)) {
-		sender.set_nick(Nick);
-		std::cout << "Executing Nick command. Nick: " << Nick << " assigned to client: " << sender.get_clientFD() << std::endl;
+	if (sender.getPassOK())
+	{
+		const std::string& Nick = args[0];
+		if (NickCommand::isValidNick(Nick)) {
+			sender.set_nick(Nick);
+			std::cout << "Executing Nick command. Nick: " << Nick << " assigned to client: " << sender.get_clientFD() << std::endl;
+			sender.setRegistered();
+		}
+		else if (!NickCommand::isValidNick(Nick))
+		{
+			sender._out.addMessage(ircErrorText(ERR_ERRONEUSNICKNAME, cmd, sender));
+			std::cout << sender._out.getMessage() << std::endl;
+			sender.cl_Epoll_In_Out();
+			return;
+		}
+		else
+		{
+			std::map<int, Client*>::const_iterator it;
+			for (it = _server->getClientMap().begin(); it != _server->getClientMap().end(); ++it)
+			{
+				Client *client = it->second;
+				if (client && client->get_nick() == Nick)
+				{
+					sender._out.addMessage(ircErrorText(ERR_NICKNAMEINUSE, cmd, sender));
+					std::cout << sender._out.getMessage() << std::endl;
+					sender.cl_Epoll_In_Out();
+					return ;
+				}
+			}
+		}
 	}
 	else {
-		return ;
+			sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass.
+			std::cout << sender._out.getMessage() << std::endl;
+			sender.cl_Epoll_In_Out();
+			return ;
 	}
 }
