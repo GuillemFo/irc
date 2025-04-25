@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 07:52:01 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/25 09:12:40 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,16 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 		std::cout << "Target not found" << std::endl;
 		return;
 	}
-	
 	std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
 	std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
 	this->getServer()->getClientByNick(target)->_out.addMessage(privmsgLine);
 	this->getServer()->getClientByNick(target)->cl_Epoll_In_Out(); //to set the epoll in and out
-	//Not working as expected !! 07.51am sender._out.addMessage(privmsgLine); // we need also to store it on sender so it opens the same tab for both and message is not lost on main channel i think. under dev /testing 25.04.25 07.47am
-	//Not working as expected !! 07.51am sender.cl_Epoll_In_Out();
 
+
+	std::string prefix2 = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
+	std::string privmsgLine2 = prefix2 + " PRIVMSG " + target + " :" + message + "\r\n";
+	sender._out.addMessage(privmsgLine2); // if double tabs open is most likely that the client does not know himself due registering by hand when we have to do the /nick /user manually due no parsing \r\n
+	sender.cl_Epoll_In_Out();
 
 	//std::cout << "Command tested: PRIVMSG" << std::endl;
 	//std::cout << "Target is: " << target << ", message is: " << message
