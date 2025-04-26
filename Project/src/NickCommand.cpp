@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 15:55:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/26 14:47:35 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,45 +64,36 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		std::cout << "No arguments in the Nick command. Aborting."
-			<< std::endl;
+		sender.sendMessage(ircErrorText(ERR_NONICKNAMEGIVEN, cmd, sender));
 		return ;
 	}
-	if (sender.getPassOK())
+	const std::string& Nick = args[0];
+	if (! sender.getPassOK())  // can the order be NICK-PASS-USER
 	{
-		const std::string& Nick = args[0];
-		if (NickCommand::isValidNick(Nick)) {
-			sender.set_nick(Nick);
-			std::cout << "Executing Nick command. Nick: " << Nick << " assigned to client: " << sender.get_clientFD() << std::endl;
-			sender.setRegistered();
-		}
-		else if (!NickCommand::isValidNick(Nick))
-		{
-			sender._out.addMessage(ircErrorText(ERR_ERRONEUSNICKNAME, cmd, sender));
-			std::cout << sender._out.getMessage() << std::endl;
-			sender.cl_Epoll_In_Out();
-			return;
-		}
-		else
-		{
-			std::map<int, Client*>::const_iterator it;
-			for (it = _server->getClientMap().begin(); it != _server->getClientMap().end(); ++it)
-			{
-				Client *client = it->second;
-				if (client && client->get_nick() == Nick)
-				{
-					sender._out.addMessage(ircErrorText(ERR_NICKNAMEINUSE, cmd, sender));
-					std::cout << sender._out.getMessage() << std::endl;
-					sender.cl_Epoll_In_Out();
-					return ;
-				}
-			}
-		}
+		sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass.
+		return ;
 	}
-	else {
-			sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass.
-			std::cout << sender._out.getMessage() << std::endl;
-			sender.cl_Epoll_In_Out();
-			return ;
+	if (!NickCommand::isValidNick(Nick))
+	{
+		sender.sendMessage(ircErrorText(ERR_ERRONEUSNICKNAME, cmd, sender));
+		return;
+	}
+	if (_server->nickExists(Nick))
+	{
+		sender.sendMessage(ircErrorText(ERR_NICKNAMEINUSE, cmd, sender));
+		return ;
+	}
+	// nick is correct and available here
+	if (sender.get_nick().empty()) //new nick
+	{
+		sender.set_nick(Nick);
+		std::cout << "Executing Nick command. Nick: " << Nick << " assigned to client: " << sender.get_clientFD() << std::endl;
+		sender.setRegistered();
+	}
+	else { // change nick
+		//TODO broadcst to all channels the change of nick
+		std::string oldNick = sender.get_nick();
+		std::string chgMsg = ":" + oldNick + " NICK " + Nick + "\r\n";
+		sender.sendAllChannels(chgMsg);
 	}
 }

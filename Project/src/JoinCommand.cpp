@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/25 22:53:53 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 15:43:46 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
 		std::cout << "No arguments in the JOIN command. Aborting." << std::endl;
-		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
-		sender.cl_Epoll_In_Out();
+		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
 	}
 	if (sender.getOkLogin())
@@ -80,57 +79,51 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 					std::cout << "is valid pass:" << sender.getServer()->getChannel(channelName)->check_pass(pass) << ":" << std::endl;
 					if (!sender.getServer()->getChannel(channelName)->check_pass(pass))
 					{
-						sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
-						sender.cl_Epoll_In_Out();
+						sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
 						return ;
 					}
 				}
 				else if (sender.getServer()->getChannel(channelName)->isMember(sender.get_nick()))
 				{
-					sender._out.addMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
-					sender.cl_Epoll_In_Out();
+					sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
 					return ;
 				}
 				else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
 				{
-					sender._out.addMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
-					sender.cl_Epoll_In_Out();
+					sender.sendMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
 					return ;
 				}
 				else if (sender.getServer()->getChannel(channelName)->isChannelFull())
 				{
-					sender._out.addMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
+					sender.sendMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
 					std::cout << sender._out.getMessage() << std::endl;
-					sender.cl_Epoll_In_Out();
 					return ;
 				}
 				sender.getServer()->getChannel(channelName)->addClient(&sender);
-				sender._out.addMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN :" + channelName + "\r\n");
-				sender.cl_Epoll_In_Out();
+				sender.addChannel(sender.getServer()->getChannel(channelName));
+				sender.sendMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
 				return ;
 			}
 			else
 			{
 				sender.getServer()->addChannelMap(channelName);
 				sender.getServer()->getChannel(channelName)->addClient(&sender);
-				sender._out.addMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN :" + channelName + "\r\n");
-				sender.cl_Epoll_In_Out();
+				sender.addChannel(sender.getServer()->getChannel(channelName));
+				sender.sendMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
 				return ;
 			}
 		}
 		else {
 			std::cout << "ERROR::Executing JOIN command. "
 				<< channelName << " not valid" << std::endl;
-			sender._out.addMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
-			sender.cl_Epoll_In_Out();
+			sender.sendMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
 			return ;
 		}
 	}
 	else 
 	{
-		sender._out.addMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
 		std::cout << sender._out.getMessage() << std::endl;
-		sender.cl_Epoll_In_Out();
 		return ;
 	}
 	return ;

@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 21:54:52 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 15:35:49 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ class Client
 		void	setRegistered(); //set to true. In the constructor would be false
 		void	setOkLogin();
 		bool	getOkLogin();
+		void	addChannel(Channel *pChannel);
+		void	remChannel(std::string &theChannel);
 		void	joinChannel(const std::string &channelName);
 		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
 		void	partChannel(const std::string &channelName);
@@ -93,13 +95,14 @@ class Client
 		bool		isRegistered();
 
 		void		sendMessage(const std::string &theMessage);
+		void		sendAllChannels(const std::string &theMessage);
 
 		void		appendToOutBuffer(const std::string& message);
 		std::string	getNextOutBufferChunk();
 		void		advanceOutBufferOffset(size_t bytesSent);
 		bool		isOutBufferEmpty() const;
 		void		clearOutBuffer();
-		const		OutBuffer& getOutBuffer() const;
+		const OutBuffer& getOutBuffer() const;
 		void		cl_Epoll_In_Out();
 		void		cl_Epoll_In();
 		

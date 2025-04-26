@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 10:00:54 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:08:19 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,19 @@ void	Client::partAllChannels()
 	this->_channels.clear();  // no memebers should be left
 }
 
+void	Client::addChannel(Channel *pChannel)
+{
+	_channels[name_tolower(pChannel->get_name())] = pChannel;
+}
+
+void	Client::remChannel(std::string &theChannel)
+{
+	std::map<std::string, Channel*>::iterator it = _channels.find(name_tolower(theChannel));
+	if (it != _channels.end())
+		_channels.erase(it);
+}
+
+
 // channelName should be shorter or equal to CHANNELLEN
 void	Client::joinChannel(const std::string &channelName)
 {
@@ -232,6 +245,15 @@ void	Client::sendMessage(const std::string &theMessage)
 {
 	this->_out.addMessage(theMessage);
 	this->cl_Epoll_In_Out();
+}
+
+void	Client::sendAllChannels(const std::string &theMessage)
+{
+	std::map<std::string, Channel*>::iterator it;
+	for (it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		it->second->broadcast(theMessage);
+	}
 }
 
 void Client::appendToOutBuffer(const std::string& message) {

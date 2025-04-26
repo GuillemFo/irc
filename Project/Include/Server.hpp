@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 14:07:36 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:39:40 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ class Server
 		int					rmChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
 		int					rmChannelMap(std::string &str, std::string &pw); // josegar2: the channels aren't removed
 
+		bool				nickExists(const std::string &theNick);
 		bool				channelExists(const std::string &theChannel);
 		Channel				*getChannel(const std::string &theChannel);
 		Client			*getClient(const int &fd);

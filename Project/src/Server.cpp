@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 23:09:29 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:43:48 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,20 @@ const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch
 // 	}
 // 	return (0);
 // }
+
+bool	Server::nickExists(const std::string &theNick)
+{
+	std::map<int, Client*>::const_iterator it;
+	for (it = this->getClientMap().begin(); it != this->getClientMap().end(); ++it)
+	{
+		Client *client = it->second;
+		if (client && name_tolower(client->get_nick()) == name_tolower(theNick))
+		{
+			return true;
+		}
+	}
+	return false;
+}
 
 bool	Server::channelExists(const std::string &theChannel)
 {
