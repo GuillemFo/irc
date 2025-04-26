@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CapCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: romanzdanov <romanzdanov@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 06:55:42 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:20:05 by romanzdanov      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 		std::string errorMsg = ":irc.server.name 410 "
 			+ sender.get_nick() + " :CAP command requires arguments\r\n";
 		sender.appendToOutBuffer(errorMsg);
-		return;
 		std::cout << "No arguments in the Cap command. Aborting."
 			<< std::endl;
 		return ;
