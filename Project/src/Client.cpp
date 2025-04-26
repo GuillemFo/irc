@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 16:08:19 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:40:43 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ const std::string	Client::get_user()const {return (this->_user);}
 void				Client::set_host(const std::string &str){this->_user = str;}
 const std::string	Client::get_host()const {return (this->_user);}
 
-void				Client::setRealName(std::string &str) {this->_realname = str;}
+void				Client::setRealName(const std::string &str) {this->_realname = str;}
 
 void	Client::setPassOK()
 {

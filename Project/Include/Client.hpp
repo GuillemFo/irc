@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 15:35:49 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:40:25 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class Client
 		const std::string	get_nick() const;
 
 		void				set_user(const std::string &str);
-		void				setRealName(std::string &str);
+		void				setRealName(const std::string &str);
 		const std::string	get_user() const;
 	
 		void				set_host(const std::string &str);
@@ -106,6 +106,4 @@ class Client
 		void		cl_Epoll_In_Out();
 		void		cl_Epoll_In();
 		
-	
-
 };
