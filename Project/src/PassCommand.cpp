@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 07:49:13 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 10:13:06 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 10:24:58 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ bool PassCommand::isValidPass(const std::string& name) {
 void PassCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
+	if (sender.getPassOK()) {
+		sender.sendMessage(ircErrorText(ERR_ALREADYREGISTERED, cmd, sender));
+		return ;
+	}
+
 	if (args.empty()) {
 		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
