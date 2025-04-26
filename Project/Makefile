@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: romanzdanov <romanzdanov@student.42.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/25 19:01:20 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/04/26 23:09:20 by romanzdanov      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,6 +106,21 @@ CapTests: \
     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
     -o CapTests
+
+#### CapTests (sorry for the mess)
+ModeTests: \
+    src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+	src/ModeCommand.cpp
+	g++ -std=c++98 -IInclude \
+    src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+	src/ModeCommand.cpp \
+    -o ModeTests
 
 -include $(DEP)
 

@@ -8,3 +8,6 @@
 Project/tmp/
 #exec file
 ircserv
+CapTests
+ModeTests
+.DS_Store
