@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 21:45:20 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:29:52 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "Client.hpp"
 
 #define CHANTYPES	"&#" //Channel types prefix supported
-#define CHANNELLEN	64	 // MUST be specified
+#define CHANNELLEN	50	 // MUST be specified
 #define CHANNEL_NOT_ALLOWED_CHARS " \a,"	//space, bell and comma
 #define CHANNELMODES "itkol"
 

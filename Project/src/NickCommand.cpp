@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 14:47:35 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:45:05 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,24 @@ NickCommand& NickCommand::operator=(const NickCommand& src) {
 
 NickCommand::~NickCommand () {}
 
+bool isIrcSpecialChar(char c) {
+    // Check if c is in 0x5B-0x60 or 0x7B-0x7D
+    return (c >= 0x5B && c <= 0x60) || (c >= 0x7B && c <= 0x7D);
+}
+
+//   nickname   =  ( letter / special ) *8( letter / digit / special / "-" )
+//   special    =  %x5B-60 / %x7B-7D
+
 bool NickCommand::isValidNick(const std::string& name) {
-	if (name.empty()) {
-		std::cout << "Aborting Nick: Nick is empty."
-			<< std::endl;
+	if (name.empty() ||
+		name.size() > NICKLEN || // has to return an error or just truncate
+		!(isalpha(name[0]) || isIrcSpecialChar(name[0])))
 		return false;
-	}
-	/////////////////////////////////////////////////////	Need to filter whats valid for nick! josegar2
-	if (name.length() > 50) {
-		std::cout << "Aborting NICK: Nick contains over 50"
-			<< " symbols." << std::endl;
-		return false;
-	}
-	for (size_t i = 0; i < name.length(); ++i) {
+	for (size_t i = 1; i < name.length(); ++i) {
 		char c = name[i];
-		if (c == ' ' || c == ',' || c < 32) {
-			std::cout << "Aborting Nick: Nicks contains invalid"
-				<< " symbols." << std::endl;
+		if (!(isalpha(c) || isdigit(c) || isIrcSpecialChar(c) || c == '-'))
 			return false;
 		}
-	}
-	///////////////////////////////////////////////////////////
-	std::map<int, Client*>::const_iterator it;
-	for (it = _server->getClientMap().begin(); it != _server->getClientMap().end(); ++it)
-	{
-		Client *client = it->second;
-		if (client && client->get_nick() == name)
-			return false;
-	}
 	return true;
 }
 
@@ -67,7 +57,7 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NONICKNAMEGIVEN, cmd, sender));
 		return ;
 	}
-	const std::string& Nick = args[0];
+	std::string Nick = args[0]; //not made const just in case nick can be truncated
 	if (! sender.getPassOK())  // can the order be NICK-PASS-USER
 	{
 		sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass.

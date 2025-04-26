@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 16:40:43 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:45:56 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,6 @@ Client &Client::operator=(const Client &other)	//do we need this??
 	return (*this);
 }
 
-bool Client::isNickCorrect(std::string theNick)
-{
-	if (theNick.empty() ||
-		theNick.size() > NICKLEN ||
-		strchr(NICK_NOT_STARTING, theNick[0]) ||
-		theNick.find(' ') != std::string::npos ||
-		theNick.find('\0') != std::string::npos ||
-		theNick.find('\r') != std::string::npos ||
-		theNick.find('\n') != std::string::npos)
-		return false;
-	return true;
-}
 
 int					Client::get_clientFD(){return (this->_client_fd);}
 Server				*Client::getServer() const{return (this->_server);}

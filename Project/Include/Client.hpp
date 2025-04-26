@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 16:40:25 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:45:54 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #define USERLEN	64 //length of username in USER message 
 #define USER_NOT_ALLOWED_CHARS " \0\r\n"
 
-#define NICKLEN	31 // MUST BE specified, 30 or 31 are typical values 
+#define NICKLEN	9 // MUST BE specified, 30 or 31 are typical values 
 
 class Server ;
 class Channel ;
@@ -59,8 +59,6 @@ class Client
 		Client &operator=(const Client &other);
 
 		std::string			_string_buff;	//store buffer until \r \n and permission to send. keep storing and remove the part sent. maybe need an int to check the lenght of the string so its easier to cut and to confirm from the server??
-
-		static bool			isNickCorrect(std::string theNick);
 
 		int					get_clientFD();
 
