@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 19:54:05 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:25:35 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void handleSend(Server &s, int fd)
 	}
 	msg.erase(0, sent_bytes); // with the count of sent bytes we remove that number from the out buffer and continue
 	s.getClient(fd)->_out.addOffset(sent_bytes);
-	if (s.getClient(fd)->_out.isEmpty())
+	if (s.getClient(fd)->isOutEmpty())
 	{
 		// Disable EPOLLOUT (from the server??) need to investigate. 24.04.25 04.04 pm
 		struct epoll_event ev;
@@ -183,8 +183,8 @@ void handleSend(Server &s, int fd)
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 		return ;
 	}
-	else
-		std::cout << "Error mid send" << std::endl;
+	// else
+	//	std::cout << "Error mid send" << std::endl;
 }
 
 

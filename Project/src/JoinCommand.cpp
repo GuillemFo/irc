@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/26 15:43:46 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:18:30 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,19 @@ JoinCommand& JoinCommand::operator=(const JoinCommand& src) {
 JoinCommand::~JoinCommand () {}
 JoinCommand::JoinCommand (Server* server) : _server(server) {}
 
+// channel    =  ( "#" / "+" / ( "!" channelid ) / "&" ) chanstring
+// [ ":" chanstring ]
+// chanstring = any octet except NUL, BELL, CR, LF, " ", "," and ":"
 bool JoinCommand::isValidChannelName(const std::string& name) {
-	if (name.empty()) {
-		std::cout << "Aborting JOIN: channel name is empty."
-			<< std::endl;
+	if (name.empty() || 
+			(name[0] != '#' && name[0] != '&') ||
+			name.length() > CHANNELLEN ||
+			!strchr(CHANTYPES, name[0]))
 		return false;
-	}
-	if (name[0] != '#' && name[0] != '&') {
-		std::cout << "Aborting JOIN: channel must start"
-			<< " with # or &." << std::endl;
-		return false;
-	}
-	if (name.length() > 50) {
-		std::cout << "Aborting JOIN: channel name contains over 50"
-			<< " symbols." << std::endl;
-		return false;
-	}
-	for (size_t i = 0; i < name.length(); ++i) {
+	for (size_t i = 1; i < name.length(); ++i) {
 		char c = name[i];
-		if (c == ' ' || c == ',' || c < 32) {
-			std::cout << "Aborting JOIN: channel name contains invalid"
-				<< " symbols." << std::endl;
+		if (c == ' ' || c == ',' || c == ':' ||
+			c == 0x00 || c == 0x07 || c == 0x0D || c == 0x0A) {
 			return false;
 		}
 	}
@@ -64,67 +56,63 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
 	}
-	if (sender.getOkLogin())
-	{
-		const std::string& channelName = args[0];
-		//need a checker for args 1 2 etc to loop the args because it can contain a password;
-		if (JoinCommand::isValidChannelName(channelName)) {
-			//std::cout << "Executing JOIN command. Joining channel: "
-			//	<< channelName << std::endl;
-			if (sender.getServer()->channelExists(channelName))
-			{
-				if (sender.getServer()->getChannel(channelName)->isPassRequired())
-				{
-					const std::string& pass = args[1];
-					std::cout << "is valid pass:" << sender.getServer()->getChannel(channelName)->check_pass(pass) << ":" << std::endl;
-					if (!sender.getServer()->getChannel(channelName)->check_pass(pass))
-					{
-						sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
-						return ;
-					}
-				}
-				else if (sender.getServer()->getChannel(channelName)->isMember(sender.get_nick()))
-				{
-					sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
-					return ;
-				}
-				else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
-				{
-					sender.sendMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
-					return ;
-				}
-				else if (sender.getServer()->getChannel(channelName)->isChannelFull())
-				{
-					sender.sendMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
-					std::cout << sender._out.getMessage() << std::endl;
-					return ;
-				}
-				sender.getServer()->getChannel(channelName)->addClient(&sender);
-				sender.addChannel(sender.getServer()->getChannel(channelName));
-				sender.sendMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
-				return ;
-			}
-			else
-			{
-				sender.getServer()->addChannelMap(channelName);
-				sender.getServer()->getChannel(channelName)->addClient(&sender);
-				sender.addChannel(sender.getServer()->getChannel(channelName));
-				sender.sendMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
-				return ;
-			}
-		}
-		else {
-			std::cout << "ERROR::Executing JOIN command. "
-				<< channelName << " not valid" << std::endl;
-			sender.sendMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
-			return ;
-		}
-	}
-	else 
+	if (!sender.getOkLogin())
 	{
 		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
 		return ;
 	}
+	const std::string& channelName = args[0];
+	//need a checker for args 1 2 etc to loop the args because it can contain a password;
+	if (channelName == "0") {
+		//TODO part all channels
+		return ;
+	}
+	if (!JoinCommand::isValidChannelName(channelName)) {
+		sender.sendMessage(ircErrorText(ERR_BADCHANMASK, cmd, sender));
+		return ;
+	}
+	//std::cout << "Executing JOIN command. Joining channel: "
+	//	<< channelName << std::endl;
+	if (!sender.getServer()->channelExists(channelName))
+	{
+		sender.getServer()->addChannelMap(channelName);  // add new channel into the server channel map
+	} else { //exisitng channel. See if it's possible to join
+		if (sender.getServer()->getChannel(channelName)->isPassRequired())
+		{
+			if (args.size() < 2 ) {  // no password provided
+				sender.sendMessage(ircErrorText(ERR_BADCHANNELKEY, cmd, sender));
+				return ;
+			}
+			const std::string& pass = args[1];
+			if (!sender.getServer()->getChannel(channelName)->check_pass(pass)) 
+			{ //incorrect password
+				sender.sendMessage(ircErrorText(ERR_BADCHANNELKEY, cmd, sender));
+				return ;
+			}
+		}
+		// No password required or is correct here
+		if (sender.getServer()->getChannel(channelName)->isMember(sender.get_nick()))
+		{ // akready in
+			sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
+			return ;
+		}
+		else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
+		{ // can't join without the INVITE
+			sender.sendMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
+			return ;
+		}
+		else if (sender.getServer()->getChannel(channelName)->isChannelFull())
+		{ // channel full
+			sender.sendMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
+			return ;
+		}
+
+	}
+	sender.getServer()->getChannel(channelName)->addClient(&sender);
+	sender.addChannel(sender.getServer()->getChannel(channelName));
+	sender.addOutMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
+	// TODO RPL_TOPIC,  RPL_NAMREPLY,  RPL_ENDOFNAMES
+	sender.addOutMessage(ircReplyText(RPL_TOPIC, cmd, sender));
+	sender.sendMessage(ircReplyText(RPL_ENDOFNAMES, cmd, sender));
 	return ;
 }

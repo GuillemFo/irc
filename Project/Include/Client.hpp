@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 20:45:54 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:12:55 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ class Client
 		void		sendMessage(const std::string &theMessage);
 		void		sendAllChannels(const std::string &theMessage);
 
-		void		appendToOutBuffer(const std::string& message);
-		std::string	getNextOutBufferChunk();
-		void		advanceOutBufferOffset(size_t bytesSent);
-		bool		isOutBufferEmpty() const;
+		void		addOutMessage(const std::string& message);
+		std::string	getOutMessage();
+		void		popCharsSent(size_t bytesSent);
+		bool		isOutEmpty() const;
 		void		clearOutBuffer();
 		const OutBuffer& getOutBuffer() const;
 		void		cl_Epoll_In_Out();
