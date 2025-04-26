@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/25 21:40:06 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:35:54 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static std::map<std::string, std::string> createErrorFormats() {
     std::map<std::string, std::string> m;
     
     // Capability error. Not in RFC but usual in some servers
-    m.insert(std::make_pair(ERR_INVALIDCAPCMD, "<client> <subcommand> :No such nick/channel"));
+    m.insert(std::make_pair(ERR_INVALIDCAPCMD, "<client> <subcommand> :Invalid CAP command"));
     
     // Client errors
     m.insert(std::make_pair(ERR_NOTREGISTERED, "<client> <command> :You have not registered"));
@@ -95,7 +95,7 @@ std::string ircErrorText(const std::string& code, const Command& cmd, const Clie
 		
 	// Replace <subcommand>
 	if ((pos = reply.find("<subcommand>")) != std::string::npos) {
-		reply.replace(pos, 9, args[0]); //first parameter
+		reply.replace(pos, 12, args[0]); //first parameter
 	}
 		
 	// Replace <target> (for ERR_TOOMANYTARGETS) wich would be the 2n parameter in PRIVMSG

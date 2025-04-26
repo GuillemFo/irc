@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CapCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 06:55:42 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:37:16 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		std::string errorMsg = ":irc.server.name 410 "
-			+ sender.get_nick() + " :CAP command requires arguments\r\n";
-		sender.appendToOutBuffer(errorMsg);
+		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
+		sender.cl_Epoll_In_Out();
 		return;
-		std::cout << "No arguments in the Cap command. Aborting."
-			<< std::endl;
-		return ;
 	}
 	const std::string& subcmd = args[0];
 	if (subcmd == "LS" and args.size() >= 2) {
 		//TODO: remove the cout message before submitting the project.
-		std::cout << "Your CAP Command would be processed here if the subject "
-			<< "required it :)" << std::endl;
+	}
+	else
+	{
+		// unrecognized command
+		sender._out.addMessage(ircErrorText(ERR_INVALIDCAPCMD, cmd, sender));
+		sender.cl_Epoll_In_Out();
 	}
 }
