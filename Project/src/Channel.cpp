@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/22 20:45:24 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 11:52:23 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,13 @@ Channel::Channel(std::string channelName, Server *server)
 }
 
 
-//Channel::Channel(const Channel &other) {*this = other;}
-
+Channel::Channel(const Channel &other) {*this = other;}
+Channel& Channel::operator=(const Channel& other) {
+	if (this != &other) {
+		this->_Name = other._Name;
+	}
+	return *this;
+};
 
 const std::string	Channel::get_name() const {return (this->_Name);}
 
@@ -151,4 +156,16 @@ bool Channel::isNameCorrect(const std::string theName)
 		theName.find(',') != std::string::npos)
 		return false;
 	return true;
+}
+
+void Channel::printInfo()
+{
+	std::cout << "Channel Name: " << _Name << std::endl;
+	std::cout << "Topic: " << (_Topic.empty() ? "(No topic set)" : _Topic) << std::endl;
+	std::cout << "Invite Only: " << (_inviteOnly ? "Yes" : "No") << std::endl;
+	std::cout << "Topic Protected: " << (_protectTopic ? "Yes" : "No") << std::endl;
+	std::cout << "Password Protected: " << (isPassRequired() ? "Yes" : "No") << std::endl;
+	std::cout << "Client Limit: " << (_clientLimit > 0 ? std::to_string(_clientLimit) : "No limit") << std::endl;
+	std::cout << "Current Clients: " << _clients.size() << std::endl;
+	std::cout << "Operators: " << _opclients.size() << std::endl;
 }

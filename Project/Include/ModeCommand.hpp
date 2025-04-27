@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:13:57 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/04/27 08:55:02 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/27 22:41:50 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ class ModeCommand : public Command
 {
 	private:
 		Server* _server;
-		void handleChannelMode(Client& sender, Channel& channel, const Command& cmd);
+		void handleChannelMode(Client& sender, Channel& channel,
+			const std::vector<std::string>& args);
 
 	public:
 		ModeCommand();

@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/04/27 09:11:58 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/27 22:42:27 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,10 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 			+ modes +"\r\n");
 		return ;
 	}
+	std::cout << "INSIDE EXECUTE" << std::endl;
+	std::cout << sender.get_nick() << " is operator: "
+		<< channel->isOperator(sender.get_nick()) << std::endl;
+	channel->printInfo();
 	if (!channel->isOperator(sender.get_nick())) {
 		//TODO: probably better use not nicks, which can change, but fds, which are permanent
 		//discuss internally. maybe I am overcomplicating things again.
@@ -80,15 +84,16 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 		//NB: I am using the channel by reference, so I am dereferencing the pointer here
 	}
-	handleChannelMode(sender, *channel, cmd);
+	handleChannelMode(sender, *channel, args);
 }
 
 void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
-	const Command& cmd)
+	const std::vector<std::string>& args)
 {
 	(void) sender;
 	(void) channel;
-	(void) cmd;
+	(void) args;
+	sender.appendToOutBuffer(args[0] + " " + args[1] + "\r\n");
 	std::cout << "this is just a placeholder of he handleChannelMode"
 		<< std::endl;
 }
