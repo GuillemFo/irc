@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 23:12:55 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:25:33 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ class Client
 		bool		isRegistered();
 
 		void		sendMessage(const std::string &theMessage);
+		void		changeAllNicks(const std::string &oldNick);
 		void		sendAllChannels(const std::string &theMessage);
 
 		void		addOutMessage(const std::string& message);

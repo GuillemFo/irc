@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 23:12:39 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:34:24 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,8 +231,20 @@ void	Client::joinChannel(const std::string &channelName, const std::string &chan
 
 void	Client::sendMessage(const std::string &theMessage)
 {
-	this->_out.addMessage(theMessage);
+	this->addOutMessage(theMessage);
 	this->cl_Epoll_In_Out();
+}
+
+void	Client::changeAllNicks(const std::string &oldNick)
+{
+	std::map<std::string, Channel*>::iterator it;
+	for (it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second->isOperator(oldNick))
+		it->second->addOperator(this);
+		it->second->addClient(this);
+		it->second->remClient(oldNick);
+	}
 }
 
 void	Client::sendAllChannels(const std::string &theMessage)
@@ -246,6 +258,7 @@ void	Client::sendAllChannels(const std::string &theMessage)
 
 void Client::addOutMessage(const std::string& message) {
 	std::string temp = message;
+	std::cout << ">>>" + _nick + ": " + message << std::endl;
 	this->_out.addMessage(temp);
 }
 
