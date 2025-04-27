@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 10:43:48 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:53:48 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ Client			*Server::getClientByNick(const std::string &s)
 
 	for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
 	{
-		if (it->second->get_nick() == s)
+		if (name_tolower(it->second->get_nick()) == name_tolower(s))
 			return it->second;
 	}
 	return NULL;

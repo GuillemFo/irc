@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 16:27:09 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:16:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 		std::string oldNick = sender.get_nick();
 		std::string chgMsg = ":" + oldNick + " NICK " + Nick + "\r\n";
 		sender.set_nick(Nick);
+		sender.sendMessage(chgMsg);
 		sender.changeAllNicks(oldNick);
 		sender.sendAllChannels(chgMsg);
 	}
