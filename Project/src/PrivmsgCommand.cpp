@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 17:41:04 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 22:17:41 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,37 +27,11 @@ PrivmsgCommand& PrivmsgCommand::operator=(const PrivmsgCommand& src) {
 PrivmsgCommand::~PrivmsgCommand() {}
 Server				*PrivmsgCommand::getServer() const{return (this->_server);}
 
-void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
-	(void) sender;
+void privMsg(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
-	if (args.size() < 1) {
-		sender.sendMessage(ircErrorText(ERR_NORECIPIENT, cmd, sender));
-		return ; // TODO: updated functionality so that error message is sent back to the clien
-	}
-	if (args.size() < 2) {
-		sender.sendMessage(ircErrorText(ERR_NOTEXTTOSEND, cmd, sender));
-		return ; // TODO: updated functionality so that error message is sent back to the clien
-	}
-	if (!sender.getOkLogin())
-	{
-		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
-		std::cout << sender._out.getMessage() << std::endl;
-		return ;
-	}
 	std::string target = args[0];
 	std::string message;
-	// the if block below is optional. we can just send back an error if args.size() > 2
-	//if (args.size() > 2) {
-	//	for (size_t i = 1; i < args.size(); ++i) {
-	//		message += args[i];
-	//		if (i + 1 < args.size())
-	//			message += " ";
-	//	}
-	//}
-	//else {
-		message = args[1];
-	//}
-
+	message = args[1];
 	if (target[0] == '#' || target[0] == '&')
 	{
 		if (sender.getServer()->channelExists(target))
@@ -87,15 +61,42 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 		}
 	}
 	// target = nick
-	else if(!(this->getServer()->getClientByNick(target) == NULL))
+	else if(!(sender.getServer()->getClientByNick(target) == NULL))
 	{
 		std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
 		std::string privmsgLine = prefix + " PRIVMSG " + target + " :" + message + "\r\n";
-		this->getServer()->getClientByNick(target)->sendMessage(privmsgLine);
+		sender.getServer()->getClientByNick(target)->sendMessage(privmsgLine);
 	}
 	else 
 	{
 		sender.sendMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
 		return;
 	}
+}
+
+void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
+	const std::vector<std::string>& args = cmd.getArgs();
+	if (args.size() < 1) {
+		sender.sendMessage(ircErrorText(ERR_NORECIPIENT, cmd, sender));
+		return ; // TODO: updated functionality so that error message is sent back to the clien
+	}
+	if (args.size() < 2) {
+		sender.sendMessage(ircErrorText(ERR_NOTEXTTOSEND, cmd, sender));
+		return ; // TODO: updated functionality so that error message is sent back to the clien
+	}
+	if (!sender.getOkLogin())
+	{
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
+		std::cout << sender._out.getMessage() << std::endl;
+		return ;
+	}
+	Command splitcmd(cmd);
+	std::vector<std::string> targets = split_arg(args[0]);
+	std::vector<std::string>::const_iterator it;
+	for (it = targets.begin(); it != targets.end(); ++it) {
+		splitcmd.clearArgs();
+		splitcmd.addArg(*it);
+		splitcmd.addArg(args[1]);
+		privMsg(splitcmd, sender);
+	}	
 }

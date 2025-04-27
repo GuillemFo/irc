@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PingCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:29:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 11:45:27 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/27 22:08:16 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,20 @@ void PingCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
-		sender.cl_Epoll_In_Out();
+		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
 	}
 	const std::string& Ping = args[0];
 	//std::string pong_out =  ":" + sender.get_nick() + " PONG " + sender.getServer()->getServerName() + " " + Ping + "\r\n"; // no need to send server name
 	std::string pong_out =  ":" + sender.get_nick() + " PONG " + " " + Ping + "\r\n";
-	sender._out.addMessage(pong_out);
-	sender.cl_Epoll_In_Out();
+	sender.sendMessage(pong_out);
 	return ;
 
 /*
 	}
 	else {
-		sender._out.addMessage(ircErrorText("ping error", cmd, sender));
+		sender.sendMessage(ircErrorText("ping error", cmd, sender));
 		std::cout << sender._out.getMessage() << std::endl;
-		sender.cl_Epoll_In_Out();
 
 		return ;
 	}
