@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 18:29:52 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:25:03 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,5 @@ class Channel
 		bool				isChannelEmpty();
 		static bool			isNameCorrect(const std::string &theName);
 		void				broadcast(const std::string &msg);
+		std::vector<std::string> getNicks();
 };

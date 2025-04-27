@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 23:35:48 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:42:02 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,4 +160,18 @@ void Channel::broadcast(const std::string &msg)
 	{
 		it->second->sendMessage(msg);
 	}
+}
+
+std::vector<std::string> Channel::getNicks()
+{
+	std::vector<std::string> result;
+	std::map<std::string, Client *>::iterator it;
+	for (it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (isOperator(it->second->get_nick()))
+			result.push_back("@" + it->second->get_nick());
+		else
+			result.push_back(it->second->get_nick());
+	}
+	return result;
 }

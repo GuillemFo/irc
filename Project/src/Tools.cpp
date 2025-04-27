@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:07:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/18 21:53:32 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:07:54 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,22 @@ std::string name_tolower(const std::string& name) {
 				}
 		}
 	}
+	return result;
+}
+
+std::vector<std::string> split_arg(const std::string& arg) {
+	std::vector<std::string> result;
+	std::string::size_type start = 0;
+	std::string::size_type end = arg.find(',');
+
+	while (end != std::string::npos) {
+		result.push_back(arg.substr(start, end - start));
+		start = end + 1;
+		end = arg.find(',', start);
+	}
+
+	// Add the last element
+	result.push_back(arg.substr(start));
+
 	return result;
 }

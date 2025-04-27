@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/25 17:33:58 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:00:38 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 		else
 			reply.replace(pos, 9, args[0]);	}
 		
-	// Replace <tokens>
+	// Replace <tokens> for RPL_ISUPPORT
 	if ((pos = reply.find("<tokens>")) != std::string::npos) {
 		reply.replace(pos, 8, "CHANNELLEN=64 CHANNELMODES=i,t,k,o,l NICKLEN=9");
 	}
