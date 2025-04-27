@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 18:51:04 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:05:06 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		{
 			sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
 			sender.remChannel(channel);
-			std::string partLine = ":" + sender.get_nick() + " PART :";
+			std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
 			if (args.size() >= 2)
 				partLine += args[1];
 			else
