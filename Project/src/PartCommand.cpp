@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 19:05:06 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:59:51 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,37 +35,39 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
 	}
-	if (sender.getOkLogin())
+	if (!sender.getOkLogin())
 	{
-		const std::string& channel = args[0];
-		if (!sender.getServer()->channelExists(channel))
-		{
-			sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
-			return ;
-		}
-		else if (!sender.getServer()->getChannel(channel)->isMember(sender.get_nick()))
-		{
-			sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender)); //dont know if this is needed.
-			return ;
-		}
-		else
-		{
-			sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
-			sender.remChannel(channel);
-			std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
-			if (args.size() >= 2)
-				partLine += args[1];
-			else
-				partLine += "User is leaving the channel";
-			partLine += "\r\n";
-			sender.sendMessage(partLine);
-			sender.getServer()->getChannel(channel)->broadcast(partLine);
-			return ;
-		}
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
+		return ;
+	}
+	std::vector<std::string> targets = split_arg(args[0]);
+	std::vector<std::string>::const_iterator it;
+	for (it = targets.begin(); it != targets.end(); ++it) {
+   		std::cout << "Target ; " << *it << std::endl;
+	}
+	const std::string& channel = args[0];
+	if (!sender.getServer()->channelExists(channel))
+	{
+		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
+		return ;
+	}
+	else if (!sender.getServer()->getChannel(channel)->isMember(sender.get_nick()))
+	{
+		sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender)); //dont know if this is needed.
+		return ;
 	}
 	else
 	{
-		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
+		sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
+		sender.remChannel(channel);
+		std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
+		if (args.size() >= 2)
+			partLine += args[1];
+		else
+			partLine += "User is leaving the channel";
+		partLine += "\r\n";
+		sender.sendMessage(partLine);
+		sender.getServer()->getChannel(channel)->broadcast(partLine);
 		return ;
 	}
 	return ;
