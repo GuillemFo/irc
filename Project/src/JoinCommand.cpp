@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/26 23:18:30 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:05:28 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		}
 		// No password required or is correct here
 		if (sender.getServer()->getChannel(channelName)->isMember(sender.get_nick()))
-		{ // akready in
-			sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
+		{ // already in, no need to send anything acording to RFC
+			// sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
 			return ;
 		}
 		else if (sender.getServer()->getChannel(channelName)->isInviteOnly())

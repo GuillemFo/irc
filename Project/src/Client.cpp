@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 16:34:24 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:48:59 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	Client::addChannel(Channel *pChannel)
 	_channels[name_tolower(pChannel->get_name())] = pChannel;
 }
 
-void	Client::remChannel(std::string &theChannel)
+void	Client::remChannel(const std::string &theChannel)
 {
 	std::map<std::string, Channel*>::iterator it = _channels.find(name_tolower(theChannel));
 	if (it != _channels.end())
