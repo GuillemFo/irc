@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:44:56 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/23 18:18:59 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:41:11 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void Command::setName(const std::string& name) {
 
 void Command::addArg(const std::string& arg) {
 	this->_args.push_back(arg);
+}
+
+void Command::clearArgs()
+{
+	this->_args.clear();
 }
 
 const std::string& Command::getName() const {

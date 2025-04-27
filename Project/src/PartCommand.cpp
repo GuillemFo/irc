@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 20:59:51 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:50:25 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,10 @@ PartCommand& PartCommand::operator=(const PartCommand& src) {
 PartCommand::~PartCommand () {}
 PartCommand::PartCommand (Server* server) : _server(server) {}
 
-
-void PartCommand::execute(const Command& cmd, Client& sender) {
+void partChannel(const Command& cmd, Client& sender)
+{
 	const std::vector<std::string>& args = cmd.getArgs();
-	// TODO: implement check for gettin cmd and/or sender as NULL
-	if (args.empty()) {
-		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
-		return ;
-	}
-	if (!sender.getOkLogin())
-	{
-		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
-		return ;
-	}
-	std::vector<std::string> targets = split_arg(args[0]);
-	std::vector<std::string>::const_iterator it;
-	for (it = targets.begin(); it != targets.end(); ++it) {
-   		std::cout << "Target ; " << *it << std::endl;
-	}
+
 	const std::string& channel = args[0];
 	if (!sender.getServer()->channelExists(channel))
 	{
@@ -69,6 +55,30 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(partLine);
 		sender.getServer()->getChannel(channel)->broadcast(partLine);
 		return ;
+	}
+}
+
+void PartCommand::execute(const Command& cmd, Client& sender) {
+	const std::vector<std::string>& args = cmd.getArgs();
+	// TODO: implement check for gettin cmd and/or sender as NULL
+	if (args.empty()) {
+		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
+		return ;
+	}
+	if (!sender.getOkLogin())
+	{
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
+		return ;
+	}
+	Command splitcmd(cmd);
+	std::vector<std::string> targets = split_arg(args[0]);
+	std::vector<std::string>::const_iterator it;
+	for (it = targets.begin(); it != targets.end(); ++it) {
+		splitcmd.clearArgs();
+		splitcmd.addArg(*it);
+		if (args.size() >= 2) // add reason if exists
+			splitcmd.addArg(args[1]);
+		partChannel(splitcmd, sender);
 	}
 	return ;
 	

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:56:38 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/13 13:42:27 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:40:14 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Command {
 		~Command();
 		void setName(const std::string& name);
 		void addArg(const std::string& arg);
+		void clearArgs();
 		const std::string& getName() const;
 		const std::vector<std::string>& getArgs() const;
 		void printCommand() const;
