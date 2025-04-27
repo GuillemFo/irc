@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PartCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/25 18:01:24 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:51:04 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 	if (args.empty()) {
-		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
-		sender.cl_Epoll_In_Out();
+		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
 	}
 	if (sender.getOkLogin())
@@ -42,34 +40,32 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		const std::string& channel = args[0];
 		if (!sender.getServer()->channelExists(channel))
 		{
-			sender._out.addMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
-			std::cout << sender._out.getMessage() << std::endl;
-			sender.cl_Epoll_In_Out();
+			sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
 			return ;
 		}
 		else if (!sender.getServer()->getChannel(channel)->isMember(sender.get_nick()))
 		{
-			sender._out.addMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender)); //dont know if this is needed.
-			std::cout << sender._out.getMessage() << std::endl;
-			sender.cl_Epoll_In_Out();
+			sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender)); //dont know if this is needed.
 			return ;
 		}
 		else
 		{
 			sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
-			//loop all clients of that channel to notify that client left.
-			std::string prefix = ":*!" + sender.get_user() + "@" + "localhost"; // we send ":*!" so tell its server who says something
-			std::string partLine = prefix + " PRIVMSG " + channel + " :" + sender.get_nick() + " has left"+ "\r\n";
-			sender._out.addMessage(partLine);
-			sender.cl_Epoll_In_Out();
+			sender.remChannel(channel);
+			std::string partLine = ":" + sender.get_nick() + " PART :";
+			if (args.size() >= 2)
+				partLine += args[1];
+			else
+				partLine += "User is leaving the channel";
+			partLine += "\r\n";
+			sender.sendMessage(partLine);
+			sender.getServer()->getChannel(channel)->broadcast(partLine);
 			return ;
 		}
 	}
 	else
 	{
-		sender._out.addMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
-		std::cout << sender._out.getMessage() << std::endl;
-		sender.cl_Epoll_In_Out();
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
 		return ;
 	}
 	return ;

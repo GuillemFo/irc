@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 16:25:33 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:48:36 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ class Client
 		void	setOkLogin();
 		bool	getOkLogin();
 		void	addChannel(Channel *pChannel);
-		void	remChannel(std::string &theChannel);
+		void	remChannel(const std::string &theChannel);
 		void	joinChannel(const std::string &channelName);
 		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
 		void	partChannel(const std::string &channelName);
