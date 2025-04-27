@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanzdanov <romanzdanov@student.42.fr>    +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/04/26 23:04:49 by romanzdanov      ###   ########.fr       */
+/*   Updated: 2025/04/27 09:11:58 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ModeCommand::ModeCommand() : _server(NULL) {}
 ModeCommand::ModeCommand(Server* server) : _server(server) {}
 ModeCommand::ModeCommand(const ModeCommand& src) : _server(src._server) {}
-ModeCommand::ModeCommand& operator=(const ModeCommand& src) {
+ModeCommand& ModeCommand::operator=(const ModeCommand& src) {
 	if (this != &src) {
 		this->_server = src._server;
 	}

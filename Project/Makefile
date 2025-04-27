@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: romanzdanov <romanzdanov@student.42.fr>    +#+  +:+       +#+         #
+#    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/26 23:09:20 by romanzdanov      ###   ########.fr        #
+#    Updated: 2025/04/27 09:35:56 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,12 +99,14 @@ CapTests: \
     src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp
+    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp
 	g++ -std=c++98 -IInclude \
     src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp \
     -o CapTests
 
 #### CapTests (sorry for the mess)
@@ -113,13 +115,13 @@ ModeTests: \
     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-	src/ModeCommand.cpp
+	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp
 	g++ -std=c++98 -IInclude \
     src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-	src/ModeCommand.cpp \
+	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp\
     -o ModeTests
 
 -include $(DEP)
@@ -131,7 +133,7 @@ clean:
 	@echo "$(CYAN)$(NAME) $(YELLOW)- $(RED)Obj deleted$(RESET)"
 
 fclean: clean
-	@rm -rf $(NAME) CapTests
+	@rm -rf $(NAME) CapTests ModeTests
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 
 .PHONY: all re clean fclean g r
