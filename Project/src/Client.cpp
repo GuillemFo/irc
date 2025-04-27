@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 20:45:56 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:12:39 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,20 +244,20 @@ void	Client::sendAllChannels(const std::string &theMessage)
 	}
 }
 
-void Client::appendToOutBuffer(const std::string& message) {
+void Client::addOutMessage(const std::string& message) {
 	std::string temp = message;
 	this->_out.addMessage(temp);
 }
 
-std::string Client::getNextOutBufferChunk() {
+std::string Client::getOutMessage() {
 	return this->_out.getMessage();
 }
 
-void Client::advanceOutBufferOffset(size_t bytesSent) {
+void Client::popCharsSent(size_t bytesSent) {
 	this->_out.addOffset(bytesSent);
 }
 
-bool Client::isOutBufferEmpty() const {
+bool Client::isOutEmpty() const {
 	return this->_out.isEmpty();
 }
 

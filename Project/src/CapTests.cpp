@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CapTests.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/23 18:30:48 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:10:54 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void test_cap_command_execute_ls() {
 
     capCmd.execute(cmd, client);
 
-    ASSERT_TRUE(!client.isOutBufferEmpty(), "Client buffer not empty after CAP LS");
+    ASSERT_TRUE(!client.isOutEmpty(), "Client buffer not empty after CAP LS");
 }
 
 void test_cap_command_execute_end() {
@@ -53,7 +53,7 @@ void test_cap_command_execute_end() {
     cmd.addArg("END");
 
     capCmd.execute(cmd, client);
-    ASSERT_TRUE(!client.isOutBufferEmpty(), "Client buffer not empty after CAP END");
+    ASSERT_TRUE(!client.isOutEmpty(), "Client buffer not empty after CAP END");
 }
 
 void test_cap_command_execute_unknown() {
@@ -66,7 +66,7 @@ void test_cap_command_execute_unknown() {
     cmd.addArg("UNKNOWN");
 
     capCmd.execute(cmd, client);
-    ASSERT_TRUE(!client.isOutBufferEmpty(), "Client buffer not empty after CAP UNKNOWN");
+    ASSERT_TRUE(!client.isOutEmpty(), "Client buffer not empty after CAP UNKNOWN");
 }
 
 void test_cap_command_missing_arg() {
@@ -78,7 +78,7 @@ void test_cap_command_missing_arg() {
     cmd.setName("CAP");
 
     capCmd.execute(cmd, client);
-    ASSERT_TRUE(!client.isOutBufferEmpty(), "Client buffer not empty for CAP with missing argument");
+    ASSERT_TRUE(!client.isOutEmpty(), "Client buffer not empty for CAP with missing argument");
 }
 
 void test_cap_command_junk_input() {
@@ -91,7 +91,7 @@ void test_cap_command_junk_input() {
     cmd.addArg("1234567890!@#$%^&*()");
 
     capCmd.execute(cmd, client);
-    ASSERT_TRUE(!client.isOutBufferEmpty(), "Client buffer not empty for CAP with junk input");
+    ASSERT_TRUE(!client.isOutEmpty(), "Client buffer not empty for CAP with junk input");
 }
 
 int main() {
