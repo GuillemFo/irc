@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/28 10:24:13 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:58:00 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 
 
 
-	//	others will see: * bobitosan1 has quit (Client Quit) the command received by sv will be "QUIT :Client Quit"
 
 	if (args.empty()) {
 		//quit without msg
@@ -44,6 +43,19 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	}
 	const std::string& Quit = args[0];
 	if (!Quit.empty()) {
+	//	others will see: * bobitosan1 has quit (Client Quit) the command received by sv will be "QUIT :Client Quit"
+			std::string quitLine = ":" + sender.get_nick() + " QUIT :";
+			if (args.size() >= 2)
+				quitLine += args[1];
+			else
+				quitLine += "Client Quit1";
+			quitLine += "\r\n";
+			sender.sendMessage(quitLine);
+			/*
+			for (all channels client exist, send the quit line)
+			sender.getServer()->getChannel(channel)->broadcast(quitLine);
+			*/
+			return ;
 		//quit with specific message
 		std::cout << "Executing Quit command." << std::endl;
 	}
