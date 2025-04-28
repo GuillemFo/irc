@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 17:53:48 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:04:20 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,10 +246,10 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("USER", new UserCommand(this));
 	_dispatcher.registerHandler("PASS", new PassCommand(this));
 	_dispatcher.registerHandler("CAP", new CapCommand(this));
-	// _dispatcher.registerHandler("QUIT", new QuitCommand(this));
+	_dispatcher.registerHandler("QUIT", new QuitCommand(this));
 	_dispatcher.registerHandler("PING", new PingCommand(this));
-	// _dispatcher.registerHandler("PONG", new PongCommand(this));
-	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this));
+	// _dispatcher.registerHandler("PONG", new PongCommand(this)); // not needed by subject
+	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this)); // not needed by subject
 	_dispatcher.registerHandler("PART", new PartCommand(this));
 	// _dispatcher.registerHandler("KICK", new KickCommand(this));
 	// _dispatcher.registerHandler("MODE", new ModeCommand(this));
