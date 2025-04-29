@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 01:28:04 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/29 07:14:00 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,38 +34,17 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 
-
-
-
+	// Redoing 29.04.25 09.13am
 	if (args.empty()) {
-		//quit without msg
+		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
+		std::cout << sender._out.getMessage() << std::endl;
+		sender.cl_Epoll_In_Out();
 		return ;
 	}
-	const std::string& Quit = args[0];
-	if (!Quit.empty()) {
-	//	others will see: * bobitosan1 has quit (Client Quit) the command received by sv will be "QUIT :Client Quit"
-	//	only need to send 1 time per clien not all channels/
-			std::string quitLine = ":" + sender.get_nick() + " QUIT :";
-			if (args.size() >= 2)
-				quitLine += args[1];
-			else
-				quitLine += "Client Quit1";
-			quitLine += "\r\n";
-			sender.sendMessage(quitLine);
-			std::map<std::string, Channel*>::iterator it;
-			for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it)// get channels
-			{
-				std::string channel = it->first;
-				
-				sender.getServer()->getChannel(channel)->broadcast(quitLine);	//not working...
-			}
-			return ;
-			//quit with specific message
-			std::cout << "Executing Quit command." << std::endl;
-	}
-	else {
-			//should never happen? 
-		sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));	//temp error.
-		return ;
-	}
+	const std::string& Quit = args[0];	
+	std::string Quit_out =  ":" + sender.get_nick() + " QUIT " + " " + Quit + "\r\n";
+	sender._out.addMessage(Quit_out);
+	sender.cl_Epoll_In_Out();
+	return ;
+
 }
