@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 18:05:28 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 07:41:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,9 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 	}
 	sender.getServer()->getChannel(channelName)->addClient(&sender);
 	sender.addChannel(sender.getServer()->getChannel(channelName));
-	sender.addOutMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
+	std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n";
 	// TODO RPL_TOPIC,  RPL_NAMREPLY,  RPL_ENDOFNAMES
+	sender.getServer()->getChannel(channelName)->broadcast(out);
 	sender.addOutMessage(ircReplyText(RPL_TOPIC, cmd, sender));
 	sender.sendMessage(ircReplyText(RPL_ENDOFNAMES, cmd, sender));
 	return ;

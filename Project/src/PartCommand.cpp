@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 01:33:14 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/29 07:55:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,11 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		}
 		else
 		{
+			std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host PART " + args[0] + "\r\n";
+			//sender.addOutMessage(partLine);
+			sender.getServer()->getChannel(channel)->broadcast(out);
 			sender.getServer()->getChannel(channel)->remClient(sender.get_nick());
-			sender.remChannel(channel);
-			std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
-			if (args.size() >= 2)
-				partLine += args[1];
-			else
-				partLine += "User is leaving the channel";
-			partLine += "\r\n";
-			sender.sendMessage(partLine);
-			sender.getServer()->getChannel(channel)->broadcast(partLine);
+			sender.remChannel(channel); //from the client class!!
 			return ;
 		}
 	}

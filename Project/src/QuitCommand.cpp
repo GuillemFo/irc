@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 07:14:00 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/29 07:52:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,13 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 
-	// Redoing 29.04.25 09.13am
-	if (args.empty()) {
-		sender._out.addMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
-		sender.cl_Epoll_In_Out();
-		return ;
-	}
-	const std::string& Quit = args[0];	
-	std::string Quit_out =  ":" + sender.get_nick() + " QUIT " + " " + Quit + "\r\n";
-	sender._out.addMessage(Quit_out);
-	sender.cl_Epoll_In_Out();
-	return ;
+	std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT " + args[0] + "\r\n";
+	std::map<std::string, Channel*>::iterator it;
 
+	for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it) // not for all channels, once per client!!
+	{
+		std::string channel = it->first;
+		sender.getServer()->getChannel(channel)->broadcast(out);
+	}
+	return ;
 }
