@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 20:41:09 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:09:58 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 #include "CapCommand.hpp"
 #include "PingCommand.hpp"
 #include "PartCommand.hpp"
+#include "TopicCommand.hpp"
 
 
 

@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 18:48:36 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:57:16 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #define USERLEN	64 //length of username in USER message 
 #define USER_NOT_ALLOWED_CHARS " \0\r\n"
 
-#define NICKLEN	9 // MUST BE specified, 30 or 31 are typical values 
+#define NICKLEN	9 // MUST BE specified, 9 in RFC, 30 or 31 are typical values 
 
 class Server ;
 class Channel ;

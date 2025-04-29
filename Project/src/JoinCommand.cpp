@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 18:05:28 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:58:05 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,10 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 	sender.addChannel(sender.getServer()->getChannel(channelName));
 	sender.addOutMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
 	// TODO RPL_TOPIC,  RPL_NAMREPLY,  RPL_ENDOFNAMES
-	sender.addOutMessage(ircReplyText(RPL_TOPIC, cmd, sender));
+	if (sender.getServer()->getChannel(args[0])->get_topic().empty())
+		sender.addOutMessage(ircReplyText(RPL_NOTOPIC, cmd, sender));
+	else
+		sender.addOutMessage(ircReplyText(RPL_TOPIC, cmd, sender));
 	sender.sendMessage(ircReplyText(RPL_ENDOFNAMES, cmd, sender));
 	return ;
 }

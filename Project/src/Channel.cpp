@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 20:42:02 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:09:32 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,16 @@ void Channel::broadcast(const std::string &msg)
 	for(it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
 		it->second->sendMessage(msg);
+	}
+}
+
+void Channel::broadcast(const std::string &msg, Client &sender)
+{
+	std::map<std::string, Client *>::iterator it;
+	for(it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (name_tolower(it->second->get_nick()) != name_tolower(sender.get_nick()))
+			it->second->sendMessage(msg);
 	}
 }
 

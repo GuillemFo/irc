@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/27 20:00:38 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:50:01 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 		reply.replace(pos, 8, "CHANNELLEN=64 CHANNELMODES=i,t,k,o,l NICKLEN=9");
 	}
 		
-	// Replace <target> (for ERR_TOOMANYTARGETS) wich would be the 2n parameter in PRIVMSG
+	// Replace <topic> If empty NOTOPIC should be called
 	if ((pos = reply.find("<topic>")) != std::string::npos) {
-		reply.replace(pos, 7, "to be coded get topic from channel");
+			reply.replace(pos, 7, sender.getServer()->getChannel(args[0])->get_topic());		
 	}
 
 	if ((pos = reply.find("<servername>")) != std::string::npos) {
