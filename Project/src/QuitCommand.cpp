@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 07:52:52 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/29 08:03:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 		std::string channel = it->first;
 		sender.getServer()->getChannel(channel)->broadcast(out);
 	}
+	
 	return ;
 }
