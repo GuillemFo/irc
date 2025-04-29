@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PartCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 19:05:06 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:33:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 		}
 		else
 		{
-			sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
+			sender.getServer()->getChannel(channel)->remClient(sender.get_nick());
 			sender.remChannel(channel);
 			std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
 			if (args.size() >= 2)

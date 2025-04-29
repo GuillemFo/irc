@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/28 10:04:20 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:37:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ Server &Server::operator=(const Server &other)	//no need??
 	}
 	return (*this);
 }
-
-///////////////////////////// OUR FUNCTIONS ////////////////////////////////////
 
 int	Server::get_serverFD() {return (this->_sv_fd);}
 
@@ -85,7 +83,7 @@ int	Server::addChannelMap(const std::string &str)
 }
 
 
-int	Server::rmClientMap(int fd) // still segfault
+int	Server::rmClientMap(int fd)
 {
 	std::map<int, Client*>::iterator it = _cl_map.find(fd);
 	if (it == _cl_map.end())
@@ -129,17 +127,6 @@ const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch
 // 	message.clear();
 // }
 
-// int	Server::send_out(std::string message)	//redo 08/04/25 16.29
-// {
-// 	ssize_t bytes_sent = send(this->client_fd , message.c_str(), strlen(message.c_str()), 0);
-// 	if (bytes_sent < 0)
-// 	{
-// 		std::cout << "Error sending message from server to client" << std::endl;
-// 		close(this->_sv_fd);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
 
 bool	Server::nickExists(const std::string &theNick)
 {
@@ -197,44 +184,6 @@ Client			*Server::getClientByNick(const std::string &s)
 }
 
 
-//This will need to be redesigned
-
-void Server::buff_to_string(char *str)
-{
-	//Prepare strings to be split when \r\n is found ??? 
-	///////// Printing tool to show non printable //////////////////////////
-	std::string test(str);
-	test = replace_tool(test, "\r", "'/r'");
-	test = replace_tool(test, "\n", "'/n'\n");
-	std::cout << "buff_in:" << C_R << test << C_RESET << ":end"<< std::endl;
-	////////////////////////////////////////////////////////////////////////
-
-	std::string content;
-	std::string line(str);
-	size_t pos = line.find('\r');
-	if (line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 line[pos +1] == '\n' to check poss contains \r first
-	{
-		while (pos != std::string::npos)
-		{
-			if (line[pos] == '\r' && line[pos +1] == '\n')	//change 01/04/25 12.32 line[pos +1] == '\n' to check poss contains \r first
-			{
-				content = line.substr(0, pos);
-				//this->command_list(content);
-				line.erase(0, pos+2);
-				pos = line.find('\r');
-				if (!line.empty() && line[pos] == '\r' && line[pos +1] == '\n') //change 01/04/25 12.32 added check for line[pos] == '\r'
-				{
-					pos = line.find('\r');
-				}
-			}			
-		}
-		pos = line.find('\n');
-		content = line.substr(0, pos);
-		//this->command_list(content);
-	}
-	else
-		throw std::string("Exiting");
-}
 
 // this command should be called from server.init() function
 // the commented lines below should be uncommented for each new command handler

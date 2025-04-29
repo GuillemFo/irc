@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 00:32:38 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/29 01:17:19 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ class Client
 		Client(const Client &other);
 		Client &operator=(const Client &other);
 
-		std::string			_string_buff;	//store buffer until \r \n and permission to send. keep storing and remove the part sent. maybe need an int to check the lenght of the string so its easier to cut and to confirm from the server??
+		std::string			_string_buff;
 
 		int					get_clientFD();
 
@@ -74,9 +74,9 @@ class Client
 		void				set_host(const std::string &str);
 		const std::string	get_host() const;
 
-		void	setPassOK(); //set to true. In the constructor would be false
+		void	setPassOK();
 		bool	getPassOK();
-		void	setRegistered(); //set to true. In the constructor would be false
+		void	setRegistered();
 		void	setOkLogin();
 		bool	getOkLogin();
 		void	addChannel(Channel *pChannel);
@@ -86,7 +86,6 @@ class Client
 		void	partChannel(const std::string &channelName);
 		void	partAllChannels();
 		
-		//getters
 		std::string	getLowerNick();
 		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
 		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]

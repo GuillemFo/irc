@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:07:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 20:07:54 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:37:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-bool	valid_port(const std::string &str) //change to a better name
+bool	valid_port(const std::string &str)
 {
 	if (!str.empty())
 	{
@@ -21,7 +21,7 @@ bool	valid_port(const std::string &str) //change to a better name
 			if (!std::isdigit(str[i]))
 				return (false);
 		}
-		if (str.length() <= 5) // min port 0 max port 65535 //maybe ther is a function to protect this properly for common used ports that are protected
+		if (str.length() <= 5) // min port 0 max port 65535
 		{
 			int res = std::atoi(str.c_str());
 			if (res <= 65535 && res >= 0)

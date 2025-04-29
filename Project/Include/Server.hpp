@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/28 10:04:36 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:18:44 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,8 @@
 
 
 
-#define HOLD_NON_ACCEPTED 10 //this will set the ammount of connections in hold before start rejecting them if they are not accepted.
+#define HOLD_NON_ACCEPTED 100 //this will set the ammount of connections in hold before start rejecting them if they are not accepted.
 
-// Need to create a channel once we start the server.
-// Need to give operator permissions to the first client it joins the server or how we stablish an initial op??
 class Client;
 class Channel;
 
@@ -68,14 +66,13 @@ class Server
 		int									_port;
 		std::string							_sv_pass;
 		std::string							_sv_name;
-		std::map<int, Client*>				_cl_map;	// int = client_fd
-		std::map<std::string , Channel*>	_ch_map;	//string = name of channel
+		std::map<int, Client*>				_cl_map;
+		std::map<std::string , Channel*>	_ch_map;
 		//**faltaria timestamp d'inici, pel RPL_STATSUPTIME
 		//**server version and MOTD
 		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
 		CommandDispatcher					_dispatcher;
-//Testing
 		
 		int					send_out(std::string message);
 
@@ -92,21 +89,18 @@ class Server
 		int					get_port() const;
 		
 		bool 				check_pass(const std::string &str);
-		
-		//Add client Remove client		// will do new[] and delete
-		//Add channel Remove channel	// will do new[] and delete
 
 
 		const std::map<int, Client*>	&getClientMap() const;
 		const std::map<std::string, Channel*>	&getChannelMap() const;
 		
 		int					addClientMap(int fd);
-		int					addChannelMap(const std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		int					addChannelMap(const std::string &str, const std::string &pw); // the pw will be in the channel object
+		int					addChannelMap(const std::string &str);
+		int					addChannelMap(const std::string &str, const std::string &pw);
 		
 		int					rmClientMap(int fd);
-		int					rmChannelMap(std::string &str);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
-		int					rmChannelMap(std::string &str, std::string &pw); // josegar2: the channels aren't removed
+		int					rmChannelMap(std::string &str);
+		int					rmChannelMap(std::string &str, std::string &pw);
 
 		bool				nickExists(const std::string &theNick);
 		bool				channelExists(const std::string &theChannel);

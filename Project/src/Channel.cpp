@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 20:42:02 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:30:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void Channel::broadcast(const std::string &msg)
 	std::map<std::string, Client *>::iterator it;
 	for(it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
+		std::cout << "Sending msg to: " << it->second->get_nick() << std::endl;	//debug line 29.04.25 03.30am
 		it->second->sendMessage(msg);
 	}
 }

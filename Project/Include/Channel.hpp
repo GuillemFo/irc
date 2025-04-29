@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 20:25:03 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:16:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Channel
 		Server		*_server;
 		std::string		_Name;
 		std::string		_Topic;
-		std::string		_key;	// if empty no pass needed
+		std::string		_key;
 		std::map<std::string, Client *> _clients; // list of all clients 
 		std::map<std::string, Client *> _opclients; // list of operator clients 
 		bool			_protectTopic;
@@ -40,7 +40,7 @@ class Channel
 		size_t			_clientLimit;
 		
 	public:
-		Channel(std::string name);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
+		Channel(std::string name);
 		Channel(std::string channelName, Server *myserver);
 		~Channel();
 		Channel(const Channel &other);

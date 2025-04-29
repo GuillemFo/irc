@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 17:41:04 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:35:47 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	if (args.size() < 1) {
 		sender.sendMessage(ircErrorText(ERR_NORECIPIENT, cmd, sender));
-		return ; // TODO: updated functionality so that error message is sent back to the clien
+		return ;
 	}
 	if (args.size() < 2) {
 		sender.sendMessage(ircErrorText(ERR_NOTEXTTOSEND, cmd, sender));
-		return ; // TODO: updated functionality so that error message is sent back to the clien
+		return ;
 	}
 	if (!sender.getOkLogin())
 	{
@@ -64,14 +64,9 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 		{
 			if (sender.getServer()->getChannel(target)->isMember(sender.get_nick()))
 			{
-				std::string groupPrefix = ":" + sender.get_nick() + "!~" + sender.get_user() + "@" + "localhost";
+				std::string groupPrefix = ":" + sender.get_nick();
 				std::string groupLine = groupPrefix + " PRIVMSG " + target + " :" + message + "\r\n";
-				//loop all channel members, addMessage etc...
-				//sendMessage(privmsgLine);
-				//cl_Epoll_In_Out();
 				sender.getServer()->getChannel(target)->broadcast(groupLine);
-				// sender.sendMessage(groupLine);
-				// sender.cl_Epoll_In_Out();
 				return ;
 			}
 			else
@@ -86,7 +81,6 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 			return;
 		}
 	}
-	// target = nick
 	else if(!(this->getServer()->getClientByNick(target) == NULL))
 	{
 		std::string prefix = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost";
