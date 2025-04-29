@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 18:48:36 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 00:32:38 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ class Client
 		const OutBuffer& getOutBuffer() const;
 		void		cl_Epoll_In_Out();
 		void		cl_Epoll_In();
+		std::map<std::string, Channel*> &getChannels();
 		
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/28 10:58:00 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:13:24 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	const std::string& Quit = args[0];
 	if (!Quit.empty()) {
 	//	others will see: * bobitosan1 has quit (Client Quit) the command received by sv will be "QUIT :Client Quit"
+	//	only need to send 1 time per client not all channels.
 			std::string quitLine = ":" + sender.get_nick() + " QUIT :";
 			if (args.size() >= 2)
 				quitLine += args[1];
@@ -51,13 +52,10 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 				quitLine += "Client Quit1";
 			quitLine += "\r\n";
 			sender.sendMessage(quitLine);
-			/*
-			for (all channels client exist, send the quit line)
-			sender.getServer()->getChannel(channel)->broadcast(quitLine);
-			*/
+			//sender.getServer()->getClients (all) and broadcast all that someone left?
 			return ;
-		//quit with specific message
-		std::cout << "Executing Quit command." << std::endl;
+			//quit with specific message
+			std::cout << "Executing Quit command." << std::endl;
 	}
 	else {
 			//should never happen? 
