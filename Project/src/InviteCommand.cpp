@@ -6,11 +6,12 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/30 10:08:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:19:49 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InviteCommand.hpp"
+#include "JoinCommand.hpp"
 #include <sys/epoll.h>
 #include <iostream>
 
@@ -48,11 +49,16 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 	// There is no requirement that the channel the target user is being invited to 
 	// must exist or be a valid channel
 	const std::string& channel = args[1];
-	if (!sender.getServer()->channelExists(channel))
+	if (!sender.getServer()->channelExists(channel)) // create if it doesn't exist
 	{
-		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
-		return ;
-	}
+	    if (!JoinCommand::isValidChannelName(channel)) {
+		    sender.sendMessage(ircErrorText(ERR_BADCHANMASK, cmd, sender));
+		    return ;
+	    }
+		sender.getServer()->addChannelMap(channel);  // add channel
+		sender.getServer()->getChannel(channel)->addClient(&sender); //add sender to channel clients
+		sender.addChannel(sender.getServer()->getChannel(channel)); //add channel to sender channels
+    }
 	Channel *theChannel = sender.getServer()->getChannel(channel);
 	if (!theChannel->isMember(sender.get_nick()))
 	{
@@ -60,18 +66,19 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	if (theChannel->isInviteOnly() && 
-	! theChannel->isOperator(sender.get_nick()))
+		!theChannel->isOperator(sender.get_nick()))
 	{
 		sender.sendMessage(ircErrorText(ERR_CHANOPRIVSNEEDED, cmd, sender));
 		return ;
 	}
-/*	theChannel->set_topic(args[1]);
-	sender.sendMessage(ircReplyText(RPL_TOPIC, cmd, sender));
-	if (theChannel->get_topic().empty())
-		//sender.sendMessage(ircReplyText(RPL_NOTOPIC, cmd, sender));
-		theChannel->broadcast(ircReplyText(RPL_NOTOPIC, cmd, sender), sender);
-	else
-		//sender.sendMessage(ircReplyText(RPL_TOPIC, cmd, sender));	
-		theChannel->broadcast(ircReplyText(RPL_TOPIC, cmd, sender), sender);
-*/
-		}
+	if (theChannel->isMember(theInvited))
+	{
+		sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
+		return ;
+	}
+	Client *theInvited = sender.getServer()->getClientByNick(nick);
+	theChannel->addClient(theInvited);
+	theInvited->addChannel(theChannel);
+	sender.sendMessage(ircReplyText(RPL_INVITING, cmd, sender));
+	theInvited->sendMessage(ircReplyText(RPL_INVITING, cmd, sender));
+}

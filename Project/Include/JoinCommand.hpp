@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/17 00:59:42 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:48:53 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class JoinCommand : public CommandHandler {
 
 		JoinCommand(Server* server);
 
-		bool isValidChannelName(const std::string& name);
+		static bool isValidChannelName(const std::string& name);
 		virtual void execute(const Command& cmd, Client& sender);
 };
 

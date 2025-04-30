@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/29 21:50:01 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:40:34 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static std::map<std::string, std::string> initReplyFormats() {
     m.insert(std::make_pair(RPL_NAMREPLY, "<client> <symbol> <channel> :[prefix]<nick> [prefix]<nick>..."));
     m.insert(std::make_pair(RPL_ENDOFNAMES, "<client> <channel> :End of /NAMES list"));
     m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <modes> <mode-params>"));
-    m.insert(std::make_pair(RPL_INVITING, "<client> <invited> <channel>"));
+    m.insert(std::make_pair(RPL_INVITING, "<client> <nick> <channel>"));
     
     return m;
 }

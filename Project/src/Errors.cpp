@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/26 09:35:54 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:09:36 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static std::map<std::string, std::string> createErrorFormats() {
     
     // Client errors
     m.insert(std::make_pair(ERR_NOTREGISTERED, "<client> <command> :You have not registered"));
-    m.insert(std::make_pair(ERR_NOSUCHNICK, "<client> <nickname> :No such nick/channel"));
+    m.insert(std::make_pair(ERR_NOSUCHNICK, "<client> <nick> :No such nick/channel"));
     m.insert(std::make_pair(ERR_NOSUCHCHANNEL, "<client> <channel> :No such channel"));
     m.insert(std::make_pair(ERR_CANNOTSENDTOCHAN, "<client> <channel> :Cannot send to channel"));
     m.insert(std::make_pair(ERR_TOOMANYCHANNELS, "<client> <channel> :You have joined too many channels"));
