@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/30 13:40:34 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 21:42:44 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static std::map<std::string, std::string> initReplyFormats() {
     m.insert(std::make_pair(RPL_NOTOPIC, "<client> <channel> :No topic is set"));
     m.insert(std::make_pair(RPL_TOPIC, "<client> <channel> :<topic>"));
     m.insert(std::make_pair(RPL_TOPICWHOTIME, "<client> <channel> <setter> <timestamp>"));
-    m.insert(std::make_pair(RPL_NAMREPLY, "<client> <symbol> <channel> :[prefix]<nick> [prefix]<nick>..."));
+    m.insert(std::make_pair(RPL_NAMREPLY, "<client> <symbol> <channel> :")); // [prefix]<nick> [prefix]<nick>...
     m.insert(std::make_pair(RPL_ENDOFNAMES, "<client> <channel> :End of /NAMES list"));
     m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <modes> <mode-params>"));
     m.insert(std::make_pair(RPL_INVITING, "<client> <nick> <channel>"));
@@ -60,18 +60,49 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 		reply.replace(pos, 8, sender.get_nick());
 	}
 		
+	// Replace <channel>
+	if ((pos = reply.find("<channel>")) != std::string::npos) {
+		if (cName == "INVITE")
+		reply.replace(pos, 9, args[1]);
+		else
+		reply.replace(pos, 9, args[0]);
+	}
+	
+	// Replace <symbol>
+	if ((pos = reply.find("<symbol>")) != std::string::npos) {
+		reply.replace(pos, 8, "=");
+	}
+		
+
+	if (code == RPL_NAMREPLY) { //construct all namereply needed
+		std::vector<std::string> nickList = sender.getServer()->getChannel(args[0])->getNicks();
+		reply = ":" + sender.getServer()->getServerName() + " " + code + " " + reply;
+		std::string linereply = reply;
+		size_t lineSize = linereply.size();
+		std::string fullreply;
+		for(size_t i = 0; i < nickList.size(); ++i) {
+			if ((lineSize + 1 + nickList[i].size()) > 510) {//limit size of the line
+				fullreply = fullreply + linereply + "\r\n";
+				linereply = reply;
+				lineSize = linereply.size();
+			}
+			if (lineSize > reply.size()) {  //some nick added
+				linereply = linereply + " ";
+				lineSize++;
+			}
+			linereply = linereply + nickList[i];
+			lineSize += nickList[i].size();
+		}
+		if (lineSize > reply.size())
+			fullreply = fullreply + linereply + "\r\n";
+		return fullreply;
+	}
+
 	// Replace <nick>
 	if ((pos = reply.find("<nick>")) != std::string::npos) {
 		reply.replace(pos, 6, args[0]);
 	}
-		
-	// Replace <channel>
-	if ((pos = reply.find("<channel>")) != std::string::npos) {
-		if (cName == "INVITE")
-			reply.replace(pos, 9, args[1]);
-		else
-			reply.replace(pos, 9, args[0]);	}
-		
+			
 	// Replace <tokens> for RPL_ISUPPORT
 	if ((pos = reply.find("<tokens>")) != std::string::npos) {
 		reply.replace(pos, 8, "CHANNELLEN=64 CHANNELMODES=i,t,k,o,l NICKLEN=9");

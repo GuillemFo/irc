@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 22:17:41 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 21:58:46 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,7 @@ void privMsg(const Command& cmd, Client& sender) {
 			{
 				std::string groupPrefix = ":" + sender.get_nick() + "!~" + sender.get_user() + "@" + "localhost";
 				std::string groupLine = groupPrefix + " PRIVMSG " + target + " :" + message + "\r\n";
-				//loop all channel members, addMessage etc...
-				//sendMessage(privmsgLine);
-				//cl_Epoll_In_Out();
-				sender.getServer()->getChannel(target)->broadcast(groupLine);
-				// sender.sendMessage(groupLine);
-				// sender.cl_Epoll_In_Out();
+				sender.getServer()->getChannel(target)->broadcast(groupLine, sender);
 				return ;
 			}
 			else
