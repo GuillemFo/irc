@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/30 14:19:49 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:47:04 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_CHANOPRIVSNEEDED, cmd, sender));
 		return ;
 	}
-	if (theChannel->isMember(theInvited))
+	if (theChannel->isMember(nick))
 	{
 		sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
 		return ;
@@ -80,5 +80,5 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 	theChannel->addClient(theInvited);
 	theInvited->addChannel(theChannel);
 	sender.sendMessage(ircReplyText(RPL_INVITING, cmd, sender));
-	theInvited->sendMessage(ircReplyText(RPL_INVITING, cmd, sender));
+	theInvited->sendMessage(sender.get_nick() + " INVITE " + nick + " " + channel);
 }
