@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 23:22:30 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/01 22:20:47 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 	if (!(cond)) std::cerr << "FAIL: " << msg << std::endl; \
 	else std::cout << "PASS: " << msg << std::endl; \
 } while (0)
+
+void printCallerFunction(const char* callerName) {
+	std::cout << "///===***===///" << std::endl;
+	std::cout << "Starting function: " << callerName << std::endl;
+	std::cout << std::endl;
+}
 
 void test_mode_command_basic() {
 	Server server(0, 6667, "pass");
@@ -78,7 +84,7 @@ void test_mode_command_print_modes() {
 	Server server(0, 6667, "pass");
 	ModeCommand modeCmd(&server);
 	Client client(&server, 4);
-
+	client.set_nick("Ann");
 	const std::string ch_name = "#testchannel";
 	server.addChannelMap(ch_name);
 	Channel* channel = server.getChannel(ch_name);
@@ -95,12 +101,14 @@ void test_mode_command_print_modes() {
 }
 
 void test_mode_command_set_invite_only() {
+	printCallerFunction(__FUNCTION__);
 	Server server(0, 6667, "pass");
 	ModeCommand modeCmd(&server);
 	Client client(&server, 5);
 	const std::string ch_name = "#inviteonly";
 	server.addChannelMap(ch_name);
 	Channel* channel = server.getChannel(ch_name);
+	client.set_nick("Bob");
 	channel->addClient(&client);
 	channel->addOperator(&client); // Client becomes channel operator
 
@@ -116,6 +124,7 @@ void test_mode_command_set_invite_only() {
 }
 
 void test_mode_command_set_topic_restricted() {
+	printCallerFunction(__FUNCTION__);
 	Server server(0, 6667, "pass");
 	ModeCommand modeCmd(&server);
 	Client client(&server, 6);
@@ -123,11 +132,11 @@ void test_mode_command_set_topic_restricted() {
 	// Channel channel(ch_name);
 	server.addChannelMap(ch_name);
 	Channel* channel = server.getChannel(ch_name);
-	client.set_nick("John");
+	client.set_nick("Casey");
 	channel->addClient(&client);
 	channel->addOperator(&client);
-	std::cout << client.get_nick() << " is operator: "
-		<< channel->isOperator(client.get_nick()) << std::endl;
+	// std::cout << client.get_nick() << " is operator: "
+		// << channel->isOperator(client.get_nick()) << std::endl;
 	
 	Command cmd;
 	cmd.setName("MODE");
@@ -141,6 +150,113 @@ void test_mode_command_set_topic_restricted() {
 	std::cout << "===outBuffer content:\n" << client.getNextOutBufferChunk();
 }
 
+void test_mode_command_set_password_and_limit() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 7);
+	client.set_nick("Donny");
+	const std::string ch_name = "#modetest1";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+kl");
+	cmd.addArg("secret123");
+	cmd.addArg("42");
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(channel->get_pass() == "secret123", "Channel password set correctly");
+	ASSERT_TRUE(channel->get_userLimit() == 42, "Channel user limit set to 42");
+}
+
+void test_mode_command_password_and_remove_limit() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 8);
+	client.set_nick("Elle");
+	const std::string ch_name = "#modetest2";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+	channel->set_userLimit(50); // pre-set user limit
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+k");
+	cmd.addArg("-l"); // password will be "-l"
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(channel->get_pass() == "-l", "Password set to '-l'");
+	ASSERT_TRUE(channel->get_userLimit() == 50, "User limit unchanged since -l not processed");
+}
+
+void test_mode_command_add_and_remove_op() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 9);
+	Client opTarget(&server, 10);
+	opTarget.set_nick("opbuddy");
+
+	const std::string ch_name = "#modetest3";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addClient(&opTarget);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+o");
+	cmd.addArg("opbuddy");
+
+	modeCmd.execute(cmd, client);
+	ASSERT_TRUE(channel->isOperator("opbuddy"), "opbuddy is promoted to operator");
+
+	Command cmd2;
+	cmd2.setName("MODE");
+	cmd2.addArg(ch_name);
+	cmd2.addArg("-o");
+	cmd2.addArg("opbuddy");
+
+	modeCmd.execute(cmd2, client);
+	ASSERT_TRUE(!channel->isOperator("opbuddy"), "opbuddy is removed from operator list");
+}
+
+void test_mode_command_missing_parameter_error() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 11);
+	client.set_nick("Frank");
+	const std::string ch_name = "#modetest4";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+k");
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(!client.isOutBufferEmpty(), "Missing parameter error message written");
+	std::cout << "===outBuffer content:\n" << client.getNextOutBufferChunk();
+}
+
 int main() {
 	std::cout << "Running ModeCommand tests..." << std::endl;
 	test_mode_command_basic();
@@ -148,7 +264,14 @@ int main() {
 	test_mode_command_invalid_target();
 	test_mode_command_nonexistent_channel();
 	test_mode_command_print_modes();
+	std::cout << "\n\n=====\nhandleChannelMode function tests\n" << std::endl;
 	test_mode_command_set_invite_only();
 	test_mode_command_set_topic_restricted();
+
+	test_mode_command_set_password_and_limit();
+	test_mode_command_password_and_remove_limit();
+	test_mode_command_add_and_remove_op();
+	test_mode_command_missing_parameter_error();
+
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 11:52:23 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/01 22:30:48 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ Channel& Channel::operator=(const Channel& other) {
 	return *this;
 };
 
+Server*				Channel::getServer() const { return this->_server; }
+
 const std::string	Channel::get_name() const {return (this->_Name);}
 
 void				Channel::set_topic(const std::string &str) {this->_Topic = str;}
@@ -46,9 +48,28 @@ bool				Channel::isPassRequired() {return (!this->_key.empty());}
 
 bool 				Channel::check_pass(const std::string &str) {return (str == this->_key);}
 
-void				Channel::setProtectTopic() {this->_protectTopic = true;}
+const std::string&	Channel::get_pass() const {
+	return this->_key;
+};
+
+
+
+void				Channel::set_userLimit(int userLimit) {
+	this->_clientLimit = userLimit;
+}
+
+void				Channel::clear_userLimit() {
+	this->_clientLimit = 0;
+}
+
+int					Channel::get_userLimit() {
+	return this->_clientLimit;
+};
+
+//NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
+void				Channel::setProtectTopic(bool modeFlag) {this->_protectTopic = modeFlag;}
 void				Channel::resetProtectTopic() {this->_protectTopic = false;}
-void				Channel::setInviteOnly() {this->_inviteOnly = true;}
+void				Channel::setInviteOnly(bool modeFlag) {this->_inviteOnly = modeFlag;}
 void				Channel::resetInviteOnly() {this->_inviteOnly = false;}
 
 Channel::~Channel()
@@ -160,6 +181,7 @@ bool Channel::isNameCorrect(const std::string theName)
 
 void Channel::printInfo()
 {
+	std::cout << "///===PRINTING CHANNEL INFO===///" << std::endl;
 	std::cout << "Channel Name: " << _Name << std::endl;
 	std::cout << "Topic: " << (_Topic.empty() ? "(No topic set)" : _Topic) << std::endl;
 	std::cout << "Invite Only: " << (_inviteOnly ? "Yes" : "No") << std::endl;
@@ -168,4 +190,5 @@ void Channel::printInfo()
 	std::cout << "Client Limit: " << (_clientLimit > 0 ? std::to_string(_clientLimit) : "No limit") << std::endl;
 	std::cout << "Current Clients: " << _clients.size() << std::endl;
 	std::cout << "Operators: " << _opclients.size() << std::endl;
+	std::cout << "///===END OF PRINTING CHANNEL INFO===///\n" << std::endl;
 }

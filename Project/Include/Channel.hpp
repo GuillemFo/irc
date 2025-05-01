@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 11:52:19 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/01 21:56:30 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ class Channel
 		Channel(const Channel &other);
 		Channel &operator=(const Channel &other);
 
+		Server*	getServer() const;
+
 		const std::string	get_name() const;
 
 		void				set_topic(const std::string &str);
@@ -54,13 +56,15 @@ class Channel
 		void				set_pass(std::string &str);
 		bool				isPassRequired();
 		bool				check_pass(const std::string &str);
+		const std::string&	get_pass() const;
 		
 		void				set_userLimit(int nb);
+		void				clear_userLimit();
 		int					get_userLimit();
-
-		void				setProtectTopic();
+//NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
+		void				setProtectTopic(bool modelFlag);
 		void				resetProtectTopic();
-		void				setInviteOnly();
+		void				setInviteOnly(bool modeFlag);
 		void				resetInviteOnly();
 		
 		void				addClient(Client *theClient);
