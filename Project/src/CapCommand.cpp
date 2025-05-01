@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CapCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 21:10:46 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 01:39:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 	}
 	else
 	{
-		// unrecognized command
 		sender.sendMessage(ircErrorText(ERR_INVALIDCAPCMD, cmd, sender));
 	}
 }

@@ -21,8 +21,7 @@ bool UserCommand::isValidUser(const std::string& name) {
 			<< std::endl;
 		return false;
 	}
-	// Need to explore what user can contain so we check allowed chars. josegar2
-	/////////////////////////////////////////////////////	Need to filter whats valid for User! josegar2
+	// Need to explore what user can contain so we check allowed chars. josegar2 TODO
 	if (name.length() > 50) {
 		std::cout << "Aborting USER: Username contains over 50"
 			<< " symbols." << std::endl;
@@ -36,7 +35,7 @@ bool UserCommand::isValidUser(const std::string& name) {
 			return false;
 		}
 	}
-	///////////////////////////////////////////////////////////
+	//
 	return true;
 }
 

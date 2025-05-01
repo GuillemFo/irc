@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 18:48:59 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 00:33:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,4 +296,9 @@ void	Client::cl_Epoll_In_Out()
 	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	
+}
+
+std::map<std::string, Channel*> &Client::getChannels()
+{
+	return this->_channels;
 }

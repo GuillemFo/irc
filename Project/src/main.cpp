@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 23:25:35 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 08:07:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
+	//TODO delete client from all channels first
+	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
-	s.rmClientMap(fd); //might still segfault here!!
 }
 
 
@@ -113,12 +114,11 @@ void handleRead(Server &s, int fd)
 		else if (bytes == 0)
 		{
 			std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
-			cleanupClient(s, fd); //segfault
+			cleanupClient(s, fd);
 			break;
 		}
 		else
 		{
-			//TODO: we need to put what we have read from the buffer into the client's inbuffer
 			buffer[bytes] = '\0';
 			client->_in.append(buffer);
 			
@@ -128,13 +128,6 @@ void handleRead(Server &s, int fd)
 
 
 			Parser parser;
-			//TODO go through a loop until all \r\n are processed
-			// each \r\n is a new line
-			// call parser.parse on each line
-			// while (buffer) {
-			// std::isstring line << 
-			// NB decide on wheter the epoll is to be called outside or within the loop
-			//}
 			Command cmd = parser.parse(client->_in.extractCommand());
 			Client *clientfd = s.getClient(fd);
 
@@ -155,10 +148,9 @@ void handleRead(Server &s, int fd)
 
 void handleSend(Server &s, int fd)
 {
-	//need to extract the out buffer here and use send
 	if (s.getClient(fd) == NULL)
 	{
-		return ; //testing 25.04.25 17.36
+		return ;
 	}
 	if (s.getClient(fd)->_out.isEmpty())
 		return ;
@@ -183,8 +175,6 @@ void handleSend(Server &s, int fd)
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 		return ;
 	}
-	// else
-	//	std::cout << "Error mid send" << std::endl;
 }
 
 
@@ -278,11 +268,11 @@ int main(int ac, char **av)
 					handleNewConnection(s);
 				else
 				{
-					if (ev & EPOLLIN) // & bitwise operator
-						handleRead(s, fd);	// inside here we need to create or add to the buffer all text incoming.
-					if (ev & EPOLLOUT) // & bitwise operator
+					if (ev & EPOLLIN)
+						handleRead(s, fd);
+					if (ev & EPOLLOUT)
 					{
-						handleSend(s, fd);	// inside here we need to write from buffer.
+						handleSend(s, fd);
 					}
 				}
 			}
