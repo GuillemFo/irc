@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 14:21:53 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/02 22:23:03 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,13 +173,21 @@ Client	*Server::getClient(const int &fd)
 
 Client			*Server::getClientByNick(const std::string &s)
 {
+	// std::map<int, Client *>::iterator it;
+
+	// for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
+	// {
+	// 	if (name_tolower(it->second->get_nick()) == name_tolower(s))
+	// 		return it->second;
+	// }
 	std::map<int, Client *>::iterator it;
 
 	for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
 	{
-		if (name_tolower(it->second->get_nick()) == name_tolower(s))
+		if (it->second->get_nick() == s)
 			return it->second;
 	}
+	std::cout << "getClientByNick: not found " << s << std::endl;
 	return NULL;
 }
 
@@ -201,7 +209,7 @@ void Server::registerAllCommands() {
 	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this)); // not needed by subject
 	_dispatcher.registerHandler("PART", new PartCommand(this));
 	// _dispatcher.registerHandler("KICK", new KickCommand(this));
-	// _dispatcher.registerHandler("MODE", new ModeCommand(this));
+	_dispatcher.registerHandler("MODE", new ModeCommand(this));
 	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
 	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
 	std::cout << "All command handlers have been registered." << std::endl;
@@ -219,3 +227,23 @@ void Server::registerAllCommands() {
 	//}
 }
 
+void Server::printAllClientsInfo() const {
+	std::cout << "----- Client Info Dump -----" << std::endl;
+
+	if (_cl_map.empty()) {
+		std::cout << "No clients connected to the server." << std::endl;
+		return;
+	}
+
+	for (std::map<int, Client*>::const_iterator it = _cl_map.begin(); it != _cl_map.end(); ++it) {
+		Client* client = it->second;
+		if (client) {
+			std::cout << "Client FD: " << it->first << std::endl;
+			std::cout << "  Nickname: " << client->get_nick() << std::endl;
+			std::cout << "  Username: " << client->get_user() << std::endl;
+			std::cout << "  Host: " << client->get_host() << std::endl;
+			std::cout << "  Is Registered: " << (client->isRegistered() ? "Yes" : "No") << std::endl;
+			std::cout << "-----------------------------" << std::endl;
+		}
+	}
+}

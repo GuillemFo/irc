@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 14:14:20 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/02 19:38:17 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ class Channel
 		Channel(const Channel &other);
 		Channel &operator=(const Channel &other);
 
+		Server*	getServer() const;
+
 		const std::string	get_name() const;
 
 		void				set_topic(const std::string &str);
@@ -54,13 +56,15 @@ class Channel
 		void				set_pass(std::string &str);
 		bool				isPassRequired();
 		bool				check_pass(const std::string &str);
+		const std::string&	get_pass() const;
 		
 		void				set_userLimit(int nb);
+		void				clear_userLimit();
 		int					get_userLimit();
-
-		void				setProtectTopic();
+//NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
+		void				setProtectTopic(bool modelFlag);
 		void				resetProtectTopic();
-		void				setInviteOnly();
+		void				setInviteOnly(bool modeFlag);
 		void				resetInviteOnly();
 		
 		void				addClient(Client *theClient);
@@ -77,4 +81,6 @@ class Channel
 		void				broadcast(const std::string &msg);
 		void				broadcast(const std::string &msg, Client &sender); //all except sender
 		std::vector<std::string> getNicks();
+		void				printInfo();
+
 };

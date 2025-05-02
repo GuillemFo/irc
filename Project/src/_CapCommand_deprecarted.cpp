@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _CapCommand_deprecarted.cpp                        :+:      :+:    :+:   */
+/*   CapCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/24 00:18:30 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/04/27 09:31:50 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 		sender.appendToOutBuffer("CAP * ACK :" + args[1] + "\r\n");
 	}
 	else if (subcmd == "END") {
-		sender.setCapNegotiationDone(true);
+		std::cout << "setCapNegotiationsDone dummy line, hehe" << std::endl;
+		//sender.setCapNegotiationDone(true);
 	}
 	else {
 		sender.appendToOutBuffer("CAP * NAK :Unknown subcommand\r\n");
@@ -64,10 +65,10 @@ void CapCommand::execute(const Command& cmd, Client& sender) {
 	}
 }
 
-void Client::setCapNegotiationDone(bool done) {
-	_capNegotiationDone = done;
-}
+// void Client::setCapNegotiationDone(bool done) {
+// 	_capNegotiationDone = done;
+// }
 
-bool Client::isCapNegotiationDone() const {
-	return _capNegotiationDone;
-}
+// bool Client::isCapNegotiationDone() const {
+// 	return _capNegotiationDone;
+// }
