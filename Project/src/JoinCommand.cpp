@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/01 14:17:40 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:08:56 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,10 @@ bool JoinCommand::isValidChannelName(const std::string& name) {
 	return true;
 }
 
-void JoinCommand::execute(const Command& cmd, Client& sender) {
-	(void) sender;
+void joinChannel(const Command& cmd, Client& sender)
+{
 	const std::vector<std::string>& args = cmd.getArgs();
-	// TODO: implement check for gettin cmd and/or sender as NULL
-	if (args.empty()) {
-		std::cout << "No arguments in the JOIN command. Aborting." << std::endl;
-		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
-		return ;
-	}
-	if (!sender.getOkLogin())
-	{
-		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
-		return ;
-	}
 	const std::string& channelName = args[0];
-	//need a checker for args 1 2 etc to loop the args because it can contain a password;
-	if (channelName == "0") {
-		//TODO part all channels
-		return ;
-	}
 	if (!JoinCommand::isValidChannelName(channelName)) {
 		sender.sendMessage(ircErrorText(ERR_BADCHANMASK, cmd, sender));
 		return ;
@@ -79,7 +63,7 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 	} else { //exisitng channel. See if it's possible to join
 		if (sender.getServer()->getChannel(channelName)->isPassRequired())
 		{
-			if (args.size() < 2 ) {  // no password provided
+			if (args.size() < 2 || args[1].empty()) {  // no password provided
 				sender.sendMessage(ircErrorText(ERR_BADCHANNELKEY, cmd, sender));
 				return ;
 			}
@@ -119,5 +103,45 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		sender.addOutMessage(ircReplyText(RPL_TOPIC, cmd, sender));
 	sender.addOutMessage(ircReplyText(RPL_NAMREPLY, cmd, sender));
 	sender.sendMessage(ircReplyText(RPL_ENDOFNAMES, cmd, sender));
+	return ;
+}
+
+void JoinCommand::execute(const Command& cmd, Client& sender) {
+	(void) sender;
+	const std::vector<std::string>& args = cmd.getArgs();
+	// TODO: implement check for gettin cmd and/or sender as NULL
+	if (args.empty()) {
+		std::cout << "No arguments in the JOIN command. Aborting." << std::endl;
+		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
+		return ;
+	}
+	if (!sender.getOkLogin())
+	{
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
+		return ;
+	}
+	//need a checker for args 1 2 etc to loop the args because it can contain a password;
+	if (args[0] == "0") {
+		//TODO part all channels
+		return ;
+	}
+	Command splitcmd(cmd);
+	std::vector<std::string> channels = split_arg(args[0]);
+	std::vector<std::string> keys; 
+	if (args.size() > 1)
+		keys = split_arg(args[1]);
+	std::vector<std::string>::const_iterator itc = channels.begin();
+	std::vector<std::string>::const_iterator itk = keys.begin();
+	while (itc != channels.end()) {
+		splitcmd.clearArgs();
+		splitcmd.addArg(*itc);
+		++itc;
+		if (itk != keys.end() && !(*itk).empty())
+		{
+			splitcmd.addArg(*itk);
+			++itk;
+		}
+		joinChannel(splitcmd, sender);
+	}
 	return ;
 }
