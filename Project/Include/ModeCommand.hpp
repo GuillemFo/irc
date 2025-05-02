@@ -14,13 +14,14 @@
 # define MODECOMMAND_HPP
 # include "Command.hpp"
 # include "Server.hpp"
+# include <sstream>
 
 class ModeCommand : public Command
 {
 	private:
 		Server* _server;
 		void handleChannelMode(Client& sender, Channel& channel,
-			const std::vector<std::string>& args);
+			const Command& cmd);
 
 	public:
 		ModeCommand();
@@ -28,7 +29,8 @@ class ModeCommand : public Command
 		ModeCommand(const ModeCommand& src);
 		ModeCommand& operator=(const ModeCommand& src);
 		virtual	~ModeCommand();
-
+		//TODO: move int_to_string  to tools 
+		std::string int_to_string(int value);
 		virtual void execute(const Command& cmd, Client& sender);
 };
 
