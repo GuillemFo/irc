@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 14:14:48 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:38:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ class Client
 		void	joinChannel(const std::string &channelName);
 		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
 		void	partChannel(const std::string &channelName);
+		std::string getListOfChannels();
 		void	partAllChannels();
 		
 		std::string	getLowerNick();

@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/02 15:08:56 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:47:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,14 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 	}
 	//need a checker for args 1 2 etc to loop the args because it can contain a password;
 	if (args[0] == "0") {
-		//TODO part all channels
+		std::string allChannels = sender.getListOfChannels();
+		if (!allChannels.empty()) {
+
+			Command partAll;
+			partAll.setName("PART");
+			partAll.addArg(allChannels);
+			sender.getServer()->_dispatcher.dispatch(partAll, sender);
+		}
 		return ;
 	}
 	Command splitcmd(cmd);
