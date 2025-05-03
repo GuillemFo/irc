@@ -1,42 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   QuitCommand.cpp                                    :+:      :+:    :+:   */
+/*   KickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 13:03:38 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/03 13:03:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-# include "QuitCommand.hpp"
+# include "KickCommand.hpp"
 # include <iostream>
 
-QuitCommand::QuitCommand() : _server(NULL) {}
-QuitCommand::QuitCommand(const QuitCommand& src) {
+KickCommand::KickCommand() : _server(NULL) {}
+KickCommand::KickCommand(const KickCommand& src) {
 	this->_server = src._server;
 }
-QuitCommand& QuitCommand::operator=(const QuitCommand& src) {
+KickCommand& KickCommand::operator=(const KickCommand& src) {
 	if (this != &src) {
 		this->_server = src._server;
 	}
 	return *this;
 }
 
-QuitCommand::~QuitCommand () {}
-QuitCommand::QuitCommand (Server* server) : _server(server) {}
-Server				*QuitCommand::getServer() const{return (this->_server);}
+KickCommand::~KickCommand () {}
+KickCommand::KickCommand (Server* server) : _server(server) {}
+Server				*KickCommand::getServer() const{return (this->_server);}
 
 
-void QuitCommand::execute(const Command& cmd, Client& sender) {
+void KickCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 
-
-	//check if client is not registered? otherwise will crash...
-	std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT " + args[0] + "\r\n";
+	//If op
+	//if on channel
+	//
+	std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host KICK " + args[0] + "\r\n";
 	std::map<std::string, Channel*>::iterator it;
 
 	for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it) // not for all channels, once per client!!
