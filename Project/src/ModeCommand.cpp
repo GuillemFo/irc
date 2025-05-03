@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/02 22:38:36 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/03 22:02:08 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,7 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 
 	const std::string& target = args[0];
 	
-	if (target.empty()) {
-		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
-		return ;
-	}
-//NB! we only check for # since the subject requires functionality for channels only
-	if (target[0] != '#') {
+	if (!sender.getServer()->channelExists(target)) {
 		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
 		return ;
 	}
@@ -59,8 +54,7 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 
 	if (args.size() == 1) {
 		std::string modes = "itkol";
-		sender.addOutMessage("The channel has the following modes " \
-			+ modes +"\r\n");
+		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
 			return ;
 		//TODO: make changes to the ircReplyText to  
 		// sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
@@ -217,7 +211,7 @@ o argument. Please report this bug to server admins in #bug_reports channel";
 	}
 	//TODO: refactor the adhoc broadcast below:
 	std::string message = ":" + sender.get_nick() + "!" + sender.get_user()
-		+ "@" + sender.get_host() + " " + modeChanges
+		+ "@" + sender.get_host() + " MODE " + channel.get_name() + " " + modeChanges
 		+ (modeParameters.empty() ? "" : " " + modeParameters) + "\r\n";
 	channel.broadcast(message);
 }

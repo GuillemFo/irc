@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/02 22:23:03 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/03 21:09:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,21 +173,13 @@ Client	*Server::getClient(const int &fd)
 
 Client			*Server::getClientByNick(const std::string &s)
 {
-	// std::map<int, Client *>::iterator it;
-
-	// for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
-	// {
-	// 	if (name_tolower(it->second->get_nick()) == name_tolower(s))
-	// 		return it->second;
-	// }
 	std::map<int, Client *>::iterator it;
 
 	for (it = this->_cl_map.begin(); it != this->_cl_map.end(); ++it)
 	{
-		if (it->second->get_nick() == s)
+		if (name_tolower(it->second->get_nick()) == name_tolower(s))
 			return it->second;
 	}
-	std::cout << "getClientByNick: not found " << s << std::endl;
 	return NULL;
 }
 
