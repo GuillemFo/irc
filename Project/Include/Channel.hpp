@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 21:56:30 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/02 19:38:17 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "Client.hpp"
 
 #define CHANTYPES	"&#" //Channel types prefix supported
-#define CHANNELLEN	64	 // MUST be specified
+#define CHANNELLEN	50	 // MUST be specified
 #define CHANNEL_NOT_ALLOWED_CHARS " \a,"	//space, bell and comma
 #define CHANNELMODES "itkol"
 
@@ -32,7 +32,7 @@ class Channel
 		Server		*_server;
 		std::string		_Name;
 		std::string		_Topic;
-		std::string		_key;	// if empty no pass needed
+		std::string		_key;
 		std::map<std::string, Client *> _clients; // list of all clients 
 		std::map<std::string, Client *> _opclients; // list of operator clients 
 		bool			_protectTopic;
@@ -40,7 +40,7 @@ class Channel
 		size_t			_clientLimit;
 		
 	public:
-		Channel(std::string name);	//thinking if i should start the channels with a default password like "" or something and then just use one constructor and destructor etc  07/04/25 12.30
+		Channel(std::string name);
 		Channel(std::string channelName, Server *myserver);
 		~Channel();
 		Channel(const Channel &other);
@@ -77,7 +77,10 @@ class Channel
 		bool				isTopicProtected();
 		bool				isChannelFull();
 		bool				isChannelEmpty();
-		static bool			isNameCorrect(const std::string theName);
+		static bool			isNameCorrect(const std::string &theName);
+		void				broadcast(const std::string &msg);
+		void				broadcast(const std::string &msg, Client &sender); //all except sender
+		std::vector<std::string> getNicks();
 		void				printInfo();
 
 };

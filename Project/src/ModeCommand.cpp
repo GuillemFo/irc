@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/01 22:28:54 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/02 22:38:36 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 ModeCommand::ModeCommand() : _server(NULL) {}
 ModeCommand::ModeCommand(Server* server) : _server(server) {}
 ModeCommand::ModeCommand(const ModeCommand& src) : _server(src._server) {}
+
 ModeCommand& ModeCommand::operator=(const ModeCommand& src) {
 	if (this != &src) {
 		this->_server = src._server;
@@ -58,7 +59,7 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 
 	if (args.size() == 1) {
 		std::string modes = "itkol";
-		sender.appendToOutBuffer("The channel has the following modes "
+		sender.addOutMessage("The channel has the following modes " \
 			+ modes +"\r\n");
 			return ;
 		//TODO: make changes to the ircReplyText to  
@@ -176,6 +177,7 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 			}
 			Server* server = channel.getServer();
 			if (!server) {
+				// std::cout << "AAAAAAAAAAAAA SERVER IS NULL!!!" << std::endl;
 				//TODO: this situation should never happen under standard operation
 				// of a server. so behaviour must be something exceptional
 				// though terminating connection because of that would be 
@@ -189,6 +191,11 @@ o argument. Please report this bug to server admins in #bug_reports channel";
 				std::cout << "ERROR: Channel's server pointer is null." << std::endl;
 				return;
 			}
+			// std::cout << "ZZZZZZZZZZZ\n" << std::endl;
+			// std::cout << args[paramIndex] << std::endl;
+			// std::cout << server->getClientByNick(args[paramIndex]) << std::endl;
+			//NB: finally found the issue (I think):
+			//client is added to a channel, but not added to a server
 			Client* target = server->getClientByNick(args[paramIndex++]);
 			if (!target || !channel.isMember(target->get_nick())) {
 				sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd,
@@ -212,5 +219,5 @@ o argument. Please report this bug to server admins in #bug_reports channel";
 	std::string message = ":" + sender.get_nick() + "!" + sender.get_user()
 		+ "@" + sender.get_host() + " " + modeChanges
 		+ (modeParameters.empty() ? "" : " " + modeParameters) + "\r\n";
-	channel.
+	channel.broadcast(message);
 }

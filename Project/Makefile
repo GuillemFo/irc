@@ -6,7 +6,7 @@
 #    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/04/27 11:53:58 by rzhdanov         ###   ########.fr        #
+#    Updated: 2025/05/02 20:02:25 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,13 @@ NAME = ircserv
 
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
 		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
-		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp InBuffer.cpp
+		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp InBuffer.cpp QuitCommand.cpp \
+		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp
 
-
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address# commented due codespace issues with fsanitize
+#just for tests
+MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))
+MODETEST_PATHS := $(addprefix src/, $(MODETEST_SRC))
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address # commented due codespace issues with fsanitize
 
 SRC_F = src/
 
@@ -109,20 +112,22 @@ CapTests: \
 	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp \
     -o CapTests
 
-#### CapTests (sorry for the mess)
-ModeTests: \
-    src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
-    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
-    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp
-	g++ -IInclude \
-    src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
-    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
-    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp\
-    -o ModeTests
+#### ModeTests (sorry for the mess)
+ModeTests: $(MODETEST_PATHS)
+	g++ -IInclude $(MODETEST_PATHS) -o ModeTests
+# ModeTests: \
+#     src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+#     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+#     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+#     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+# 	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp
+# 	g++ -IInclude \
+#     src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
+#     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
+#     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
+#     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
+# 	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp\
+#     -o ModeTests
 
 -include $(DEP)
 

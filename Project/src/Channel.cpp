@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 22:30:48 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/02 22:36:37 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ Channel& Channel::operator=(const Channel& other) {
 		this->_Name = other._Name;
 	}
 	return *this;
-};
+}
 
 Server*				Channel::getServer() const { return this->_server; }
 
@@ -50,7 +50,7 @@ bool 				Channel::check_pass(const std::string &str) {return (str == this->_key)
 
 const std::string&	Channel::get_pass() const {
 	return this->_key;
-};
+}
 
 
 
@@ -64,7 +64,7 @@ void				Channel::clear_userLimit() {
 
 int					Channel::get_userLimit() {
 	return this->_clientLimit;
-};
+}
 
 //NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
 void				Channel::setProtectTopic(bool modeFlag) {this->_protectTopic = modeFlag;}
@@ -94,6 +94,7 @@ void	Channel::addClient(Client *theClient)
 		this->addOperator(theClient);
 	this->_clients[name_tolower(theClient->get_nick())] = theClient;
 }
+
 void	Channel::addOperator(Client *theClient)
 {
 	// the logic of it has to be normal or operator should be outside
@@ -167,7 +168,7 @@ bool		Channel::isChannelEmpty()
 	return (this->_clients.size() == 0);
 }
 
-bool Channel::isNameCorrect(const std::string theName)
+bool Channel::isNameCorrect(const std::string &theName)
 {
 	if (theName.empty() ||
 		theName.size() > CHANNELLEN ||
@@ -179,16 +180,67 @@ bool Channel::isNameCorrect(const std::string theName)
 	return true;
 }
 
+void Channel::broadcast(const std::string &msg)
+{
+	std::map<std::string, Client *>::iterator it;
+	for(it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		it->second->sendMessage(msg);
+	}
+}
+
+void Channel::broadcast(const std::string &msg, Client &sender)
+{
+	std::map<std::string, Client *>::iterator it;
+	for(it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (name_tolower(it->second->get_nick()) != name_tolower(sender.get_nick()))
+			it->second->sendMessage(msg);
+	}
+}
+
+std::vector<std::string> Channel::getNicks()
+{
+	std::vector<std::string> result;
+	std::map<std::string, Client *>::iterator it;
+	for (it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (isOperator(it->second->get_nick()))
+			result.push_back("@" + it->second->get_nick());
+		else
+			result.push_back(it->second->get_nick());
+	}
+	return result;
+}
+
 void Channel::printInfo()
 {
-	std::cout << "///===PRINTING CHANNEL INFO===///" << std::endl;
-	std::cout << "Channel Name: " << _Name << std::endl;
-	std::cout << "Topic: " << (_Topic.empty() ? "(No topic set)" : _Topic) << std::endl;
-	std::cout << "Invite Only: " << (_inviteOnly ? "Yes" : "No") << std::endl;
-	std::cout << "Topic Protected: " << (_protectTopic ? "Yes" : "No") << std::endl;
-	std::cout << "Password Protected: " << (isPassRequired() ? "Yes" : "No") << std::endl;
-	std::cout << "Client Limit: " << (_clientLimit > 0 ? std::to_string(_clientLimit) : "No limit") << std::endl;
-	std::cout << "Current Clients: " << _clients.size() << std::endl;
-	std::cout << "Operators: " << _opclients.size() << std::endl;
-	std::cout << "///===END OF PRINTING CHANNEL INFO===///\n" << std::endl;
+    std::cout << "///===PRINTING CHANNEL INFO===///" << std::endl;
+    std::cout << "Channel Name: " << _Name << std::endl;
+    std::cout << "Topic: " << (_Topic.empty() ? "(No topic set)" : _Topic) << std::endl;
+    std::cout << "Invite Only: " << (_inviteOnly ? "Yes" : "No") << std::endl;
+    std::cout << "Topic Protected: " << (_protectTopic ? "Yes" : "No") << std::endl;
+    std::cout << "Password Protected: " << (isPassRequired() ? "Yes" : "No") << std::endl;
+    // std::cout << "Client Limit: " << (_clientLimit > 0 ? std::to_string(_clientLimit) : "No limit") << std::endl;
+    std::cout << "Current Clients: " << _clients.size() << std::endl;
+    std::cout << "Operators: " << _opclients.size() << std::endl;
+
+    // Print all client nicknames
+    std::cout << "Clients in Channel: ";
+    std::map<std::string, Client*>::iterator it;
+    for (it = _clients.begin(); it != _clients.end(); ++it)
+    {
+        std::cout << it->first << " "; // `it->first` is the nickname of the client
+    }
+    std::cout << std::endl;
+
+    // Print all operator nicknames
+    std::cout << "Operators in Channel: ";
+    for (it = _opclients.begin(); it != _opclients.end(); ++it)
+    {
+        std::cout << it->first << " "; // `it->first` is the nickname of the operator
+    }
+    std::cout << std::endl;
+
+    std::cout << "///===END OF PRINTING CHANNEL INFO===///\n" << std::endl;
 }

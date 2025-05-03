@@ -6,17 +6,17 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:13:57 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/04/27 22:41:50 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/02 22:21:53 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MODECOMMAND_HPP
 # define MODECOMMAND_HPP
-# include "Command.hpp"
+# include "CommandHandler.hpp"
 # include "Server.hpp"
 # include <sstream>
 
-class ModeCommand : public Command
+class ModeCommand : public CommandHandler
 {
 	private:
 		Server* _server;
