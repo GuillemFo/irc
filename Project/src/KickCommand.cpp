@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 20:40:28 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:03:16 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void KickChannel(const Command& cmd, Client& sender)
 	if (!args[2].empty())
 	{
 		const std::string& comment = args[2];
-		std::cout << "AG 1:" << args[2] << ":" << std::endl;
 		commentLine += comment;
 	}
 	commentLine += "\r\n";
@@ -107,6 +106,8 @@ void KickCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	
+
+	// The loop does not work properly 04.05.25 09.03pm
 	Command splitcmd(cmd);
 	std::vector<std::string> channels = split_arg(args[0]);
 	std::vector<std::string> targets; 
