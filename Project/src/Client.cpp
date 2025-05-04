@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 00:33:25 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/03 13:42:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ bool	Client::isRegistered() {return this->_registered;}
 void	Client::partChannel(const std::string &channelName) 
 {
 	std::cout << "Part CHannel" << std::endl;
-	Channel * pChannel;
+	Channel *pChannel;
 	// check if channelName is not empty or doesn't exist
 	if ((channelName.empty()) ||
 	! this->_server->channelExists(channelName))
@@ -120,6 +120,20 @@ void	Client::partChannel(const std::string &channelName)
 	this->_channels.erase(name_tolower(channelName));
 }
 
+std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part all channels
+	std::map<std::string, Channel *>::iterator it = this->_channels.begin();
+	std::string result;
+
+	while(it != this->_channels.end())
+	{
+		result += it->second->get_name();
+		++it;
+		if (it != this->_channels.end())
+			result += ",";
+	}
+	return result;
+
+}
 // Leave all channels after receiving a JOIN 0
 void	Client::partAllChannels()
 {
