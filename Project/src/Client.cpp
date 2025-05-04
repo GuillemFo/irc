@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 13:42:29 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:47:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,8 @@ std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part al
 	return result;
 
 }
-// Leave all channels after receiving a JOIN 0
+// Leave all channels after receiving a JOIN 0 or quit server
+// Also shoud check if is op and rm from op.
 void	Client::partAllChannels()
 {
 	std::map<std::string, Channel *>::iterator it;

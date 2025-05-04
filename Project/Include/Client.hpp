@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 13:38:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:53:01 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class Channel ;
 class Client
 {
 	private:
-		Server 				*_server; // to get the details and functions of the server
+		Server 				*_server;
 		int 				_client_fd;
 		std::string 		_nick;
 		std::string 		_user;
@@ -44,11 +44,10 @@ class Client
 		bool				_passok;	//password received and OK
 		bool				_registered; //nick OK
 		bool				_okLogin;	// pass ok and nick ok
-		std::map<std::string, Channel*> _channels; //list of channels joined
+		std::map<std::string, Channel*> _channels;
 		
 		
 	public:
-		// made public to be able to call its member functions
 		OutBuffer			_out;
 		InBuffer			_in;
 

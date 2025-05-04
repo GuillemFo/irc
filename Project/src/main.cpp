@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 18:18:18 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:51:14 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
-	//TODO delete client from all channels first
+	s.getClient(fd)->partAllChannels(); //need to rm from operator too.
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	s.rmClientMap(fd);
 	close(fd);
@@ -93,7 +93,7 @@ void handleNewConnection(Server &s)
 
 void handleRead(Server &s, int fd)
 {
-	//maybe change buffer to std::string so we protect overflows and then check length???
+	//maybe change buffer to std::string so we protect overflows and then check length??? If try with nc -C can overflow!!
 	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
 	Client *client = s.getClient(fd);
 	if (!client) {
@@ -103,7 +103,7 @@ void handleRead(Server &s, int fd)
 	while (true)
 	{
 		buffer[0] = '\0';
-		ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0); // the idea is to read all until the socket is drained of info.
+		ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
 		if (bytes == -1)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -126,21 +126,14 @@ void handleRead(Server &s, int fd)
 			std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n");
 			while (client->_in.hasCompleteCommand())
 			{
-
-
-			Parser parser;
-			Command cmd = parser.parse(client->_in.extractCommand());
-			Client *clientfd = s.getClient(fd);
-
-			//Check if client set pass nick and user before exec anything? add a checker before any command?
-			
-			s._dispatcher.dispatch(cmd, *clientfd);
+				Parser parser;
+				Command cmd = parser.parse(client->_in.extractCommand());
+				Client *clientfd = s.getClient(fd);
+				s._dispatcher.dispatch(cmd, *clientfd);
 			}
 
-			// Store response in a write buffer associated with the client and enable EPOLLOUT only when needed
-
 			struct epoll_event ev;
-			ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
+			ev.events = EPOLLIN | EPOLLOUT;
 			ev.data.fd = fd;
 			epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 		}
@@ -169,9 +162,8 @@ void handleSend(Server &s, int fd)
 	s.getClient(fd)->_out.addOffset(sent_bytes);
 	if (s.getClient(fd)->isOutEmpty())
 	{
-		// Disable EPOLLOUT (from the server??) need to investigate. 24.04.25 04.04 pm
 		struct epoll_event ev;
-		ev.events = EPOLLIN; //| EPOLLET;
+		ev.events = EPOLLIN;
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
 		return ;
@@ -198,7 +190,7 @@ int main(int ac, char **av)
 			return (-1);
 		}
 		
-		setNonBlocking(sv_fd); //set fcntl to non blocking
+		setNonBlocking(sv_fd);
 		Server s(sv_fd, atoi(av[1]), av[2]);
 		
 		s.registerAllCommands();
@@ -290,116 +282,3 @@ int main(int ac, char **av)
 
 // https://www.suchprogramming.com/epoll-in-3-easy-steps/ 
 
-
-
-//	EPOLLIN EPOLLOUT EPOLLET
-//	https://chatgpt.com/share/67ff80a6-50e0-800a-9aa3-35fbffe54d04
-
-
-
-
-
-
-
-
-
-
-
-				// int num_fd_ready = epoll_wait(s.get_epollFD(), events, MAX_EVENTS, -1);
-				// if (num_fd_ready < 0)
-				// {
-				// 	std::cout << "epoll_wait error" << std::endl;
-				// 	break ;
-				// }
-				// for (int i = 0; i < num_fd_ready; ++i)
-				// {
-				// 	int fd = events[i].data.fd;
-				// 	if (fd == s.get_serverFD())
-				// 	{
-
-
-
-				// 	std::cout << "Accept new client here:" <<std::endl;
-				// 		while (true)
-				// 		{
-				// 			int cl_fd = accept(s.get_serverFD(), NULL, NULL);
-				// 			if (cl_fd < 0)
-				// 			{
-				// 				if (errno == EAGAIN || errno == EWOULDBLOCK)
-				// 					break; // all connections accepted
-				// 				std::cout << "accept error" << std::endl;
-				// 				break;
-				// 			}
-				// 			setNonBlocking(cl_fd);
-				// 			struct epoll_event ev_cl;
-				// 			ev_cl.events = EPOLLIN | EPOLLET;
-				// 			ev_cl.data.fd = cl_fd;
-				// 			if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev_cl) < 0)
-				// 			{
-				// 				std::cout << "epoll_ctl: client fd error" << std::endl;
-				// 				close(cl_fd);
-				// 				continue;
-				// 			}
-				// 			s.addClientMap(cl_fd);
-				// 			std::cout << C_Y "New client connected: fd " C_RESET << cl_fd << std::endl;
-				// 		}
-				// 		std::cout << "END Accept new client" <<std::endl;
-				// 	}
-
-
-
-
-
-
-
-
-
-
-				//NEED TO REDO PROPERLY!!
-				// 	else
-				// 	{
-				// 		std::cout << "Read client here:" <<std::endl;
-				// 		while (true)
-				// 		{
-				// 			//set server to listen EPOLLIN | EPOLLET
-				// 			ssize_t count = read(fd, buffer, BUFFER_SIZE);
-				// 			if (count == -1)
-				// 			{
-				// 				if (errno == EAGAIN || errno == EWOULDBLOCK)
-				// 					break; // no more data
-				// 				std::cout << "read error" << std::endl;
-				// 				close(fd);
-				// 				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
-				// 				s.rmClientMap(fd);
-				// 				break;
-				// 			}
-				// 			else if (count == 0)
-				// 			{
-				// 				std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
-				// 				s.rmClientMap(fd);
-				// 				close(fd);
-				// 				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
-				// 				break;
-				// 			}
-				// 			else
-				// 			{ // Not working as expected. Need to work properly to set epollin epollout epollet!!!
-				// 				buffer[count] = '\0';
-				// 				std::cout << "Received from " << fd << ": " << buffer;
-				// 				Parser parser;
-				// 				Command testInputsCmd = parser.parse(buffer);
-				// 				testInputsCmd.printCommand();
-				// 				ev.events = EPOLLOUT | EPOLLET;
-				// 				epoll_ctl(epoll_fd, EPOLL_CTL_MOD, fd, &ev);
-				// 				ssize_t sent = send(fd, buffer, count, 0);
-				// 				if (sent == -1 && (errno != EAGAIN && errno != EWOULDBLOCK))
-				// 				{
-				// 					std::cout << "send error" << std::endl;
-				// 					close(fd);
-				// 					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
-				// 					s.rmClientMap(fd);
-				// 				}
-				// 				ev.events = EPOLLOUT | EPOLLET;
-				// 			}
-				// 		}
-				// 		std::cout << "END Read client" <<std::endl;
-				
