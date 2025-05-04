@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 13:03:38 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/04 15:45:48 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,17 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 
-
-	//check if client is not registered? otherwise will crash...
-	std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT " + args[0] + "\r\n";
-	std::map<std::string, Channel*>::iterator it;
-
-	for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it) // not for all channels, once per client!!
+	if (sender.getOkLogin())
 	{
-		std::string channel = it->first;
-		sender.getServer()->getChannel(channel)->broadcast(out);
+		std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT " + args[0] + "\r\n";
+		std::map<std::string, Channel*>::iterator it;
+
+		for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it) // not for all channels, once per client!!
+		{
+			std::string channel = it->first;
+			sender.getServer()->getChannel(channel)->broadcast(out);
+		}
+		close(sender.get_clientFD());
 	}
-	
 	return ;
 }
