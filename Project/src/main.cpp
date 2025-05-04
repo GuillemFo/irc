@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 15:01:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:49:41 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void handleNewConnection(Server &s)
 
 void handleRead(Server &s, int fd)
 {
+	//maybe change buffer to std::string so we protect overflows and then check length???
 	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
 	Client *client = s.getClient(fd);
 	if (!client) {
