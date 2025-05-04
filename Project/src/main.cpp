@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/29 08:07:29 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/04 18:18:18 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	setNonBlocking(int sv_fd)
 void cleanupClient(Server &s, int fd)
 {
 	//TODO delete client from all channels first
-	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
+	s.rmClientMap(fd);
 	close(fd);
 }
 
@@ -93,6 +93,7 @@ void handleNewConnection(Server &s)
 
 void handleRead(Server &s, int fd)
 {
+	//maybe change buffer to std::string so we protect overflows and then check length???
 	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
 	Client *client = s.getClient(fd);
 	if (!client) {
