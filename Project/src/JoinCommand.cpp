@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/03 13:47:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/04 20:25:27 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,9 +143,10 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		splitcmd.clearArgs();
 		splitcmd.addArg(*itc);
 		++itc;
-		if (itk != keys.end() && !(*itk).empty())
+		if (itk != keys.end())
 		{
-			splitcmd.addArg(*itk);
+			if (!(*itk).empty()) 
+				splitcmd.addArg(*itk);
 			++itk;
 		}
 		joinChannel(splitcmd, sender);
