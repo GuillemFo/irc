@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KickCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:40:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 12:57:03 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/04 19:47:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class KickCommand : public CommandHandler {
 
 		KickCommand(Server* server);
 		Server				*getServer() const;
+		//bool isValidChannelName(const std::string& name);
+		//void KickCommand::KickChannel(const Command& cmd, Client& sender);
 
 		
 		virtual void execute(const Command& cmd, Client& sender);

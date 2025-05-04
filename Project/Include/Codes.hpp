@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/25 21:37:58 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/04 20:03:32 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 /* Channel Permission Errors */
 #define ERR_NOTONCHANNEL		"442"  // Client not in channel
 #define ERR_CHANOPRIVSNEEDED	"482"  // Client isn't a channel operator
+#define	ERR_USERNOTINCHANNEL	"441"  // Target not in channel
 
 /* Message/PRIVMSG Errors */
 #define ERR_NOSUCHNICK			"401"  // Target nick/channel doesn't exist

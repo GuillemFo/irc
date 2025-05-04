@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 21:09:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/04 19:47:04 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void Server::registerAllCommands() {
 	// _dispatcher.registerHandler("PONG", new PongCommand(this)); // not needed by subject
 	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this)); // not needed by subject
 	_dispatcher.registerHandler("PART", new PartCommand(this));
-	// _dispatcher.registerHandler("KICK", new KickCommand(this));
+	_dispatcher.registerHandler("KICK", new KickCommand(this));
 	_dispatcher.registerHandler("MODE", new ModeCommand(this));
 	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
 	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
