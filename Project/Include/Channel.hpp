@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/02 19:38:17 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/04 21:52:10 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ class Channel
 		std::string		_Name;
 		std::string		_Topic;
 		std::string		_key;
-		std::map<std::string, Client *> _clients; // list of all clients 
-		std::map<std::string, Client *> _opclients; // list of operator clients 
+		std::map<std::string, Client *> _clients;
+		std::map<std::string, Client *> _opclients;
 		bool			_protectTopic;
 		bool			_inviteOnly;
 		size_t			_clientLimit;
