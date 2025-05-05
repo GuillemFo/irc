@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 00:49:48 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/05 01:12:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ Your executable will be run as follows:
 	MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
 	BUFFER_SIZE → how many bytes you read from a socket at once.
 */
+
+// IMPORTANT!!!!!  every throw std::runtime_error will stop the server!!! remove immediately!! same with any throw
 #define MAX_EVENTS 10 // 64
 #define BUFFER_SIZE 512
 
