@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/04 20:25:27 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:48:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,14 @@ void joinChannel(const Command& cmd, Client& sender)
 		}
 		else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
 		{ // can't join without the INVITE
-			sender.sendMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
-			return ;
+			if (sender.getServer()->getChannel(channelName)->isInvited(sender.get_nick()))
+			{
+				sender.getServer()->getChannel(channelName)->remInvited(sender.get_nick());
+			}
+			else {
+				sender.sendMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
+				return ;
+			}
 		}
 		else if (sender.getServer()->getChannel(channelName)->isChannelFull())
 		{ // channel full
