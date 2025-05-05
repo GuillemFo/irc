@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 00:36:53 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/05 14:23:43 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,18 @@
 #include "InviteCommand.hpp"
 #include "ModeCommand.hpp"
 #include "KickCommand.hpp"
-
+#include "Tools.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
+#include "PrivmsgCommand.hpp"
+#include "Tools.hpp"
+#include "Colors.hpp"
+#include "JoinCommand.hpp"
+#include "Parser.hpp"
+#include "Command.hpp"
+#include "CommandDispatcher.hpp"
+#include <iostream>
+#include <csignal>
 
 
 

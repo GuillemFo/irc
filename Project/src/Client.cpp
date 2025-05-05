@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 21:47:55 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:49:35 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void	Client::partChannel(const std::string &channelName)
 	// remove client from client map in channel and from channel map in client
 	pChannel->remClient(this->get_nick());
 	this->_channels.erase(name_tolower(channelName));
+
 }
 
 std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part all channels
@@ -139,11 +140,11 @@ std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part al
 void	Client::partAllChannels()
 {
 	std::map<std::string, Channel *>::iterator it;
-	for (it = this->_channels.begin(); 
-		 it != this->_channels.end(); ++it)
+	for (it = this->_channels.begin(); it != this->_channels.end(); ++it)
 	{
+		std::cout << "here:" << it->second->get_name() << ":" << std::endl;
 		try {
-			this->partChannel(it->first);
+			this->partChannel(it->second->get_name());
 		} catch (...) {}	// no errors should be thrown from partChannel
 	}
 	this->_channels.clear();  // no memebers should be left

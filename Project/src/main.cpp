@@ -3,25 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 01:12:27 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/05 15:00:50 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Tools.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include "PrivmsgCommand.hpp"
-#include "Tools.hpp"
-#include "Colors.hpp"
-#include "JoinCommand.hpp"
-#include "Parser.hpp"
-#include "Command.hpp"
-#include "CommandDispatcher.hpp"
-#include <iostream>
+
 /*
 Your executable will be run as follows:
 ./ircserv <port> <password>
@@ -56,7 +46,7 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
-	s.getClient(fd)->partAllChannels(); //need to rm from operator too.
+	//s.getClient(fd)->partAllChannels(); //need to rm from operator too.
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	s.rmClientMap(fd);
 	close(fd);
@@ -92,14 +82,10 @@ void handleNewConnection(Server &s)
 }
 
 
-//test to protect 512 string lenght (need to do our function!!) rn is working 05/05/25 02.42 am
-bool checkTailAfterCRLF(const std::string &input) {
-	std::string::size_type pos = input.find("\r\n");
-	if (pos == std::string::npos)
-		return true;
-
-	std::string::size_type tailLength = input.length() - (pos + 2);
-	return tailLength <= 512;
+bool isValidIRCMessage(const std::string &input) {
+	if (input.size() > 512)
+		return false;
+	return true;
 }
 
 
@@ -135,14 +121,16 @@ void handleRead(Server &s, int fd)
 			std::string tmp(buffer, bytes);
 			client->_in.append(tmp);
 			
+				if (!isValidIRCMessage(client->_in.getRaw()))
+				{
+					client->sendMessage(client->get_nick() + " :Input line was too long\r\n"); // is sent multiple times... 05.05.25 01.07 pm
+					client->_in.clear();
+					return ;
+				}
 			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); buffer overflow when nc with massive text
 			while (client->_in.hasCompleteCommand())
 			{
 				Parser parser;
-				if (!checkTailAfterCRLF(client->_in.getRaw()))
-				{
-					client->sendMessage(client->get_nick() + " :Input line was too long");
-				}
 				Command cmd = parser.parse(client->_in.extractCommand());
 				Client *clientfd = s.getClient(fd);
 				s._dispatcher.dispatch(cmd, *clientfd);
@@ -186,12 +174,18 @@ void handleSend(Server &s, int fd)
 	}
 }
 
+void handle_sigint(int sig)
+{
+	if (sig)
+		exit(0);
+}
 
 int main(int ac, char **av)
 {
 	int sv_fd, epoll_fd;
 	try
 	{
+		signal(SIGINT, handle_sigint);
 		if (ac != 3)
 			throw std::string("Wrong arguments");
 		sv_fd = socket(AF_INET, SOCK_STREAM, 0);
