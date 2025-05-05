@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 14:49:35 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:54:25 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 }
 
 Client::~Client() {
-	this->partAllChannels();
+	//this->partAllChannels();
 	// has to be removed from client map in Server
 }
 
@@ -137,17 +137,33 @@ std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part al
 }
 // Leave all channels after receiving a JOIN 0 or quit server
 // Also shoud check if is op and rm from op.
-void	Client::partAllChannels()
+
+
+//Testing 05.05.25 03.54pm
+// void	Client::partAllChannels()
+// {
+// 	std::map<std::string, Channel *>::iterator it;
+// 	for (it = this->_channels.begin(); it != this->_channels.end();)
+// 	{
+// 		std::cout << "here:" << it->second->get_name() << ":" << std::endl;
+// 		try {
+// 			this->partChannel(it->second->get_name());
+// 		} catch (...) {}	// no errors should be thrown from partChannel
+// 		it++;
+// 	}
+// 	this->_channels.clear();  // no memebers should be left
+// }
+
+void Client::partAllChannels()
 {
-	std::map<std::string, Channel *>::iterator it;
-	for (it = this->_channels.begin(); it != this->_channels.end(); ++it)
+	while (!this->_channels.empty())
 	{
-		std::cout << "here:" << it->second->get_name() << ":" << std::endl;
+		std::string name = this->_channels.begin()->first;
+		std::cout << "here: " << name << std::endl;
 		try {
-			this->partChannel(it->second->get_name());
-		} catch (...) {}	// no errors should be thrown from partChannel
+			this->partChannel(name);
+		} catch (...) {}  // still safe
 	}
-	this->_channels.clear();  // no memebers should be left
 }
 
 void	Client::addChannel(Channel *pChannel)

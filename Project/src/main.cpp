@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 15:00:50 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:17:31 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
-	//s.getClient(fd)->partAllChannels(); //need to rm from operator too.
-	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
+
+	s.getClient(fd)->partAllChannels(); //need to rm from operator too.
 	s.rmClientMap(fd);
+	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
 }
 
@@ -68,7 +69,7 @@ void handleNewConnection(Server &s)
 		}
 		setNonBlocking(cl_fd);
 		struct epoll_event ev;
-		ev.events = EPOLLIN; //| EPOLLET;	//comment 05.05.25 12.50am
+		ev.events = EPOLLIN;
 		ev.data.fd = cl_fd;
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
 		{
@@ -120,13 +121,13 @@ void handleRead(Server &s, int fd)
 		{
 			std::string tmp(buffer, bytes);
 			client->_in.append(tmp);
-			
 				if (!isValidIRCMessage(client->_in.getRaw()))
 				{
 					client->sendMessage(client->get_nick() + " :Input line was too long\r\n"); // is sent multiple times... 05.05.25 01.07 pm
 					client->_in.clear();
 					return ;
 				}
+			
 			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); buffer overflow when nc with massive text
 			while (client->_in.hasCompleteCommand())
 			{
