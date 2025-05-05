@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/02 22:36:37 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:08:36 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,12 @@ void	Channel::addOperator(Client *theClient)
 	this->_opclients[name_tolower(theClient->get_nick())] = theClient;
 }
 
+void	Channel::addInvited(Client *theClient)
+{
+	// the logic of it has to be normal or operator should be outside
+	this->_invited[name_tolower(theClient->get_nick())] = theClient;
+}
+
 
 void	Channel::remClient(const std::string &clientNick)
 {
@@ -116,13 +122,27 @@ void	Channel::remClient(const std::string &clientNick)
 	if (it == this->_opclients.end())
 		return;
 	this->_opclients.erase(it);
+	// remove from invited
+	it = this->_invited.find(name_tolower(clientNick));
+	if (it == this->_invited.end())
+		return;
+	this->_invited.erase(it);
 
 }
+
 void	Channel::remOperator(const std::string &clientNick)
 {
 	// It will be called just if isOperator after a MOD -o
 	// another way to remove from map
 	int d = this->_opclients.erase(name_tolower(clientNick));
+	(void) d;
+}
+
+void	Channel::remInvited(const std::string &clientNick)
+{
+	// It will be called just if isOperator after a MOD -o
+	// another way to remove from map
+	int d = this->_invited.erase(name_tolower(clientNick));
 	(void) d;
 }
 
@@ -135,6 +155,7 @@ bool		Channel::isMember(const std::string &clientNick)
 		return true;
 	return false;
 }
+
 bool		Channel::isOperator(const std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
@@ -142,6 +163,16 @@ bool		Channel::isOperator(const std::string &clientNick)
 	it = this->_opclients.find(name_tolower(clientNick));
 	if (it != this->_opclients.end())
 	return true;
+	return false;
+}
+
+bool		Channel::isInvited(const std::string &clientNick)
+{
+	std::map<std::string, Client *>::iterator it;
+	
+	it = this->_invited.find(name_tolower(clientNick));
+	if (it != this->_invited.end())
+		return true;
 	return false;
 }
 
