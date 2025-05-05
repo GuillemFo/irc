@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 21:06:46 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:00:55 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 			std::string channel = it->first;
 			sender.getServer()->getChannel(channel)->broadcast(out, sender);
 		}
-		sender.sendMessage("ERROR: Quitting IRC server\r\n");
+		sender.sendMessage("Quitting IRC server\r\n");
 	}
 	close(sender.get_clientFD());
 	return ;

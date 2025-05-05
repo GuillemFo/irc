@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 21:03:16 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:55:33 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void KickChannel(const Command& cmd, Client& sender)
 	}
 	std::string commentPrefix = ":" + sender.get_nick();
 	std::string commentLine = commentPrefix + " KICK " + channelName + " " + target + " :";
-	if (!args[2].empty())
+	if (args.size() > 2 && !args[2].empty())
 	{
 		const std::string& comment = args[2];
 		commentLine += comment;

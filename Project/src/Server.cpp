@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 19:47:04 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:40:07 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ Client	*Server::getClient(const int &fd)
 	it = this->_cl_map.find(fd);
 	if (it == this->_cl_map.end())
 	{
-		return NULL; // need to expand for proper error!
+		return 0; // need to expand for proper error!
 	}
 	return it->second;
 }
