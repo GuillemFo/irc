@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 21:51:14 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 00:04:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Your executable will be run as follows:
 	BUFFER_SIZE → how many bytes you read from a socket at once.
 */
 #define MAX_EVENTS 64
-#define BUFFER_SIZE 512
+#define BUFFER_SIZE 600
 
 void	setNonBlocking(int sv_fd)
 {
@@ -76,7 +76,7 @@ void handleNewConnection(Server &s)
 		}
 		setNonBlocking(cl_fd);
 		struct epoll_event ev;
-		ev.events = EPOLLIN | EPOLLET;
+		ev.events = EPOLLIN; //| EPOLLET;	//comment 05.05.25 12.50am
 		ev.data.fd = cl_fd;
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
 		{
@@ -94,7 +94,7 @@ void handleNewConnection(Server &s)
 void handleRead(Server &s, int fd)
 {
 	//maybe change buffer to std::string so we protect overflows and then check length??? If try with nc -C can overflow!!
-	char buffer[BUFFER_SIZE + 1]; //not sure about the +1 thing. I think 512 chars should be the limit
+	char buffer[BUFFER_SIZE];
 	Client *client = s.getClient(fd);
 	if (!client) {
 		std::cout << "Invalid client fd: " << fd << std::endl; // probably change to std::cerr
@@ -120,14 +120,16 @@ void handleRead(Server &s, int fd)
 		}
 		else
 		{
-			buffer[bytes] = '\0';
-			client->_in.append(buffer);
+			std::string tmp(buffer, bytes);
 			
-			std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n");
+			//buffer[bytes] = '\0'; //buffer overflow if sting is too big.
+			client->_in.append(tmp);
+			
+			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); buffer overflow when nc with massive text
 			while (client->_in.hasCompleteCommand())
 			{
 				Parser parser;
-				Command cmd = parser.parse(client->_in.extractCommand());
+				Command cmd = parser.parse(client->_in.extractCommand()); //need a way to protect the 512 lenght before entering so we do not need the client inside or we send client somehow and add the error...
 				Client *clientfd = s.getClient(fd);
 				s._dispatcher.dispatch(cmd, *clientfd);
 			}
