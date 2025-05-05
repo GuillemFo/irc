@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 15:54:25 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:24:46 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ void Client::partAllChannels()
 	while (!this->_channels.empty())
 	{
 		std::string name = this->_channels.begin()->first;
-		std::cout << "here: " << name << std::endl;
 		try {
 			this->partChannel(name);
 		} catch (...) {}  // still safe

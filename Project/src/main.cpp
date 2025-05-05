@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 16:17:31 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:22:58 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Your executable will be run as follows:
 */
 
 // IMPORTANT!!!!!  every throw std::runtime_error will stop the server!!! remove immediately!! same with any throw
-#define MAX_EVENTS 10 // 64
+#define MAX_EVENTS 128
 #define BUFFER_SIZE 512
 
 void	setNonBlocking(int sv_fd)
@@ -107,7 +107,7 @@ void handleRead(Server &s, int fd)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
-			std::cout << "read error on fd: " << fd << std::endl; // probably change to std::cerr
+			std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
 			cleanupClient(s, fd);
 			break;
 		}
