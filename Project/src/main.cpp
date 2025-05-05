@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 17:14:26 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:06:26 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void handleRead(Server &s, int fd)
 					return ;
 				}
 			
-			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); buffer overflow when nc with massive text
+			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); //buffer overflow when nc with massive text
 			while (client->_in.hasCompleteCommand())
 			{
 				Parser parser;

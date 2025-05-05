@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 17:55:33 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:42:21 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void KickChannel(const Command& cmd, Client& sender)
 		commentLine += comment;
 	}
 	commentLine += "\r\n";
-	sender.getServer()->getChannel(channelName)->broadcast(commentLine, sender);
+	sender.getServer()->getChannel(channelName)->broadcast(commentLine);
 	
 	sender.getServer()->getChannel(channelName)->remClient(target);
 	sender.getServer()->getClientByNick(target)->remChannel(channelName);
@@ -95,7 +95,7 @@ void KickCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 
-	if (args.empty()) {
+	if (args.empty() || args.size() < 2) { // at least one channel and one user
 		std::cout << "No arguments in the KICK command. Aborting." << std::endl;
 		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
@@ -106,24 +106,27 @@ void KickCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	
-
+	
 	// The loop does not work properly 04.05.25 09.03pm
 	Command splitcmd(cmd);
 	std::vector<std::string> channels = split_arg(args[0]);
-	std::vector<std::string> targets; 
-	if (args.size() > 1)
-		targets = split_arg(args[1]);
+	std::vector<std::string> users = split_arg(args[1]);
+	if (channels.size() > 1 && channels.size() != users.size())
+	{	// if there is more than 1 chan number of chan must be = to number of users
+		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
+		return ;
+	}
 	std::vector<std::string>::const_iterator itc = channels.begin();
-	std::vector<std::string>::const_iterator itk = targets.begin();
-	while (itc != channels.end()) {
+	std::vector<std::string>::const_iterator itu = users.begin();
+	while (itu != users.end()) {
 		splitcmd.clearArgs();
 		splitcmd.addArg(*itc);
-		++itc;
-		if (itk != targets.end() && !(*itk).empty())
-		{
-			splitcmd.addArg(*itk);
-			++itk;
-		}
+		splitcmd.addArg(*itu);
+		++itu;
+		if (channels.size() > 1)
+			++itc;
+		if (args.size() > 2)	//reason
+			splitcmd.addArg(args[2]);
 		//if no target send error for that command?
 		KickChannel(splitcmd, sender);
 	}
