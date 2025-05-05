@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 16:24:46 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:19:03 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ bool	Client::isRegistered() {return this->_registered;}
 
 void	Client::partChannel(const std::string &channelName) 
 {
-	std::cout << "Part CHannel" << std::endl;
 	Channel *pChannel;
 	// check if channelName is not empty or doesn't exist
 	if ((channelName.empty()) ||
