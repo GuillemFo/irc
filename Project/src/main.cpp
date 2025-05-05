@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 00:04:41 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/05 00:42:05 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ void handleNewConnection(Server &s)
 }
 
 
+//test to protect 512 string lenght (need to do our function!!) rn is working 05/05/25 02.42 am
+bool checkTailAfterCRLF(const std::string &input) {
+	std::string::size_type pos = input.find("\r\n");
+	if (pos == std::string::npos)
+		return true;
+
+	std::string::size_type tailLength = input.length() - (pos + 2);
+	return tailLength <= 512;
+}
+
+
 
 void handleRead(Server &s, int fd)
 {
@@ -129,7 +140,11 @@ void handleRead(Server &s, int fd)
 			while (client->_in.hasCompleteCommand())
 			{
 				Parser parser;
-				Command cmd = parser.parse(client->_in.extractCommand()); //need a way to protect the 512 lenght before entering so we do not need the client inside or we send client somehow and add the error...
+				if (!checkTailAfterCRLF(client->_in.getRaw()))
+				{
+					client->sendMessage(client->get_nick() + " :Input line was too long");
+				}
+				Command cmd = parser.parse(client->_in.extractCommand());
 				Client *clientfd = s.getClient(fd);
 				s._dispatcher.dispatch(cmd, *clientfd);
 			}

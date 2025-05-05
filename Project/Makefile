@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/05 00:16:58 by codespace        ###   ########.fr        #
+#    Updated: 2025/05/05 00:36:56 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = ircserv
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
 		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
 		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp InBuffer.cpp QuitCommand.cpp \
-		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp ErrInput.cpp
+		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp
 
 #just for tests
 MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))
