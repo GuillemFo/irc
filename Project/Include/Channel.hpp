@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/02 19:38:17 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:00:11 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class Channel
 		std::string		_key;
 		std::map<std::string, Client *> _clients; // list of all clients 
 		std::map<std::string, Client *> _opclients; // list of operator clients 
+		std::map<std::string, Client *> _invited; // list of operator clients 
 		bool			_protectTopic;
 		bool			_inviteOnly;
 		size_t			_clientLimit;
@@ -69,10 +70,13 @@ class Channel
 		
 		void				addClient(Client *theClient);
 		void				addOperator(Client *theClient);
+		void				addInvited(Client *theClient);
 		void				remClient(const std::string &clientNick);
 		void				remOperator(const std::string &clientNick);
+		void				remInvited(const std::string &clientNick);
 		bool				isMember(const std::string &clientNick);
 		bool				isOperator(const std::string &clientNick);
+		bool				isInvited(const std::string &clientNick);
 		bool				isInviteOnly();
 		bool				isTopicProtected();
 		bool				isChannelFull();
