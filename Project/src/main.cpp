@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 00:42:05 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/05 00:48:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Your executable will be run as follows:
 	BUFFER_SIZE → how many bytes you read from a socket at once.
 */
 #define MAX_EVENTS 64
-#define BUFFER_SIZE 600
+#define BUFFER_SIZE 512
 
 void	setNonBlocking(int sv_fd)
 {
@@ -104,7 +104,6 @@ bool checkTailAfterCRLF(const std::string &input) {
 
 void handleRead(Server &s, int fd)
 {
-	//maybe change buffer to std::string so we protect overflows and then check length??? If try with nc -C can overflow!!
 	char buffer[BUFFER_SIZE];
 	Client *client = s.getClient(fd);
 	if (!client) {
@@ -132,8 +131,6 @@ void handleRead(Server &s, int fd)
 		else
 		{
 			std::string tmp(buffer, bytes);
-			
-			//buffer[bytes] = '\0'; //buffer overflow if sting is too big.
 			client->_in.append(tmp);
 			
 			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); buffer overflow when nc with massive text
@@ -166,7 +163,7 @@ void handleSend(Server &s, int fd)
 	if (s.getClient(fd)->_out.isEmpty())
 		return ;
 	std::string msg = s.getClient(fd)->_out.getMessage();
-	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  //send(fd, data, len, MSG_NOSIGNAL) nosignal to protect from  sending to a close socket
+	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  // nosignal to protect from sending to a close socket
 	if (sent_bytes == -1)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
