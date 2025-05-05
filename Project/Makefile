@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/05 00:36:56 by codespace        ###   ########.fr        #
+#    Updated: 2025/05/05 01:07:35 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ tmp:
 	@mkdir -p $(TMP)
 
 $(NAME): $(OBJ) $(OBJ_G) $(OBJ_R)
-	$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) $(OBJ_R) -I $(INC) -o $(NAME)
+	@$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) $(OBJ_R) -I $(INC) -o $(NAME)
 	@echo "$(GREEN)$(NAME) compiled$(RESET)"
 
 ###############################################################################
@@ -95,7 +95,7 @@ r: $(OBJ) $(OBJ_R)
 ###############################################################################
 $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
-	$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
+	@$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
 
 #### CapTests (sorry for the mess)
 CapTests: \
