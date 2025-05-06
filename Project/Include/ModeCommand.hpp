@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 20:13:57 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/02 22:21:53 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/07 01:39:02 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ class ModeCommand : public CommandHandler
 		ModeCommand(const ModeCommand& src);
 		ModeCommand& operator=(const ModeCommand& src);
 		virtual	~ModeCommand();
-		//TODO: move int_to_string  to tools 
-		std::string int_to_string(int value);
 		virtual void execute(const Command& cmd, Client& sender);
+		std::string formatModeChangeMessage(const Client& sender,
+			const Channel& channel,
+			const std::string& modeChanges,
+			const std::string& modeParameters);
 };
 
 #endif

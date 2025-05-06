@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/30 21:42:44 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:58:18 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,40 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 		if (lineSize > reply.size())
 			fullreply = fullreply + linereply + "\r\n";
 		return fullreply;
+	}
+
+	if (code == RPL_CHANNELMODEIS) {
+		Channel* channel = sender.getServer()->getChannel(args[0]);
+		if (!channel) {
+			std::cout << "That is weird. This reply is sent from \
+handleChannelMode. You cannot get here if there is no such channel. "
+			<< "But getChannel returned NULL." << std::endl;
+			return "";
+		}
+		std::string modes = "+";
+		std::string parameters;
+		if (channel->isInviteOnly()) {
+			modes += "i";
+		}
+		if (channel->isTopicProtected()) 
+		{
+			modes += "t";
+		}
+		if (!channel->isPassRequired()) {
+			if (channel->isOperator(name_tolower(sender.get_nick()))) {
+				modes += "k";
+				parameters += " " + channel->get_pass();
+			}
+		}
+		int channel_user_limit = channel->get_userLimit();
+		if (channel_user_limit) {
+			modes += "l";
+			parameters += " " + int_to_string(channel_user_limit);
+		}
+		std::string reply = ":" + sender.getServer()->getServerName() + " "
+			+ code + " " + sender.get_nick() + " " + args[0] + " "
+			+ modes + parameters + "\r\n";
+			return reply;
 	}
 
 	// Replace <nick>
