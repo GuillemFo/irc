@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 20:06:26 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:20:50 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,13 @@ void handleSend(Server &s, int fd)
 
 void handle_sigint(int sig)
 {
-	if (sig)
-		exit(0);
+	//if (sig)
+	//	exit(0);
+	(void) sig;
+	Server::mustExit = true;
 }
+
+bool Server::mustExit = false;
 
 int main(int ac, char **av)
 {
@@ -255,7 +259,7 @@ int main(int ac, char **av)
 		struct epoll_event events[MAX_EVENTS];
 
 		//Event loop
-		while (true)
+		while (!Server::mustExit)
 		{
 			int num_ready = epoll_wait(s.get_epollFD(), events, MAX_EVENTS, -1);
 			if (num_ready < 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 14:23:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:18:10 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ class Server
 		//**server version and MOTD
 		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
+
+		static bool			mustExit;
 		CommandDispatcher					_dispatcher;
-		
+	
 		int					send_out(std::string message);
 
 		Server(int sv_fd, int port, std::string sv_pass);
