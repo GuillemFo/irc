@@ -67,7 +67,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 			sender.sendMessage(ircReplyText(RPL_WELCOME, cmd, sender));
 			sender.sendMessage(ircReplyText(RPL_YOURHOST, cmd, sender));
 			sender.sendMessage(ircReplyText(RPL_MOTD, cmd, sender));
-			sender.sendMessage(ircReplyText(RPL_ENDOFMOTD, cmd, sender));
+			//sender.sendMessage(ircReplyText(RPL_ENDOFMOTD, cmd, sender)); //we can skip this since it impies we have /MOTD command
 			return ;
 			///
 		}
