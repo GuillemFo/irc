@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 10:15:11 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:09:40 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #define CHANNEL_NOT_ALLOWED_CHARS " \a,"	//space, bell and comma
 #define CHANNELMODES "itkol"
 
-#define TOPICLEN 307	// MUST be defined. 307 is the typical value
 
 
 class Client ;
