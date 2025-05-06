@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 22:05:37 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:57:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,7 +272,7 @@ void	Client::changeAllNicks(const std::string &oldNick)
 	for (it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second->isOperator(oldNick))
-		it->second->addOperator(this);
+			it->second->addOperator(this);
 		it->second->addClient(this);
 		it->second->remClient(oldNick);
 	}

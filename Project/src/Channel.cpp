@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 19:43:50 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:55:14 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,33 @@ int					Channel::get_userLimit() {
 }
 
 //NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
-void				Channel::setProtectTopic(bool modeFlag) {this->_protectTopic = modeFlag;}
-void				Channel::resetProtectTopic() {this->_protectTopic = false;}
-void				Channel::setInviteOnly(bool modeFlag) {this->_inviteOnly = modeFlag;}
-void				Channel::resetInviteOnly() {this->_inviteOnly = false;}
+void	Channel::setProtectTopic(bool modeFlag) {this->_protectTopic = modeFlag;}
+void	Channel::resetProtectTopic() {this->_protectTopic = false;}
+void	Channel::setInviteOnly(bool modeFlag) {this->_inviteOnly = modeFlag;}
+void	Channel::resetInviteOnly() {this->_inviteOnly = false;}
+
+std::string		Channel::getModesSet() {
+	std::string	modes = "+";
+	std::string	params;
+
+	if (this->_inviteOnly)
+		modes += "i";
+	if (this->_protectTopic)
+		modes += "t";
+	if (this->_clientLimit > 0){
+		modes += "l";
+		std::ostringstream oss;
+		oss << _clientLimit;
+		params += oss.str();
+	}
+	if (!this->_key.empty()){
+		modes += "k";
+		if (!params.empty())
+			params += " ";
+		params += _key;
+	}
+	return modes + " " + params;
+}
 
 Channel::~Channel()
 {
