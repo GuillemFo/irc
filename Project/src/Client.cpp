@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 17:19:03 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:57:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 Client::~Client() {
 	//this->partAllChannels();
 	// has to be removed from client map in Server
+	this->_in.clear();
 }
 
 Client::Client(const Client &other){*this = other;}
@@ -271,7 +272,7 @@ void	Client::changeAllNicks(const std::string &oldNick)
 	for (it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second->isOperator(oldNick))
-		it->second->addOperator(this);
+			it->second->addOperator(this);
 		it->second->addClient(this);
 		it->second->remClient(oldNick);
 	}
@@ -323,6 +324,7 @@ void	Client::cl_Epoll_In()
 void	Client::cl_Epoll_In_Out()
 {
 	struct epoll_event ev;
+	memset(&ev, 0, sizeof(ev)); // Explicit zeroing to avoid some errors
 	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	

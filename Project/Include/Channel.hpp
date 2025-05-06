@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 19:43:13 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 10:15:11 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Channel
 		void				resetProtectTopic();
 		void				setInviteOnly(bool modeFlag);
 		void				resetInviteOnly();
+		std::string			getModesSet();
 		
 		void				addClient(Client *theClient);
 		void				addOperator(Client *theClient);
