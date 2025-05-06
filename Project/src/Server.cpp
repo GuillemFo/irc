@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 22:33:33 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:53:49 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,8 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("MODE", new ModeCommand(this));
 	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
 	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
-	std::cout << "All command handlers have been registered." << std::endl;
+	_dispatcher.registerHandler("WHO", new WhoCommand(this));
+	
 	
 	// TODO: add error handling, so that if empty string is given or non-existing
 	// handler, the program exits cleanly (this is a whole other set of functions

@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/05 14:14:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:15:17 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ CommandDispatcher::~CommandDispatcher() {
 		delete it->second;
 	}
 	_handlers.clear();
-	std::cout << "CommandDispatcher deleted. All command handlers have been "
-		<< "cleared." << std::endl;
+	//std::cout << "CommandDispatcher deleted. All command handlers have been "
+		//<< "cleared." << std::endl;
 }
 
 void	CommandDispatcher::registerHandler(const std::string& name, 
@@ -50,6 +50,8 @@ void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
 	}
 	else {
 		std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
+		//sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
+		
 		//TODO: replace message with macro (e.g. ERRNOSUCHCOMMAND)
 		// implement like this:
 		// std::string err_msg;
