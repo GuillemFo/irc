@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 18:00:55 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:08:05 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-# include "QuitCommand.hpp"
-# include <iostream>
+#include "QuitCommand.hpp"
+#include <iostream>
+#include <set>
 
 QuitCommand::QuitCommand() : _server(NULL) {}
 QuitCommand::QuitCommand(const QuitCommand& src) {
@@ -38,13 +39,22 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	{
 		std::string out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT " + args[0] + "\r\n";
 		std::map<std::string, Channel*>::iterator it;
-
+		std::set<std::string> commonNicks;
 		for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it) // not for all channels, once per client!!
 		{
-			std::string channel = it->first;
-			sender.getServer()->getChannel(channel)->broadcast(out, sender);
+			std::map<std::string, Client*>::iterator itc;
+			std::pair<std::set<std::string>::iterator, bool> inserted;
+			for (itc = it->second->getMembers().begin(); itc != it->second->getMembers().end(); ++itc) {
+				inserted = commonNicks.insert(itc->first);
+				if (inserted.second && sender.get_nick() != itc->second->get_nick()) {
+				//	std::string channel = it->first;
+				//	sender.getServer()->getChannel(channel)->broadcast(out, sender);
+					itc->second->sendMessage(out);
+				}
+			}
+		
 		}
-		sender.sendMessage("Quitting IRC server\r\n");
+		sender.sendMessage("ERROR Quitting IRC server\r\n");
 	}
 	close(sender.get_clientFD());
 	return ;

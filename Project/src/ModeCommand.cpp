@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/05 12:26:12 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:04:24 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,8 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 	}
 
 	if (args.size() == 1) {
-		std::string modes = "itkol";
 		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
 			return ;
-		//TODO: make changes to the ircReplyText to  
-		// sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
 	}
 	if (!channel->isOperator(sender.get_nick())) {
 		sender.sendMessage(ircErrorText(ERR_CHANOPRIVSNEEDED, cmd, sender));

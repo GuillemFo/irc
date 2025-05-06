@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 11:55:14 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:40:06 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,8 @@ std::vector<std::string> Channel::getNicks()
 	}
 	return result;
 }
+
+std::map<std::string, Client *> Channel::getMembers() { return this->_clients;}
 
 void Channel::printInfo()
 {
