@@ -62,8 +62,12 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 		
 		//TODO use the welcome_msg in Server class
 			///	testing 25.04.25 09.26 am
-			std::string welcome_msg = ":" + sender.getServer()->getServerName() + " 001 " + sender.get_nick() + " :Welcome to the IRC Network, " + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost" + "\r\n" + ":" + sender.getServer()->getServerName() + " 002 " + sender.get_nick() + " :Your host is " + sender.getServer()->getServerName() + ", running version 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 003 "+ sender.get_nick() + " :Text 3" +"\r\n" + ":" + sender.getServer()->getServerName() + " 004 " + sender.get_nick() + " " + sender.getServer()->getServerName() + " 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 375 " + sender.get_nick() + " :msg of the day" +"\r\n" + ":" + sender.getServer()->getServerName() +" 372 " + sender.get_nick() + " :- Welcome" +"\r\n" + ":" + sender.getServer()->getServerName() +" 376 " + sender.get_nick() + " :End of /MOTD command." +"\r\n";
-			sender.sendMessage(welcome_msg);
+			//std::string welcome_msg = ":" + sender.getServer()->getServerName() + " 001 " + sender.get_nick() + " :Welcome to the IRC Network, " + sender.get_nick() + "!" + sender.get_user() + "@" + "localhost" + "\r\n" + ":" + sender.getServer()->getServerName() + " 002 " + sender.get_nick() + " :Your host is " + sender.getServer()->getServerName() + ", running version 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 003 "+ sender.get_nick() + " :Text 3" +"\r\n" + ":" + sender.getServer()->getServerName() + " 004 " + sender.get_nick() + " " + sender.getServer()->getServerName() + " 1.0" +"\r\n" + ":" + sender.getServer()->getServerName() + " 375 " + sender.get_nick() + " :msg of the day" +"\r\n" + ":" + sender.getServer()->getServerName() +" 372 " + sender.get_nick() + " :- Welcome" +"\r\n" + ":" + sender.getServer()->getServerName() +" 376 " + sender.get_nick() + " :End of /MOTD command." +"\r\n";
+			//sender.sendMessage(welcome_msg);
+			sender.sendMessage(ircReplyText(RPL_WELCOME, cmd, sender));
+			sender.sendMessage(ircReplyText(RPL_YOURHOST, cmd, sender));
+			sender.sendMessage(ircReplyText(RPL_MOTD, cmd, sender));
+			sender.sendMessage(ircReplyText(RPL_ENDOFMOTD, cmd, sender));
 			return ;
 			///
 		}
