@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/06 19:33:23 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:11:22 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
 		it->second->execute(cmd, sender);
 	}
 	else {
-		std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
-		
-		//ERROR AQUI!!
+		//std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
 		sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
 	}
 }
