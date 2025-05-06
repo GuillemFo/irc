@@ -6,7 +6,7 @@
 #    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/05 17:48:27 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/05/06 19:53:13 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = ircserv
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
 		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
 		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp InBuffer.cpp QuitCommand.cpp \
-		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp
+		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp WhoCommand.cpp
 
 #just for tests
 MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))

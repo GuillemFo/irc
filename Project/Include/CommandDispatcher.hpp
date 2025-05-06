@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/06 19:45:11 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:47:38 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <map>
 # include <string>
 
-class Client;
+//class Client;
 class Command;
 
 class CommandDispatcher {

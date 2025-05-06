@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CommandHandler.hpp                                 :+:      :+:    :+:   */
+/*   WhoCommand.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/06 19:47:05 by gforns-s         ###   ########.fr       */
+/*   Created: 2025/05/06 19:50:40 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/05/06 19:51:04 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDHANDLER_HPP
-# define COMMANDHANDLER_HPP
+#ifndef WHOCOMMAND_HPP
+# define WHOCOMMAND_HPP
 
-# include "Parser.hpp"
+# include "CommandHandler.hpp"
+# include "Server.hpp"
 
-class Command;
-class Client;
-
-class CommandHandler {
+class WhoCommand : public CommandHandler {
+	private:
+		Server * _server;
+	
 	public:
-		virtual ~CommandHandler() {}
-		virtual void execute(const Command& cmd, Client& sender) = 0;
+		WhoCommand();
+		WhoCommand(const WhoCommand& src);
+		WhoCommand& operator=(const WhoCommand& src);
+		virtual ~WhoCommand();
+
+		WhoCommand(Server* server);
+
+		virtual void execute(const Command& cmd, Client& sender);
 };
 
 #endif

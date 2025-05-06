@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 19:45:19 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:53:59 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@
 #include "Parser.hpp"
 #include "Command.hpp"
 #include "CommandDispatcher.hpp"
+#include "WhoCommand.hpp"
 
 
 
