@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/06 20:15:17 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:54:52 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,8 @@ void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
 	}
 	else {
 		std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
-		//sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
 		
-		//TODO: replace message with macro (e.g. ERRNOSUCHCOMMAND)
-		// implement like this:
-		// std::string err_msg;
-		// err_msg = ERRNOSUCHCOMMAND(sender->get_nick, name);
-		// std::cout << err_msg;
-		// TODO: provide actual functionality for sending back the reply to the sender
-		// like 
-		// sender.sendError(err_msg);
+		//ERROR AQUI!!
+		//sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
 	}
 }
