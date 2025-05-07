@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/05 14:14:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:47:56 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandDispatcher.hpp"
+#include "Codes.hpp"
 #include <iostream>
 
 CommandDispatcher::CommandDispatcher () {}
@@ -49,7 +50,7 @@ void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
 		it->second->execute(cmd, sender);
 	}
 	else {
-		std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
+		// std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
 		//TODO: replace message with macro (e.g. ERRNOSUCHCOMMAND)
 		// implement like this:
 		// std::string err_msg;
@@ -57,6 +58,6 @@ void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
 		// std::cout << err_msg;
 		// TODO: provide actual functionality for sending back the reply to the sender
 		// like 
-		// sender.sendError(err_msg);
+		sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
 	}
 }

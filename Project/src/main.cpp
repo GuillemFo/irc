@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 20:05:44 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:10:12 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
-
+	std::cout << "Cleanup client" << std::endl;
 	s.getClient(fd)->partAllChannels(); //need to rm from operator too.
 	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
