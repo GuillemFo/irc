@@ -6,7 +6,7 @@
 #    By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/07 17:16:08 by josegar2         ###   ########.fr        #
+#    Updated: 2025/05/07 19:38:40 by josegar2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cp
 #just for tests
 MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))
 MODETEST_PATHS := $(addprefix src/, $(MODETEST_SRC))
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -gdwarf-4 #-fsanitize=address # commented due codespace issues with fsanitize
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-gdwarf-4 #-fsanitize=address # commented due codespace issues with fsanitize
 
 SRC_F = src/
 

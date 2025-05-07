@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 12:18:10 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/07 20:56:53 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,7 @@ class Server
 		int					addChannelMap(const std::string &str, const std::string &pw);
 		
 		int					rmClientMap(int fd);
-		int					rmChannelMap(std::string &str);
-		int					rmChannelMap(std::string &str, std::string &pw);
+		void				rmChannelMap(const std::string &str);
 
 		bool				nickExists(const std::string &theNick);
 		bool				channelExists(const std::string &theChannel);

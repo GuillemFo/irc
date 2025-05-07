@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 21:53:01 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/07 20:51:00 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,10 @@ class Client
 		bool	getOkLogin();
 		void	addChannel(Channel *pChannel);
 		void	remChannel(const std::string &theChannel);
-		void	joinChannel(const std::string &channelName);
-		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
 		void	partChannel(const std::string &channelName);
 		std::string getListOfChannels();
 		void	partAllChannels();
 		
-		std::string	getLowerNick();
 		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
 		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();
