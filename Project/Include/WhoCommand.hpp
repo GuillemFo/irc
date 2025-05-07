@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   QuitCommand.hpp                                    :+:      :+:    :+:   */
+/*   WhoCommand.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/28 09:40:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 12:25:44 by gforns-s         ###   ########.fr       */
+/*   Created: 2025/05/06 19:50:40 by gforns-s          #+#    #+#             */
+/*   Updated: 2025/05/06 19:51:04 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef QUITCOMMAND_HPP
-# define QUITCOMMAND_HPP
+#ifndef WHOCOMMAND_HPP
+# define WHOCOMMAND_HPP
 
 # include "CommandHandler.hpp"
 # include "Server.hpp"
 
-class QuitCommand : public CommandHandler {
+class WhoCommand : public CommandHandler {
 	private:
 		Server * _server;
 	
 	public:
-		QuitCommand();
-		QuitCommand(const QuitCommand& src);
-		QuitCommand& operator=(const QuitCommand& src);
-		virtual ~QuitCommand();
+		WhoCommand();
+		WhoCommand(const WhoCommand& src);
+		WhoCommand& operator=(const WhoCommand& src);
+		virtual ~WhoCommand();
 
-		QuitCommand(Server* server);
-		Server				*getServer() const;
+		WhoCommand(Server* server);
 
-		
 		virtual void execute(const Command& cmd, Client& sender);
 };
 

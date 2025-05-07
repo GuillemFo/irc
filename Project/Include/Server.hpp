@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/02 22:19:44 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:53:59 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@
 #include <cstring>
 #include <map>
 #include <vector>
-#include <sstream>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <csignal>
 #include <cstdio> //perror
 
 #include "Colors.hpp"
@@ -53,6 +52,19 @@
 #include "TopicCommand.hpp"
 #include "InviteCommand.hpp"
 #include "ModeCommand.hpp"
+#include "KickCommand.hpp"
+#include "Tools.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
+#include "PrivmsgCommand.hpp"
+#include "Tools.hpp"
+#include "Colors.hpp"
+#include "JoinCommand.hpp"
+#include "Parser.hpp"
+#include "Command.hpp"
+#include "CommandDispatcher.hpp"
+#include "WhoCommand.hpp"
+
 
 
 
@@ -75,8 +87,10 @@ class Server
 		//**server version and MOTD
 		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
+
+		static bool			mustExit;
 		CommandDispatcher					_dispatcher;
-		
+	
 		int					send_out(std::string message);
 
 		Server(int sv_fd, int port, std::string sv_pass);

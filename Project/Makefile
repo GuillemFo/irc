@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
+#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/02 20:02:25 by rzhdanov         ###   ########.fr        #
+#    Updated: 2025/05/06 19:53:13 by gforns-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,12 @@ NAME = ircserv
 SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cpp \
 		PrivmsgCommand.cpp JoinCommand.cpp NickCommand.cpp PassCommand.cpp UserCommand.cpp OutBuffer.cpp CommandDispatcher.cpp \
 		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp InBuffer.cpp QuitCommand.cpp \
-		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp
+		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp WhoCommand.cpp
 
 #just for tests
 MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))
 MODETEST_PATHS := $(addprefix src/, $(MODETEST_SRC))
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g -fsanitize=address # commented due codespace issues with fsanitize
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-fsanitize=address # commented due codespace issues with fsanitize
 
 SRC_F = src/
 
@@ -77,7 +77,7 @@ tmp:
 	@mkdir -p $(TMP)
 
 $(NAME): $(OBJ) $(OBJ_G) $(OBJ_R)
-	$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) $(OBJ_R) -I $(INC) -o $(NAME)
+	@$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) $(OBJ_R) -I $(INC) -o $(NAME)
 	@echo "$(GREEN)$(NAME) compiled$(RESET)"
 
 ###############################################################################
@@ -95,7 +95,7 @@ r: $(OBJ) $(OBJ_R)
 ###############################################################################
 $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
-	$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
+	@$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
 
 #### CapTests (sorry for the mess)
 CapTests: \

@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/07 00:58:18 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/08 00:46:37 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static std::map<std::string, std::string> initReplyFormats() {
     m.insert(std::make_pair(RPL_TOPICWHOTIME, "<client> <channel> <setter> <timestamp>"));
     m.insert(std::make_pair(RPL_NAMREPLY, "<client> <symbol> <channel> :")); // [prefix]<nick> [prefix]<nick>...
     m.insert(std::make_pair(RPL_ENDOFNAMES, "<client> <channel> :End of /NAMES list"));
-    m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <modes> <mode-params>"));
+    m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <mode-params>"));
     m.insert(std::make_pair(RPL_INVITING, "<client> <nick> <channel>"));
     
     return m;
@@ -115,7 +115,7 @@ handleChannelMode. You cannot get here if there is no such channel. "
 		{
 			modes += "t";
 		}
-		if (!channel->isPassRequired()) {
+		if (channel->isPassRequired()) {
 			if (channel->isOperator(name_tolower(sender.get_nick()))) {
 				modes += "k";
 				parameters += " " + channel->get_pass();
@@ -141,10 +141,19 @@ handleChannelMode. You cannot get here if there is no such channel. "
 	if ((pos = reply.find("<tokens>")) != std::string::npos) {
 		reply.replace(pos, 8, "CHANNELLEN=64 CHANNELMODES=i,t,k,o,l NICKLEN=9");
 	}
+	if ((pos = reply.find("<client>")) != std::string::npos) {
+		reply.replace(pos, 8, sender.get_nick());
+	}
+	if ((pos = reply.find("<ver>")) != std::string::npos) {
+		reply.replace(pos, 5, "1.0");
+	}
 		
 	// Replace <topic> If empty NOTOPIC should be called
 	if ((pos = reply.find("<topic>")) != std::string::npos) {
 			reply.replace(pos, 7, sender.getServer()->getChannel(args[0])->get_topic());		
+	}
+	if ((pos = reply.find("<text>")) != std::string::npos) {
+			reply.replace(pos, 6, "Today is a good day :)");		
 	}
 
 	if ((pos = reply.find("<servername>")) != std::string::npos) {

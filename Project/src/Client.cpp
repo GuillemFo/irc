@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/03 13:42:29 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:57:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 }
 
 Client::~Client() {
-	this->partAllChannels();
+	//this->partAllChannels();
 	// has to be removed from client map in Server
+	this->_in.clear();
 }
 
 Client::Client(const Client &other){*this = other;}
@@ -102,7 +103,6 @@ bool	Client::isRegistered() {return this->_registered;}
 
 void	Client::partChannel(const std::string &channelName) 
 {
-	std::cout << "Part CHannel" << std::endl;
 	Channel *pChannel;
 	// check if channelName is not empty or doesn't exist
 	if ((channelName.empty()) ||
@@ -118,6 +118,7 @@ void	Client::partChannel(const std::string &channelName)
 	// remove client from client map in channel and from channel map in client
 	pChannel->remClient(this->get_nick());
 	this->_channels.erase(name_tolower(channelName));
+
 }
 
 std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part all channels
@@ -134,18 +135,34 @@ std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part al
 	return result;
 
 }
-// Leave all channels after receiving a JOIN 0
-void	Client::partAllChannels()
+// Leave all channels after receiving a JOIN 0 or quit server
+// Also shoud check if is op and rm from op.
+
+
+//Testing 05.05.25 03.54pm
+// void	Client::partAllChannels()
+// {
+// 	std::map<std::string, Channel *>::iterator it;
+// 	for (it = this->_channels.begin(); it != this->_channels.end();)
+// 	{
+// 		std::cout << "here:" << it->second->get_name() << ":" << std::endl;
+// 		try {
+// 			this->partChannel(it->second->get_name());
+// 		} catch (...) {}	// no errors should be thrown from partChannel
+// 		it++;
+// 	}
+// 	this->_channels.clear();  // no memebers should be left
+// }
+
+void Client::partAllChannels()
 {
-	std::map<std::string, Channel *>::iterator it;
-	for (it = this->_channels.begin(); 
-		 it != this->_channels.end(); ++it)
+	while (!this->_channels.empty())
 	{
+		std::string name = this->_channels.begin()->first;
 		try {
-			this->partChannel(it->first);
-		} catch (...) {}	// no errors should be thrown from partChannel
+			this->partChannel(name);
+		} catch (...) {}  // still safe
 	}
-	this->_channels.clear();  // no memebers should be left
 }
 
 void	Client::addChannel(Channel *pChannel)
@@ -255,7 +272,7 @@ void	Client::changeAllNicks(const std::string &oldNick)
 	for (it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second->isOperator(oldNick))
-		it->second->addOperator(this);
+			it->second->addOperator(this);
 		it->second->addClient(this);
 		it->second->remClient(oldNick);
 	}
@@ -307,6 +324,7 @@ void	Client::cl_Epoll_In()
 void	Client::cl_Epoll_In_Out()
 {
 	struct epoll_event ev;
+	memset(&ev, 0, sizeof(ev)); // Explicit zeroing to avoid some errors
 	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	

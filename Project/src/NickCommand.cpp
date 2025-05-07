@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/27 18:16:18 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/04 19:32:28 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,7 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(chgMsg);
 		sender.changeAllNicks(oldNick);
 		sender.sendAllChannels(chgMsg);
+		//if operator with old nick, change operator from all channels to the new nick and remove old operator
+		//if channel member, loop trough all channels to rename nick from the list of users?
 	}
 }

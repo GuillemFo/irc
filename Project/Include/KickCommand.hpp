@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   QuitCommand.hpp                                    :+:      :+:    :+:   */
+/*   KickCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:40:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 12:25:44 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/05 12:25:48 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef QUITCOMMAND_HPP
-# define QUITCOMMAND_HPP
+#ifndef KICKCOMMAND_HPP
+# define KICKCOMMAND_HPP
 
 # include "CommandHandler.hpp"
 # include "Server.hpp"
 
-class QuitCommand : public CommandHandler {
+class KickCommand : public CommandHandler {
 	private:
 		Server * _server;
 	
 	public:
-		QuitCommand();
-		QuitCommand(const QuitCommand& src);
-		QuitCommand& operator=(const QuitCommand& src);
-		virtual ~QuitCommand();
+		KickCommand();
+		KickCommand(const KickCommand& src);
+		KickCommand& operator=(const KickCommand& src);
+		virtual ~KickCommand();
 
-		QuitCommand(Server* server);
+		KickCommand(Server* server);
 		Server				*getServer() const;
 
 		

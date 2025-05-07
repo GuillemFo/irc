@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/07 01:05:14 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/08 00:46:46 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 /* Channel Permission Errors */
 #define ERR_NOTONCHANNEL		"442"  // Client not in channel
 #define ERR_CHANOPRIVSNEEDED	"482"  // Client isn't a channel operator
+#define	ERR_USERNOTINCHANNEL	"441"  // Target not in channel
 
 /* Message/PRIVMSG Errors */
 #define ERR_NOSUCHNICK			"401"  // Target nick/channel doesn't exist
