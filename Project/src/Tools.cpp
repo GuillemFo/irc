@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:07:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 14:22:11 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:07:23 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,10 @@ std::vector<std::string> split_arg(const std::string& arg) {
 	result.push_back(arg.substr(start));
 
 	return result;
+}
+
+std::string	int_to_string(int value) {
+	std::ostringstream oss;
+	oss << value;
+	return oss.str();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   InBuffer.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/05 00:40:54 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/05 21:51:58 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ InBuffer& InBuffer::operator=(const InBuffer& src) {
 	return *this;
 }
 
-InBuffer::~InBuffer() {}
+InBuffer::~InBuffer() { _buffer.clear();}
 
 void InBuffer::append(const std::string &data) {
 	this->_buffer += data;

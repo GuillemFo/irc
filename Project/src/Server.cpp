@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 15:40:07 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:53:49 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,14 @@ Server::~Server()
 	// loop to delete all clients and channels due new[] in each map!!
 	// delete ->second (as the exam :) )
 	// dont forget to .clear _cl_map and _ch_map
-
-
+	std::map<std::string , Channel*>::iterator it;
+	for (it = _ch_map.begin(); it != _ch_map.end(); ++it){
+		delete it->second;
+	}
+	std::map<int , Client*>::iterator itc;
+	for (itc = _cl_map.begin(); itc != _cl_map.end(); ++itc){
+		delete itc->second;
+	}
 }
 
 Server::Server(const Server &other){*this = other;}	//no need??
@@ -204,7 +210,8 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("MODE", new ModeCommand(this));
 	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
 	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
-	std::cout << "All command handlers have been registered." << std::endl;
+	_dispatcher.registerHandler("WHO", new WhoCommand(this));
+	
 	
 	// TODO: add error handling, so that if empty string is given or non-existing
 	// handler, the program exits cleanly (this is a whole other set of functions

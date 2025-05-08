@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/04 20:09:58 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 00:46:56 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static std::map<std::string, std::string> createErrorFormats() {
     m.insert(std::make_pair(ERR_BADCHANNELKEY, "<client> <channel> :Cannot join channel (+k)"));
     m.insert(std::make_pair(ERR_BADCHANMASK, "<client> <channel> :Bad Channel Mask"));
     m.insert(std::make_pair(ERR_CHANOPRIVSNEEDED, "<client> <channel> :You're not channel operator"));
+	m.insert(std::make_pair(ERR_UNKNOWNMODE, "<client> <char> :is unknown mode char to me"));
 	m.insert(std::make_pair(ERR_USERNOTINCHANNEL, "<client> <nick> <channel> :They aren't on that channel")); //need to fix 04.05 08.09 pm
 
     

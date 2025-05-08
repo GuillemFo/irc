@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 14:23:43 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:53:59 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@
 #include <cstring>
 #include <map>
 #include <vector>
-#include <sstream>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <csignal>
 #include <cstdio> //perror
 
 #include "Colors.hpp"
@@ -64,8 +63,8 @@
 #include "Parser.hpp"
 #include "Command.hpp"
 #include "CommandDispatcher.hpp"
-#include <iostream>
-#include <csignal>
+#include "WhoCommand.hpp"
+
 
 
 
@@ -88,8 +87,10 @@ class Server
 		//**server version and MOTD
 		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
+
+		static bool			mustExit;
 		CommandDispatcher					_dispatcher;
-		
+	
 		int					send_out(std::string message);
 
 		Server(int sv_fd, int port, std::string sv_pass);

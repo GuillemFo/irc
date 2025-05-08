@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 20:06:26 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:31:08 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ Your executable will be run as follows:
 	BUFFER_SIZE → how many bytes you read from a socket at once.
 */
 
-// IMPORTANT!!!!!  every throw std::runtime_error will stop the server!!! remove immediately!! same with any throw
 #define MAX_EVENTS 128
 #define BUFFER_SIZE 512
 
@@ -177,9 +176,13 @@ void handleSend(Server &s, int fd)
 
 void handle_sigint(int sig)
 {
-	if (sig)
-		exit(0);
+	//if (sig)
+	//	exit(0);
+	(void) sig;
+	Server::mustExit = true;
 }
+
+bool Server::mustExit = false;
 
 int main(int ac, char **av)
 {
@@ -187,6 +190,9 @@ int main(int ac, char **av)
 	try
 	{
 		signal(SIGINT, handle_sigint);
+		signal(SIGTERM, handle_sigint);
+		signal(SIGQUIT, handle_sigint);
+		signal(SIGPIPE, SIG_IGN);
 		if (ac != 3)
 			throw std::string("Wrong arguments");
 		sv_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -255,14 +261,11 @@ int main(int ac, char **av)
 		struct epoll_event events[MAX_EVENTS];
 
 		//Event loop
-		while (true)
+		while (!Server::mustExit)
 		{
 			int num_ready = epoll_wait(s.get_epollFD(), events, MAX_EVENTS, -1);
 			if (num_ready < 0)
-			{
-				std::cerr << "epoll_wait error\n";
 				break;
-			}
 
 			for (int i = 0; i < num_ready; ++i)
 			{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/04 20:03:32 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 00:46:46 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 #define ERR_TOOMANYCHANNELS 	"405"  // Client joined too many channels
 #define ERR_BADCHANNELKEY		"475"  // Wrong channel password
 #define ERR_CHANNELISFULL		"471"  // Channel is at user limit (+l)
+#define ERR_UNKNOWNMODE         "472"  // Mode is not supported by the channel
 #define ERR_INVITEONLYCHAN		"473"  // Channel is invite-only (+i)
 #define ERR_BADCHANMASK			"476"  // Invalid channel name format
 

@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/02 22:31:48 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/08 00:51:07 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,142 @@ void test_add_client_to_channel() {
 	ASSERT_TRUE(channel->isOperator("testuser"), "testuser is promoted to operator");
 }
 
+void test_mode_command_multiple_modes_combined() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 12);
+	client.set_nick("MultiUser");
+	const std::string ch_name = "#multi";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+itkl");
+	cmd.addArg("multiKey");
+	cmd.addArg("99");
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(channel->isInviteOnly(), "+i applied");
+	ASSERT_TRUE(channel->isTopicProtected(), "+t applied");
+	ASSERT_TRUE(channel->get_pass() == "multiKey", "+k applied");
+	ASSERT_TRUE(channel->get_userLimit() == 99, "+l applied");
+	
+	Command cmd2;
+	cmd2.setName("MODE");
+	cmd2.addArg(ch_name);
+
+	modeCmd.execute(cmd2, client);
+	std::string msg = client.getOutMessage();
+	ASSERT_TRUE(!msg.empty(), ": " + msg);
+}
+
+void test_mode_command_invalid_mode_char() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 13);
+	client.set_nick("InvalidTester");
+	const std::string ch_name = "#invalidchar";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+x"); // Invalid mode
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(!client.isOutEmpty(), "ERR_UNKNOWNMODE was sent for +x");
+	std::cout << "===outBuffer content:\n" << client.getOutMessage();
+}
+
+void test_mode_command_mix_valid_and_invalid() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 14);
+	client.set_nick("MixTester");
+	const std::string ch_name = "#mixmodes";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+iktx"); // +i, +k valid, +t valid, +x invalid
+	cmd.addArg("mypassword");
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(channel->isInviteOnly(), "+i applied");
+	ASSERT_TRUE(channel->isTopicProtected(), "+t applied");
+	ASSERT_TRUE(channel->get_pass() == "mypassword", "+k applied");
+}
+
+void test_mode_command_missing_o_target() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	Client client(&server, 15);
+	client.set_nick("Leader");
+	const std::string ch_name = "#missingo";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(&client);
+	channel->addOperator(&client);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("+o"); // Missing target nickname
+
+	modeCmd.execute(cmd, client);
+
+	ASSERT_TRUE(!client.isOutEmpty(), "Missing +o parameter triggers error");
+	std::cout << "===outBuffer content:\n" << client.getOutMessage();
+}
+
+void test_mode_command_remove_non_operator() {
+	printCallerFunction(__FUNCTION__);
+	Server server(0, 6667, "pass");
+	ModeCommand modeCmd(&server);
+	server.addClientMap(16);
+	server.addClientMap(17);
+	Client* op = server.getClient(16);
+	Client* nonop = server.getClient(17);
+	op->set_nick("RealOp");
+	nonop->set_nick("FakeOp");
+
+	const std::string ch_name = "#removeop";
+	server.addChannelMap(ch_name);
+	Channel* channel = server.getChannel(ch_name);
+	channel->addClient(op);
+	channel->addClient(nonop);
+	channel->addOperator(op);
+
+	Command cmd;
+	cmd.setName("MODE");
+	cmd.addArg(ch_name);
+	cmd.addArg("-o");
+	cmd.addArg("FakeOp");
+
+	modeCmd.execute(cmd, *op);
+
+	ASSERT_TRUE(!channel->isOperator("FakeOp"), "Non-operator not falsely promoted or left behind");
+}
+
+
 int main() {
 	std::cout << "Running ModeCommand tests..." << std::endl;
 	test_mode_command_basic();
@@ -302,5 +438,10 @@ int main() {
 	test_mode_command_add_and_remove_op();
 	test_mode_command_missing_parameter_error();
 	// test_add_client_to_channel();
+	test_mode_command_multiple_modes_combined();
+	test_mode_command_invalid_mode_char();
+	test_mode_command_mix_valid_and_invalid();
+	test_mode_command_missing_o_target();
+	test_mode_command_remove_non_operator();
 	return 0;
 }
