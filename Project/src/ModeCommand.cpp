@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/06 20:04:24 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:03:44 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,11 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
 		return ;
 	}
-
-	if (args.size() == 1) {
+	if (!channel->isMember(sender.get_nick())) {
+		sender.sendMessage(ircErrorText(ERR_USERNOTINCHANNEL, cmd, sender));
+		return ;
+	}
+	if (args.size() == 1 ) {
 		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
 			return ;
 	}
