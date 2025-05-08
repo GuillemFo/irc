@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/08 00:46:46 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:02:02 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /********* ERRORS ***********/
 /* Generic errors */
 #define ERR_INPUTTOOLONG		"417"
-#define ERR_UNKNOWNCOMMAND		"422"
+#define ERR_UNKNOWNCOMMAND		"421"
 
 /* Capability Errors */
 #define ERR_INVALIDCAPCMD		"410"  // Not supported parameters for CAP

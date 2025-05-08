@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 21:53:01 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:16:07 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Client
 	private:
 		Server 				*_server;
 		int 				_client_fd;
+		std::string			_ip;
 		std::string 		_nick;
 		std::string 		_user;
 		std::string 		_realname;
@@ -60,6 +61,8 @@ class Client
 		std::string			_string_buff;
 
 		int					get_clientFD();
+		void				set_ip(const std::string &theIP);
+		std::string			get_ip();
 
 		Server				*getServer() const;
 
@@ -80,13 +83,10 @@ class Client
 		bool	getOkLogin();
 		void	addChannel(Channel *pChannel);
 		void	remChannel(const std::string &theChannel);
-		void	joinChannel(const std::string &channelName);
-		void	joinChannel(const std::string &channelName, const std::string &channelPwd);
 		void	partChannel(const std::string &channelName);
 		std::string getListOfChannels();
 		void	partAllChannels();
 		
-		std::string	getLowerNick();
 		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
 		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]
 		bool		isRegistered();

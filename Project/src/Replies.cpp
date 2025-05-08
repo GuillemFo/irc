@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/08 00:46:37 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:55:21 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static std::map<std::string, std::string> initReplyFormats() {
     m.insert(std::make_pair(RPL_TOPICWHOTIME, "<client> <channel> <setter> <timestamp>"));
     m.insert(std::make_pair(RPL_NAMREPLY, "<client> <symbol> <channel> :")); // [prefix]<nick> [prefix]<nick>...
     m.insert(std::make_pair(RPL_ENDOFNAMES, "<client> <channel> :End of /NAMES list"));
-    m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <mode-params>"));
+    m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <mode> <mode-params>"));
     m.insert(std::make_pair(RPL_INVITING, "<client> <nick> <channel>"));
     
     return m;
@@ -156,11 +156,18 @@ handleChannelMode. You cannot get here if there is no such channel. "
 			reply.replace(pos, 6, "Today is a good day :)");		
 	}
 
+	// Replace <mode> <mode-params> If empty NOTOPIC should be called
+	if ((pos = reply.find("<mode> <mode-params>")) != std::string::npos) {
+			reply.replace(pos, 20, sender.getServer()->getChannel(args[0])->getModesSet());		
+	}
+
 	if ((pos = reply.find("<servername>")) != std::string::npos) {
 		reply.replace(pos, 12, sender.getServer()->getServerName());
 	}
 	//  ****** SOME <args> missing for replacement
-
+	reply = ":" + sender.getServer()->getServerName() + " " + code + " " + reply;
 	// Construct the full IRC message
-	return ":" + sender.getServer()->getServerName() + " " + code + " " + reply + "\r\n";
+	if (reply.length() > 510)
+		reply = reply.substr(0, 510);
+	return reply + "\r\n";
 }

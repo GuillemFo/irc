@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/08 00:47:10 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:55:37 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,11 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
 		return ;
 	}
-
-	if (args.size() == 1) {
-		std::string modes = "itkol";
+	if (!channel->isMember(sender.get_nick())) {
+		sender.sendMessage(ircErrorText(ERR_USERNOTINCHANNEL, cmd, sender));
+		return ;
+	}
+	if (args.size() == 1 ) {
 		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
 		// std::cout << "here is the sender's message: "
 		// 	<< sender.getOutMessage() << std::endl;

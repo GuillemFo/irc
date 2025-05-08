@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 19:53:59 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:02:07 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,7 @@ class Server
 		int					addChannelMap(const std::string &str, const std::string &pw);
 		
 		int					rmClientMap(int fd);
-		int					rmChannelMap(std::string &str);
-		int					rmChannelMap(std::string &str, std::string &pw);
+		void				rmChannelMap(const std::string &str);
 
 		bool				nickExists(const std::string &theNick);
 		bool				channelExists(const std::string &theChannel);
