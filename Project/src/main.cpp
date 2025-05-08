@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/07 17:10:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:17:31 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void handleNewConnection(Server &s)
 		}
 		setNonBlocking(cl_fd);
 		struct epoll_event ev;
+		memset(&ev, 0, sizeof(ev));
 		ev.events = EPOLLIN;
 		ev.data.fd = cl_fd;
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
@@ -138,6 +139,7 @@ void handleRead(Server &s, int fd)
 			}
 
 			struct epoll_event ev;
+			memset(&ev, 0, sizeof(ev));
 			ev.events = EPOLLIN | EPOLLOUT;
 			ev.data.fd = fd;
 			epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
@@ -168,6 +170,7 @@ void handleSend(Server &s, int fd)
 	if (s.getClient(fd)->isOutEmpty())
 	{
 		struct epoll_event ev;
+		memset(&ev, 0, sizeof(ev));
 		ev.events = EPOLLIN;
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
@@ -243,6 +246,7 @@ int main(int ac, char **av)
 
 		s.set_epollFD(epoll_fd);
 		struct epoll_event ev;
+		memset(&ev, 0, sizeof(ev));
 		ev.events = EPOLLIN | EPOLLET;
 		ev.data.fd = s.get_serverFD();
 			
