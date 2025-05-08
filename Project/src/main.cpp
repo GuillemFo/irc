@@ -6,11 +6,12 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 14:17:31 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:28:15 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <arpa/inet.h>
 
 /*
 Your executable will be run as follows:
@@ -59,7 +60,9 @@ void handleNewConnection(Server &s)
 {
 	while (true)
 	{
-		int cl_fd = accept(s.get_serverFD(), NULL, NULL);
+		struct sockaddr_in client_addr;
+		socklen_t addr_len = sizeof(client_addr);
+		int cl_fd = accept(s.get_serverFD(), (struct sockaddr*)&client_addr, &addr_len);
 		if (cl_fd < 0)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -79,7 +82,11 @@ void handleNewConnection(Server &s)
 			continue;
 		}
 		s.addClientMap(cl_fd);
+		char client_ip[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
+		s.getClient(cl_fd)->set_ip(std::string(client_ip));
 		std::cout << C_Y "New client connected: fd " C_RESET << cl_fd << std::endl;
+		std::cout << C_Y "IP : " << client_ip << std::endl;
 	}
 }
 

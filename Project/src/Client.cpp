@@ -6,11 +6,12 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/07 21:09:27 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:18:07 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+
 Client::Client(int cl_fd) : _client_fd(cl_fd) 
 {
 	this->_nick = std::string();
@@ -51,6 +52,9 @@ Client &Client::operator=(const Client &other)	//do we need this??
 
 
 int					Client::get_clientFD(){return (this->_client_fd);}
+void				Client::set_ip(const std::string &theIP) { this->_ip = theIP;}
+std::string			Client::get_ip(){return this->_ip;}
+
 Server				*Client::getServer() const{return (this->_server);}
 
 void				Client::set_nick(const std::string &str){this->_nick = str;}

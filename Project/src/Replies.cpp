@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/06 20:39:08 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:46:03 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,9 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 		reply.replace(pos, 12, sender.getServer()->getServerName());
 	}
 	//  ****** SOME <args> missing for replacement
-
+	reply = ":" + sender.getServer()->getServerName() + " " + code + " " + reply;
 	// Construct the full IRC message
-	return ":" + sender.getServer()->getServerName() + " " + code + " " + reply + "\r\n";
+	if (reply.length() > 510)
+		reply = reply.substr(0, 510);
+	return reply + "\r\n";
 }
