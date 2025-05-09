@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:18:55 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/09 23:21:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,18 +195,6 @@ bool		Channel::isChannelFull()
 bool		Channel::isChannelEmpty()
 {
 	return (this->_clients.size() == 0);
-}
-
-bool Channel::isNameCorrect(const std::string &theName)
-{
-	if (theName.empty() ||
-		theName.size() > CHANNELLEN ||
-		!strchr(CHANTYPES, theName[0]) ||
-		theName.find(' ') != std::string::npos ||
-		theName.find('\a') != std::string::npos ||
-		theName.find(',') != std::string::npos)
-		return false;
-	return true;
 }
 
 void Channel::broadcast(const std::string &msg)

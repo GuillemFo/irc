@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:11:37 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/09 23:21:21 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ class Channel
 		bool				isTopicProtected();
 		bool				isChannelFull();
 		bool				isChannelEmpty();
-		static bool			isNameCorrect(const std::string &theName);
 		void				broadcast(const std::string &msg);
 		void				broadcast(const std::string &msg, Client &sender); //all except sender
 		std::vector<std::string> getNicks();

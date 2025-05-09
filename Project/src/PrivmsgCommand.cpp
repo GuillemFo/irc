@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivmsgCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 11:31:25 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/09 23:26:14 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	if (!sender.getOkLogin())
 	{
 		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
 		return ;
 	}
 	Command splitcmd(cmd);

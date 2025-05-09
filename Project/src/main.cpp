@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:26:37 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/09 23:26:10 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,9 @@ void handleSend(Server &s, int fd)
 	{
 		return ;
 	}
-	if (s.getClient(fd)->_out.isEmpty())
+	if (s.getClient(fd)->isOutEmpty())
 		return ;
-	std::string msg = s.getClient(fd)->_out.getMessage();
+	std::string msg = s.getClient(fd)->getOutMessage();
 	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  // nosignal to protect from sending to a close socket
 	if (sent_bytes == -1)
 	{
@@ -164,7 +164,7 @@ void handleSend(Server &s, int fd)
 		return;
 	}
 	msg.erase(0, sent_bytes); // with the count of sent bytes we remove that number from the out buffer and continue
-	s.getClient(fd)->_out.addOffset(sent_bytes);
+	s.getClient(fd)->popCharsSent(sent_bytes);
 	if (s.getClient(fd)->isOutEmpty())
 	{
 		struct epoll_event ev;
