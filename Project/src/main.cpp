@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 20:55:49 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:00:59 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void handleNewConnection(Server &s)
 		inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
 		s.getClient(cl_fd)->set_ip(std::string(client_ip));
 		std::cout << C_Y "New client connected: fd " C_RESET << cl_fd << std::endl;
-		std::cout << C_Y "IP : " << client_ip << std::endl;
+		std::cout << C_Y "IP : " << client_ip << C_RESET << std::endl;
 	}
 }
 
