@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:00 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 00:24:22 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:34:01 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <vector>
 # include <string>
 # include "IncomingCommand.hpp"
+
+# define PING "PING"
+# define PONG "PONG"
 
 class Bot {
 	private:

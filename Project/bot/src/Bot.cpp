@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:06 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 00:28:49 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:49:06 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,15 @@
 
 #define BUFFER_SIZE 1024
 Bot::Bot() {};
-Bot::Bot(const std::string& server, int port, const std::string& password) {
-	connectToServer(server, port, password);
+Bot::Bot(const std::string& server, int port, const std::string& password)
+	: _socket_fd(-1), _connected(false) {
+	_connected = connectToServer(server, port, password);
 }
+
 Bot::~Bot() {
-	close(this->_socket_fd);
+	if (this->_connected) {
+		close(this->_socket_fd);
+	}
 	for (size_t i = 0; i < this->_commands.size(); i++) {
 		delete this->_commands[i];
 	}
@@ -57,4 +61,50 @@ bool Bot::connectToServer(const std::string& server, int port,
 	sendRaw("JOIN #bot");
 
 	return true;
+}
+
+bool Bot::isConnected() const {
+	return this->_connected;
+}
+
+void Bot::sendRaw(const std::string& msg) {
+	std::string full = msg +"\r\n";
+	send(this->_socket_fd, full.c_str(), full.size(), 0);
+}
+
+void Bot::handleMessage(const std::string& msg) {
+	//TODO: probably use compare instead to work avoid getting ping from 
+	// a random position in the message (if someone send a message 
+	// containing PING)
+	if (msg.find(PING) == 0) {
+		sendRaw("PONG" + msg.substr(4));
+		return ;
+	}
+	size_t exclamation = msg.find('!');
+	size_t colon = msg.find(" :");
+	if (colon != std::string::npos && exclamation != std::string::npos) {
+		std::string sender = msg.substr(1, exclamation - 1);
+		std::string content = msg.substr(colon + 2);
+		size_t limit = this->_commands.size();
+		for (size_t i = 0; i < limit; ++i) {
+			if (this->_commands[i]->matches(content)) {
+				sendRaw(this->_commands[i]->respond(sender));
+				break;
+			}
+		}
+	}
+}
+
+void Bot::run() {
+	char buffer[BUFFER_SIZE];
+	while (true) {
+		std::memset(buffer, 0, BUFFER_SIZE);
+		int bytes = recv(this->_socket_fd, buffer, BUFFER_SIZE - 1, 0);
+		if (bytes <= 0) {
+			break;
+		}
+		std::string msg(buffer);
+		std::cout << msg;
+		handleMessage(msg);
+	}
 }

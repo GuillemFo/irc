@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:20:50 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 00:15:08 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:47:51 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int main(int argc, char **argv) {
 		password = argv[3];
 	}
 	Bot bot(server, port, password);
+	if (!bot.isConnected()) {
+		std::cerr << "Bot failed to connect to the server. Aborting."
+			<< std::endl;
+		return 1;
+	}
 	bot.run();
 	//we will need the Server to somehow add bot to every channel
 	return 0;

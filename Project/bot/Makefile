@@ -6,7 +6,7 @@
 #    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/08 20:21:18 by rzhdanov          #+#    #+#              #
-#    Updated: 2025/05/08 22:02:00 by rzhdanov         ###   ########.fr        #
+#    Updated: 2025/05/09 00:31:05 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ NAME = bot
 
 SRC = \
 	$(SRC_DIR)/bot.cpp \
-	$(CMD_DIR)/PingCommand.cpp \
+	$(CMD_DIR)/BotPingCommand.cpp \
 	main.cpp
 
 INCLUDES = -I$(INC_DIR) -I$(CMD_DIR)
