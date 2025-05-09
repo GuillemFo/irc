@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 20:55:41 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:11:37 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
-#define CHANTYPES	"&#" //Channel types prefix supported
+#define CHANTYPES	"&#"
 #define CHANNELLEN	50	 // MUST be specified
-#define CHANNEL_NOT_ALLOWED_CHARS " \a,"	//space, bell and comma
+#define CHANNEL_NOT_ALLOWED_CHARS " \a,"
 #define CHANNELMODES "itkol"
 
 
@@ -24,7 +24,6 @@
 class Client ;
 class Server ;
 
-//Channel *channels[channelName] = new Channel(channelName); !!!!!!!
 class Channel
 {
 	private:
@@ -32,9 +31,9 @@ class Channel
 		std::string		_Name;
 		std::string		_Topic;
 		std::string		_key;
-		std::map<std::string, Client *> _clients; // list of all clients 
-		std::map<std::string, Client *> _opclients; // list of operator clients 
-		std::map<std::string, Client *> _invited; // list of operator clients 
+		std::map<std::string, Client *> _clients;
+		std::map<std::string, Client *> _opclients;
+		std::map<std::string, Client *> _invited;
 		bool			_protectTopic;
 		bool			_inviteOnly;
 		size_t			_clientLimit;
@@ -61,7 +60,6 @@ class Channel
 		void				set_userLimit(int nb);
 		void				clear_userLimit();
 		int					get_userLimit();
-//NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
 		void				setProtectTopic(bool modelFlag);
 		void				resetProtectTopic();
 		void				setInviteOnly(bool modeFlag);

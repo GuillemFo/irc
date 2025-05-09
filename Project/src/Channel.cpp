@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 13:51:27 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:18:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int					Channel::get_userLimit() {
 	return this->_clientLimit;
 }
 
-//NB: I changed setters here to take a bool as an argument and set the respective bool in channel equal to that argument
 void	Channel::setProtectTopic(bool modeFlag) {this->_protectTopic = modeFlag;}
 void	Channel::resetProtectTopic() {this->_protectTopic = false;}
 void	Channel::setInviteOnly(bool modeFlag) {this->_inviteOnly = modeFlag;}
@@ -94,38 +93,22 @@ std::string		Channel::getModesSet() {
 	return modes + params;
 }
 
-Channel::~Channel()
-{
-	/*
-	// remove channel from client map of channels
-	std::map<std::string, Client *>::iterator it;
-	for (it = _clients.begin(); it != _clients.end(); ++it) {
-        it->second->partChannel(_Name);  //it can be a loop********
-    }
-	for (it = _opclients.begin(); it != _opclients.end(); ++it) {
-        it->second->partChannel(_Name);  //it can be a loop********
-    }
-	*/
-}
-
+Channel::~Channel(){}
 
 void	Channel::addClient(Client *theClient)
 {
-	// once the join channel is succesful --> add client to the map _clients
-	if (this->_clients.size() == 0) // if no clients in channel add as operator
+	if (this->_clients.size() == 0)
 		this->addOperator(theClient);
 	this->_clients[name_tolower(theClient->get_nick())] = theClient;
 }
 
 void	Channel::addOperator(Client *theClient)
 {
-	// the logic of it has to be normal or operator should be outside
 	this->_opclients[name_tolower(theClient->get_nick())] = theClient;
 }
 
 void	Channel::addInvited(Client *theClient)
 {
-	// the logic of it has to be normal or operator should be outside
 	this->_invited[name_tolower(theClient->get_nick())] = theClient;
 }
 
@@ -134,17 +117,14 @@ void	Channel::remClient(const std::string &clientNick)
 {
 	std::map<std::string, Client *>::iterator it;
 
-	// in the partchannel will be checked that client isMember
 	it = this->_clients.find(name_tolower(clientNick));
-	if (it == this->_clients.end())  // it must not happen
+	if (it == this->_clients.end())
 		return;
 	this->_clients.erase(it);
-	// remove from operators
 	it = this->_opclients.find(name_tolower(clientNick));
 	if (it == this->_opclients.end())
 		return;
 	this->_opclients.erase(it);
-	// remove from invited
 	it = this->_invited.find(name_tolower(clientNick));
 	if (it == this->_invited.end())
 		return;
@@ -154,16 +134,12 @@ void	Channel::remClient(const std::string &clientNick)
 
 void	Channel::remOperator(const std::string &clientNick)
 {
-	// It will be called just if isOperator after a MOD -o
-	// another way to remove from map
 	int d = this->_opclients.erase(name_tolower(clientNick));
 	(void) d;
 }
 
 void	Channel::remInvited(const std::string &clientNick)
 {
-	// It will be called just if isOperator after a MOD -o
-	// another way to remove from map
 	int d = this->_invited.erase(name_tolower(clientNick));
 	(void) d;
 }
@@ -280,20 +256,17 @@ void Channel::printInfo()
     std::cout << "Current Clients: " << _clients.size() << std::endl;
     std::cout << "Operators: " << _opclients.size() << std::endl;
 
-    // Print all client nicknames
     std::cout << "Clients in Channel: ";
     std::map<std::string, Client*>::iterator it;
     for (it = _clients.begin(); it != _clients.end(); ++it)
     {
-        std::cout << it->first << " "; // `it->first` is the nickname of the client
+        std::cout << it->first << " ";
     }
     std::cout << std::endl;
-
-    // Print all operator nicknames
     std::cout << "Operators in Channel: ";
     for (it = _opclients.begin(); it != _opclients.end(); ++it)
     {
-        std::cout << it->first << " "; // `it->first` is the nickname of the operator
+        std::cout << it->first << " ";
     }
     std::cout << std::endl;
 

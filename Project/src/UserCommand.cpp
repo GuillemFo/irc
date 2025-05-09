@@ -21,7 +21,6 @@ bool UserCommand::isValidUser(const std::string& name) {
 			<< std::endl;
 		return false;
 	}
-	// Need to explore what user can contain so we check allowed chars. josegar2 TODO
 	if (name.length() > 50) {
 		std::cout << "Aborting USER: Username contains over 50"
 			<< " symbols." << std::endl;
@@ -43,7 +42,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 	(void) sender;
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
-	if (sender.getOkLogin()) { // if already full registered
+	if (sender.getOkLogin()) {
 		sender.sendMessage(ircErrorText(ERR_ALREADYREGISTERED, cmd, sender));
 		return ;
 	}
@@ -53,7 +52,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 	}
 	if (sender.isRegistered())
 	{
-		const std::string& User = args[0]; // need to check the other args?? 
+		const std::string& User = args[0];
 		if (UserCommand::isValidUser(User)) {
 			sender.set_user(User);
 			sender.setRealName(args[3]);
@@ -64,7 +63,6 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 			sender.sendMessage(ircReplyText(RPL_MOTD, cmd, sender));
 			//sender.sendMessage(ircReplyText(RPL_ENDOFMOTD, cmd, sender)); //we can skip this since it impies we have /MOTD command
 			return ;
-			///
 		}
 	}
 	else {

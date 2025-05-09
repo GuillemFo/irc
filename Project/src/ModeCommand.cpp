@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/08 20:55:37 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:27:02 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 	}
 	if (args.size() == 1 ) {
 		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
-		// std::cout << "here is the sender's message: "
-		// 	<< sender.getOutMessage() << std::endl;
 			return ;
 	}
 	if (!channel->isOperator(sender.get_nick())) {
