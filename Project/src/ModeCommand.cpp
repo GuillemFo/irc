@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/05 12:26:12 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:55:37 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,6 @@ ModeCommand& ModeCommand::operator=(const ModeCommand& src) {
 }
 
 ModeCommand::~ModeCommand() {}
-
-std::string ModeCommand::int_to_string(int value) {
-    std::ostringstream oss;
-    oss << value;
-    return oss.str();
-}
 
 void ModeCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
@@ -51,13 +45,15 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
 		return ;
 	}
-
-	if (args.size() == 1) {
-		std::string modes = "itkol";
+	if (!channel->isMember(sender.get_nick())) {
+		sender.sendMessage(ircErrorText(ERR_USERNOTINCHANNEL, cmd, sender));
+		return ;
+	}
+	if (args.size() == 1 ) {
 		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
+		// std::cout << "here is the sender's message: "
+		// 	<< sender.getOutMessage() << std::endl;
 			return ;
-		//TODO: make changes to the ircReplyText to  
-		// sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
 	}
 	if (!channel->isOperator(sender.get_nick())) {
 		sender.sendMessage(ircErrorText(ERR_CHANOPRIVSNEEDED, cmd, sender));
@@ -185,11 +181,6 @@ o argument. Please report this bug to server admins in #bug_reports channel";
 				std::cout << "ERROR: Channel's server pointer is null." << std::endl;
 				return;
 			}
-			// std::cout << "ZZZZZZZZZZZ\n" << std::endl;
-			// std::cout << args[paramIndex] << std::endl;
-			// std::cout << server->getClientByNick(args[paramIndex]) << std::endl;
-			//NB: finally found the issue (I think):
-			//client is added to a channel, but not added to a server
 			Client* target = server->getClientByNick(args[paramIndex++]);
 			if (!target || !channel.isMember(target->get_nick())) {
 				sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd,
@@ -205,13 +196,24 @@ o argument. Please report this bug to server admins in #bug_reports channel";
 			modeParameters += target->get_nick() + " ";
 		}
 		else {
-			sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
-			//TODO: replace with ERR_UNKNOWN MODE after I implement it
+			sender.sendMessage(ircErrorText(ERR_UNKNOWNMODE, cmd, sender));
 		}
 	}
-	//TODO: refactor the adhoc broadcast below:
-	std::string message = ":" + sender.get_nick() + "!" + sender.get_user()
-		+ "@" + sender.get_host() + " MODE " + channel.get_name() + " " + modeChanges
-		+ (modeParameters.empty() ? "" : " " + modeParameters) + "\r\n";
+	std::string message = formatModeChangeMessage(sender, channel, modeChanges,
+		modeParameters);
 	channel.broadcast(message);
+}
+
+std::string ModeCommand::formatModeChangeMessage(const Client& sender,
+	const Channel& channel,
+	const std::string& modeChanges,
+	const std::string& modeParameters) {
+	std::string msg = ":" + sender.get_nick() + "!" + sender.get_user() +
+	"@" + sender.get_host() + " MODE " + channel.get_name() + " " +
+	modeChanges;
+
+	if (!modeParameters.empty())
+	msg += " " + modeParameters;
+
+	return msg + "\r\n";
 }

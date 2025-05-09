@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/04 20:03:32 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:02:02 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /********* ERRORS ***********/
 /* Generic errors */
 #define ERR_INPUTTOOLONG		"417"
-#define ERR_UNKNOWNCOMMAND		"422"
+#define ERR_UNKNOWNCOMMAND		"421"
 
 /* Capability Errors */
 #define ERR_INVALIDCAPCMD		"410"  // Not supported parameters for CAP
@@ -41,6 +41,7 @@
 #define ERR_TOOMANYCHANNELS 	"405"  // Client joined too many channels
 #define ERR_BADCHANNELKEY		"475"  // Wrong channel password
 #define ERR_CHANNELISFULL		"471"  // Channel is at user limit (+l)
+#define ERR_UNKNOWNMODE         "472"  // Mode is not supported by the channel
 #define ERR_INVITEONLYCHAN		"473"  // Channel is invite-only (+i)
 #define ERR_BADCHANMASK			"476"  // Invalid channel name format
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/06 19:53:13 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/05/08 20:55:30 by josegar2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cp
 #just for tests
 MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))
 MODETEST_PATHS := $(addprefix src/, $(MODETEST_SRC))
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-fsanitize=address # commented due codespace issues with fsanitize
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-gdwarf-4 #-fsanitize=address # commented due codespace issues with fsanitize
 
 SRC_F = src/
 

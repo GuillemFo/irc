@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 14:19:34 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/07 21:13:50 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,20 @@ void partChannel(const Command& cmd, Client& sender)
 	}
 	else
 	{
-		sender.getServer()->getChannel(channel)->remClient(sender.get_nick()); // might segfault
+		Channel *pChannel = sender.getServer()->getChannel(channel);
+		pChannel->remClient(sender.get_nick()); // might segfault
 		sender.remChannel(channel);
 		std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
 		if (args.size() >= 2)
-			partLine += args[1];
+		partLine += args[1];
 		else
-			partLine += "User is leaving the channel";
+		partLine += "User is leaving the channel";
 		partLine += "\r\n";
 		sender.sendMessage(partLine);
-		sender.getServer()->getChannel(channel)->broadcast(partLine);
+		if (pChannel->isChannelEmpty())  // if empty remove channel
+			pChannel->getServer()->rmChannelMap(channel);
+		else
+			sender.getServer()->getChannel(channel)->broadcast(partLine);
 		return ;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 19:53:49 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:55:00 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,21 +102,13 @@ int	Server::rmClientMap(int fd)
 	return (1);
 }
 
-
-
-
-int	Server::rmChannelMap(std::string &str) // not needed by subject
+void 	Server::rmChannelMap(const std::string &str)
 {
-	if (_ch_map.find(name_tolower(str)) == _ch_map.end())
-		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
-	else
+	if (_ch_map.find(name_tolower(str)) != _ch_map.end())
 	{
-		
 		delete this->_ch_map[name_tolower(str)];
 		this->_ch_map.erase(name_tolower(str));
-		return (1);
 	}
-	return (-1);
 }
 
 const std::map<int, Client*>	&Server::getClientMap() const {return _cl_map;}
@@ -188,8 +180,6 @@ Client			*Server::getClientByNick(const std::string &s)
 	}
 	return NULL;
 }
-
-
 
 // this command should be called from server.init() function
 // the commented lines below should be uncommented for each new command handler

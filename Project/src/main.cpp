@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 20:31:08 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:55:49 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <arpa/inet.h>
 
 /*
 Your executable will be run as follows:
@@ -45,7 +46,7 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
-
+	std::cout << "Cleanup client" << std::endl;
 	s.getClient(fd)->partAllChannels(); //need to rm from operator too.
 	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
@@ -58,7 +59,9 @@ void handleNewConnection(Server &s)
 {
 	while (true)
 	{
-		int cl_fd = accept(s.get_serverFD(), NULL, NULL);
+		struct sockaddr_in client_addr;
+		socklen_t addr_len = sizeof(client_addr);
+		int cl_fd = accept(s.get_serverFD(), (struct sockaddr*)&client_addr, &addr_len);
 		if (cl_fd < 0)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -68,6 +71,7 @@ void handleNewConnection(Server &s)
 		}
 		setNonBlocking(cl_fd);
 		struct epoll_event ev;
+		memset(&ev, 0, sizeof(ev));
 		ev.events = EPOLLIN;
 		ev.data.fd = cl_fd;
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
@@ -77,7 +81,11 @@ void handleNewConnection(Server &s)
 			continue;
 		}
 		s.addClientMap(cl_fd);
+		char client_ip[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
+		s.getClient(cl_fd)->set_ip(std::string(client_ip));
 		std::cout << C_Y "New client connected: fd " C_RESET << cl_fd << std::endl;
+		std::cout << C_Y "IP : " << client_ip << std::endl;
 	}
 }
 
@@ -137,6 +145,7 @@ void handleRead(Server &s, int fd)
 			}
 
 			struct epoll_event ev;
+			memset(&ev, 0, sizeof(ev));
 			ev.events = EPOLLIN | EPOLLOUT;
 			ev.data.fd = fd;
 			epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
@@ -167,6 +176,7 @@ void handleSend(Server &s, int fd)
 	if (s.getClient(fd)->isOutEmpty())
 	{
 		struct epoll_event ev;
+		memset(&ev, 0, sizeof(ev));
 		ev.events = EPOLLIN;
 		ev.data.fd = fd;
 		epoll_ctl(s.get_epollFD(), EPOLL_CTL_MOD, fd, &ev);
@@ -245,6 +255,7 @@ int main(int ac, char **av)
 
 		s.set_epollFD(epoll_fd);
 		struct epoll_event ev;
+		memset(&ev, 0, sizeof(ev));
 		ev.events = EPOLLIN | EPOLLET;
 		ev.data.fd = s.get_serverFD();
 			

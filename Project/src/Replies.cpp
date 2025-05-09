@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/06 20:48:53 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:55:21 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static std::map<std::string, std::string> initReplyFormats() {
     m.insert(std::make_pair(RPL_TOPICWHOTIME, "<client> <channel> <setter> <timestamp>"));
     m.insert(std::make_pair(RPL_NAMREPLY, "<client> <symbol> <channel> :")); // [prefix]<nick> [prefix]<nick>...
     m.insert(std::make_pair(RPL_ENDOFNAMES, "<client> <channel> :End of /NAMES list"));
-    m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <mode-params>"));
+    m.insert(std::make_pair(RPL_CHANNELMODEIS, "<client> <channel> <mode> <mode-params>"));
     m.insert(std::make_pair(RPL_INVITING, "<client> <nick> <channel>"));
     
     return m;
@@ -98,6 +98,40 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 		return fullreply;
 	}
 
+	if (code == RPL_CHANNELMODEIS) {
+		Channel* channel = sender.getServer()->getChannel(args[0]);
+		if (!channel) {
+			std::cout << "That is weird. This reply is sent from \
+handleChannelMode. You cannot get here if there is no such channel. "
+			<< "But getChannel returned NULL." << std::endl;
+			return "";
+		}
+		std::string modes = "+";
+		std::string parameters;
+		if (channel->isInviteOnly()) {
+			modes += "i";
+		}
+		if (channel->isTopicProtected()) 
+		{
+			modes += "t";
+		}
+		if (channel->isPassRequired()) {
+			if (channel->isOperator(name_tolower(sender.get_nick()))) {
+				modes += "k";
+				parameters += " " + channel->get_pass();
+			}
+		}
+		int channel_user_limit = channel->get_userLimit();
+		if (channel_user_limit) {
+			modes += "l";
+			parameters += " " + int_to_string(channel_user_limit);
+		}
+		std::string reply = ":" + sender.getServer()->getServerName() + " "
+			+ code + " " + sender.get_nick() + " " + args[0] + " "
+			+ modes + parameters + "\r\n";
+			return reply;
+	}
+
 	// Replace <nick>
 	if ((pos = reply.find("<nick>")) != std::string::npos) {
 		reply.replace(pos, 6, args[0]);
@@ -122,11 +156,18 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 			reply.replace(pos, 6, "Today is a good day :)");		
 	}
 
+	// Replace <mode> <mode-params> If empty NOTOPIC should be called
+	if ((pos = reply.find("<mode> <mode-params>")) != std::string::npos) {
+			reply.replace(pos, 20, sender.getServer()->getChannel(args[0])->getModesSet());		
+	}
+
 	if ((pos = reply.find("<servername>")) != std::string::npos) {
 		reply.replace(pos, 12, sender.getServer()->getServerName());
 	}
 	//  ****** SOME <args> missing for replacement
-
+	reply = ":" + sender.getServer()->getServerName() + " " + code + " " + reply;
 	// Construct the full IRC message
-	return ":" + sender.getServer()->getServerName() + " " + code + " " + reply + "\r\n";
+	if (reply.length() > 510)
+		reply = reply.substr(0, 510);
+	return reply + "\r\n";
 }
