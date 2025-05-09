@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:00 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 09:34:01 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:17:44 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Bot {
 		bool _connected;
 
 		void sendRaw(const std::string& msg);
-		void handleMessage(const std::string& msg);
+		// void handleMessage(const std::string& msg);
 		void setPassword(const std::string& password);
 		bool connectToServer(const std::string& server, int port,
 			const std::string& password);
@@ -39,6 +39,7 @@ class Bot {
 		~Bot();
 		void run();
 		bool isConnected() const;
+		void handleMessage(const std::string& msg);
 };
 
 #endif

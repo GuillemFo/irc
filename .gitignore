@@ -11,3 +11,5 @@ ircserv
 CapTests
 ModeTests
 .DS_Store
+bot
+bot_test
