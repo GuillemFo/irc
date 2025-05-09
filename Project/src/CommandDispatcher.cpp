@@ -50,14 +50,6 @@ void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
 		it->second->execute(cmd, sender);
 	}
 	else {
-		// std::cout << "Error: command *\\" << name << "\\* not found" << std::endl;
-		//TODO: replace message with macro (e.g. ERRNOSUCHCOMMAND)
-		// implement like this:
-		// std::string err_msg;
-		// err_msg = ERRNOSUCHCOMMAND(sender->get_nick, name);
-		// std::cout << err_msg;
-		// TODO: provide actual functionality for sending back the reply to the sender
-		// like 
 		sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, cmd, sender));
 	}
 }
