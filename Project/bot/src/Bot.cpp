@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:06 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 09:49:06 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/10 01:16:15 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ Bot::Bot() {};
 Bot::Bot(const std::string& server, int port, const std::string& password)
 	: _socket_fd(-1), _connected(false) {
 	_connected = connectToServer(server, port, password);
+	if (_connected) {
+		this->_commands.push_back(new BotPingCommand());
+	}
 }
 
 Bot::~Bot() {
@@ -73,23 +76,40 @@ void Bot::sendRaw(const std::string& msg) {
 }
 
 void Bot::handleMessage(const std::string& msg) {
+	// std::cout << "[DEBUG] handleMessage() called with:\n" << msg << std::endl;
 	//TODO: probably use compare instead to work avoid getting ping from 
 	// a random position in the message (if someone send a message 
 	// containing PING)
-	if (msg.find(PING) == 0) {
+	// if (msg.find(PING) == 0) {
+	if (msg.compare(0, 4, PING) == 0) {
 		sendRaw("PONG" + msg.substr(4));
+		// std::cout << "WE HAVE FOUND PING" << std::endl;
 		return ;
 	}
 	size_t exclamation = msg.find('!');
-	size_t colon = msg.find(" :");
+	// size_t colon = msg.find(" :");
+	size_t colon = msg.find(':');
 	if (colon != std::string::npos && exclamation != std::string::npos) {
 		std::string sender = msg.substr(1, exclamation - 1);
-		std::string content = msg.substr(colon + 2);
-		size_t limit = this->_commands.size();
-		for (size_t i = 0; i < limit; ++i) {
-			if (this->_commands[i]->matches(content)) {
-				sendRaw(this->_commands[i]->respond(sender));
-				break;
+		std::string content = msg.substr(colon + 1);
+		// std::cout<< "DEBUG INSIDE IF LOOP. COLON IS NOT NPOS" << std::endl;
+		// std::cout << "Extracted content: [" << content << "]" << std::endl;
+		size_t privmsgPos = msg.find("PRIVMSG ");
+		if (privmsgPos != std::string::npos) {
+			size_t limit = this->_commands.size();
+			size_t targetStart = privmsgPos + 8;
+			size_t targetEnd = msg.find(' ', targetStart);
+			std:: string target = msg.substr(targetStart, 
+											targetEnd - targetStart);
+			for (size_t i = 0; i < limit; ++i) {
+				if (this->_commands[i]->matches(content)) {
+					std::string response = "PRIVMSG " + target + " :"
+						+ this->_commands[i]->respond(sender);
+					// std::cout << "TESTING: " << response << std::endl;
+					sendRaw(response);
+					// sendRaw(this->_commands[i]->respond(sender));
+					break;
+				}
 			}
 		}
 	}
@@ -100,11 +120,21 @@ void Bot::run() {
 	while (true) {
 		std::memset(buffer, 0, BUFFER_SIZE);
 		int bytes = recv(this->_socket_fd, buffer, BUFFER_SIZE - 1, 0);
+		std::string raw(buffer);
+		// std::cout << "[RECV] \n" << raw << "[END OF RCV]" << std::endl;
 		if (bytes <= 0) {
 			break;
 		}
 		std::string msg(buffer);
-		std::cout << msg;
-		handleMessage(msg);
+		std::stringstream ss(msg);
+		std::string line;
+		while (std::getline(ss, line)) {
+			if (!line.empty() && line[line.size() - 1] != '\r')
+			{
+				line.erase(line.size() - 1);
+			}
+			// std::cout << msg;
+			handleMessage(line);
+		}
 	}
 }
