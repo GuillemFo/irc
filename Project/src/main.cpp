@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/10 18:37:54 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 20:44:20 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,12 @@ int main(int ac, char **av)
 		setNonBlocking(sv_fd);
 		Server s(sv_fd, atoi(av[1]), av[2]);
 		
-		s.registerAllCommands();
+		if (!s.registerAllCommands())
+		{
+			std::cout << "Unable to register Command Handlers" << std::endl;
+			return (-1);
+
+		}
 		s.set_server_name("127.0.0.1");
 		struct sockaddr_in server_addr;
 		memset(&server_addr, 0, sizeof(server_addr));

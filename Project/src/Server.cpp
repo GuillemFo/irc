@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/10 18:41:55 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 20:43:07 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,54 +168,23 @@ Client			*Server::getClientByNick(const std::string &s)
 	return NULL;
 }
 
-void Server::registerAllCommands() {
-	_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
-	_dispatcher.registerHandler("JOIN", new JoinCommand(this));
-	_dispatcher.registerHandler("NICK", new NickCommand(this));
-	_dispatcher.registerHandler("USER", new UserCommand(this));
-	_dispatcher.registerHandler("PASS", new PassCommand(this));
-	_dispatcher.registerHandler("CAP", new CapCommand(this));
-	_dispatcher.registerHandler("QUIT", new QuitCommand(this));
-	_dispatcher.registerHandler("PING", new PingCommand(this));
-	_dispatcher.registerHandler("PART", new PartCommand(this));
-	_dispatcher.registerHandler("KICK", new KickCommand(this));
-	_dispatcher.registerHandler("MODE", new ModeCommand(this));
-	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
-	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
-	_dispatcher.registerHandler("WHO", new WhoCommand(this));
+bool Server::registerAllCommands() {
+	bool	r = true;
 
-	
-	// TODO: add error handling, so that if empty string is given or non-existing
-	// handler, the program exits cleanly (this is a whole other set of functions
-	// that we will need to implement)
-	// in this particular case maybe make this funciton return a bool
-	// and make all other functions return a bool. then we can do
-	//return _dispatcher.registerHandler("JOIN", new JoinCommand(this)) &&
-	//		_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this)) && ...
-	// and in the server.init() we put:
-	// if (!registerAllCommands) {
-	//	clean_up();
-	//}
+	r = r && _dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
+	r = r && _dispatcher.registerHandler("JOIN", new JoinCommand(this));
+	r = r && _dispatcher.registerHandler("NICK", new NickCommand(this));
+	r = r && _dispatcher.registerHandler("USER", new UserCommand(this));
+	r = r && _dispatcher.registerHandler("PASS", new PassCommand(this));
+	r = r && _dispatcher.registerHandler("CAP", new CapCommand(this));
+	r = r && _dispatcher.registerHandler("QUIT", new QuitCommand(this));
+	r = r && _dispatcher.registerHandler("PING", new PingCommand(this));
+	r = r && _dispatcher.registerHandler("PART", new PartCommand(this));
+	r = r && _dispatcher.registerHandler("KICK", new KickCommand(this));
+	r = r && _dispatcher.registerHandler("MODE", new ModeCommand(this));
+	r = r && _dispatcher.registerHandler("TOPIC", new TopicCommand(this));
+	r = r && _dispatcher.registerHandler("INVITE", new InviteCommand(this));
+	r = r && _dispatcher.registerHandler("WHO", new WhoCommand(this));
 
-}
-
-void Server::printAllClientsInfo() const {
-	std::cout << "----- Client Info Dump -----" << std::endl;
-
-	if (_cl_map.empty()) {
-		std::cout << "No clients connected to the server." << std::endl;
-		return;
-	}
-
-	for (std::map<int, Client*>::const_iterator it = _cl_map.begin(); it != _cl_map.end(); ++it) {
-		Client* client = it->second;
-		if (client) {
-			std::cout << "Client FD: " << it->first << std::endl;
-			std::cout << "  Nickname: " << client->get_nick() << std::endl;
-			std::cout << "  Username: " << client->get_user() << std::endl;
-			std::cout << "  Host: " << client->get_host() << std::endl;
-			std::cout << "  Is Registered: " << (client->isRegistered() ? "Yes" : "No") << std::endl;
-			std::cout << "-----------------------------" << std::endl;
-		}
-	}
+	return r;
 }

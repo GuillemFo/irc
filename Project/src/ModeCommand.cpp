@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/10 20:09:07 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/10 20:11:31 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 				if (user_limit < 1) {
 					sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS,
 													cmd, sender));
-					sender.sendMessage("+l takes a positive integer \
-as argument. invalid input is was given.");
 					return ;
 				}
 				else {

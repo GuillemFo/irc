@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:20:22 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 21:02:32 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,6 @@ void	Client::sendAllChannels(const std::string &theMessage)
 
 void Client::addOutMessage(const std::string& message) {
 	std::string temp = message;
-	std::cout << ">>>" + _nick + ": " + message << std::endl;
 	this->_out.addMessage(temp);
 }
 

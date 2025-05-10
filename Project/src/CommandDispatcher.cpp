@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 11:20:36 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 20:44:36 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,12 @@ CommandDispatcher::~CommandDispatcher() {
 	
 }
 
-void	CommandDispatcher::registerHandler(const std::string& name, 
+bool	CommandDispatcher::registerHandler(const std::string& name, 
 											CommandHandler* handler) {
+	if (! handler)
+		return false;
 	_handlers[name] = handler;
+	return true;
 }
 
 void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {
