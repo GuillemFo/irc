@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/08 21:02:05 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:38:13 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static std::map<std::string, std::string> createErrorFormats() {
     
     // Nickname errors
     m.insert(std::make_pair(ERR_NONICKNAMEGIVEN, "<client> :No nickname given"));
-    m.insert(std::make_pair(ERR_ERRONEUSNICKNAME, "<client> <nick> :Erroneous nickname"));
+    m.insert(std::make_pair(ERR_ERRONEUSNICKNAME, "<client> <nick> :Erroneous nickname or longer than 9 chars"));
     m.insert(std::make_pair(ERR_NICKNAMEINUSE, "<client> <nick> :Nickname is already in use"));
     m.insert(std::make_pair(ERR_NICKCOLLISION, "<client> <nick> :Nickname collision KILL"));
     
