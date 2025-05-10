@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/09 23:38:13 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:11:11 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static std::map<std::string, std::string> createErrorFormats() {
     m.insert(std::make_pair(ERR_ERRONEUSNICKNAME, "<client> <nick> :Erroneous nickname or longer than 9 chars"));
     m.insert(std::make_pair(ERR_NICKNAMEINUSE, "<client> <nick> :Nickname is already in use"));
     m.insert(std::make_pair(ERR_NICKCOLLISION, "<client> <nick> :Nickname collision KILL"));
+    m.insert(std::make_pair(ERR_INVALIDUSERNAME, "<client> :Erroneous username or longer than 50 chars"));
     
     // Channel errors
     m.insert(std::make_pair(ERR_NOTONCHANNEL, "<client> <channel> :You're not on that channel"));
