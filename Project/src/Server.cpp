@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/10 18:37:25 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 18:41:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,20 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
 	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
 	_dispatcher.registerHandler("WHO", new WhoCommand(this));
+
+	
+	// TODO: add error handling, so that if empty string is given or non-existing
+	// handler, the program exits cleanly (this is a whole other set of functions
+	// that we will need to implement)
+	// in this particular case maybe make this funciton return a bool
+	// and make all other functions return a bool. then we can do
+	//return _dispatcher.registerHandler("JOIN", new JoinCommand(this)) &&
+	//		_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this)) && ...
+	// and in the server.init() we put:
+	// if (!registerAllCommands) {
+	//	clean_up();
+	//}
+
 }
 
 void Server::printAllClientsInfo() const {
