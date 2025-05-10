@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/10 18:30:14 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 22:58:26 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,40 +66,11 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 	std::vector<std::string> args = cmd.getArgs();
 
 	bool	addMode = true;
-	//TODO: maybe add check if args[1] exists to avoid segfaults.
-	// even though we can only get here if args[1] does exist.
 	std::string					modeString;
-	//TODO: make validModes argument a macro
 	std::string					validModes = "itkol";
 	size_t						argsSize = args.size();
-	// std::vector<std::string>	parameters;
 	modeString += args[1];
-	// for (size_t i = 1; i < argsSize; ++i) {
-	// 	const std::string& part = args[i];
-	// 	if (!part.empty() && (part[0] == '+' || part[0] == '-')) {
-	// 		bool argIsValidMode = true;
-	// 		for (size_t j = 1; j < part.length(); ++j) {
-	// 			if(validModes.find(part[j]) == std::string::npos) {
-	// 				//TODO: implement 472 ERR_UNKNOWNMODE here
-	// 				sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, ))
-	// 				argIsValidMode = false;
-	// 				break;
-	// 			}
-	// 		}
-	// 		if (argIsValidMode) {
-	// 			modeString += part;
-	// 			continue;
-	// 		}	
-	// 	}
-	// 	parameters.push_back(part);
-	// }
 	size_t modeStringLength = modeString.length();
-	//TODO: add check for whether modeString is not empty
-	// below is a stub, but better use error codes
-	// if (!modeStringLength) {
-	// 	std::cout << "no valid modes in command arguments" << std::endl;
-	// 	return ;
-	// }
 	size_t paramIndex = 2;
 	std::string modeChanges;
 	std::string modeParameters;
@@ -148,9 +119,17 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 					return ;
 				}
 				int user_limit = std::atoi(args[paramIndex ++].c_str());
-				//TODO: add behaviour if user_limit is not a valid int
-				channel.set_userLimit(user_limit);
-				modeParameters += int_to_string(user_limit) + " ";
+				if (user_limit < 1) {
+					sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS,
+													cmd, sender));
+					sender.sendMessage("+l takes a positive integer \
+as argument. invalid input is was given.");
+					return ;
+				}
+				else {
+					channel.set_userLimit(user_limit);
+					modeParameters += int_to_string(user_limit) + " ";
+				}
 			}
 			else {
 				channel.clear_userLimit();
@@ -165,14 +144,6 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 			}
 			Server* server = channel.getServer();
 			if (!server) {
-				// std::cout << "AAAAAAAAAAAAA SERVER IS NULL!!!" << std::endl;
-				//TODO: this situation should never happen under standard operation
-				// of a server. so behaviour must be something exceptional
-				// though terminating connection because of that would be 
-				// too extreme. IMPLEMENT APPROPRIATE BEHAVIOUR
-				// sending err_msg is probably just a placeholder. TBD
-				// also returning here means we do not get to send to the user the 
-				// modeChanges string. So at least this has to be changed.
 				std::string err_msg = "INTERNAL ERROR: could not process. \
 o argument. Please report this bug to server admins in #bug_reports channel";
 				sender.sendMessage(err_msg);
