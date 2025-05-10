@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/09 11:27:02 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 18:30:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ o argument. Please report this bug to server admins in #bug_reports channel";
 				return;
 			}
 			Client* target = server->getClientByNick(args[paramIndex++]);
-			if (!target || !channel.isMember(target->get_nick())) {
+			if (target == NULL || !target || !channel.isMember(target->get_nick())) {
 				sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd,
 												sender));
 				return ;
