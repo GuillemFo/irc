@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/05 16:48:12 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:23:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ JoinCommand& JoinCommand::operator=(const JoinCommand& src) {
 JoinCommand::~JoinCommand () {}
 JoinCommand::JoinCommand (Server* server) : _server(server) {}
 
-// channel    =  ( "#" / "+" / ( "!" channelid ) / "&" ) chanstring
-// [ ":" chanstring ]
-// chanstring = any octet except NUL, BELL, CR, LF, " ", "," and ":"
 bool JoinCommand::isValidChannelName(const std::string& name) {
 	if (name.empty() || 
 			(name[0] != '#' && name[0] != '&') ||
@@ -55,33 +52,31 @@ void joinChannel(const Command& cmd, Client& sender)
 		sender.sendMessage(ircErrorText(ERR_BADCHANMASK, cmd, sender));
 		return ;
 	}
-	//std::cout << "Executing JOIN command. Joining channel: "
-	//	<< channelName << std::endl;
+
 	if (!sender.getServer()->channelExists(channelName))
 	{
-		sender.getServer()->addChannelMap(channelName);  // add new channel into the server channel map
-	} else { //exisitng channel. See if it's possible to join
+		sender.getServer()->addChannelMap(channelName);
+	} else {
 		if (sender.getServer()->getChannel(channelName)->isPassRequired())
 		{
-			if (args.size() < 2 || args[1].empty()) {  // no password provided
+			if (args.size() < 2 || args[1].empty()) {
 				sender.sendMessage(ircErrorText(ERR_BADCHANNELKEY, cmd, sender));
 				return ;
 			}
 			const std::string& pass = args[1];
 			if (!sender.getServer()->getChannel(channelName)->check_pass(pass)) 
-			{ //incorrect password
+			{
 				sender.sendMessage(ircErrorText(ERR_BADCHANNELKEY, cmd, sender));
 				return ;
 			}
 		}
-		// No password required or is correct here
+	
 		if (sender.getServer()->getChannel(channelName)->isMember(sender.get_nick()))
-		{ // already in, no need to send anything acording to RFC
-			// sender.sendMessage(ircErrorText(ERR_USERONCHANNEL, cmd, sender));
+		{
 			return ;
 		}
 		else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
-		{ // can't join without the INVITE
+		{
 			if (sender.getServer()->getChannel(channelName)->isInvited(sender.get_nick()))
 			{
 				sender.getServer()->getChannel(channelName)->remInvited(sender.get_nick());
@@ -92,7 +87,7 @@ void joinChannel(const Command& cmd, Client& sender)
 			}
 		}
 		else if (sender.getServer()->getChannel(channelName)->isChannelFull())
-		{ // channel full
+		{
 			sender.sendMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
 			return ;
 		}
@@ -100,9 +95,7 @@ void joinChannel(const Command& cmd, Client& sender)
 	}
 	sender.getServer()->getChannel(channelName)->addClient(&sender);
 	sender.addChannel(sender.getServer()->getChannel(channelName));
-	//sender.addOutMessage(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
 	sender.getServer()->getChannel(channelName)->broadcast(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
-	// TODO RPL_TOPIC,  RPL_NAMREPLY,  RPL_ENDOFNAMES
 	if (sender.getServer()->getChannel(args[0])->get_topic().empty())
 		sender.addOutMessage(ircReplyText(RPL_NOTOPIC, cmd, sender));
 	else
@@ -126,7 +119,6 @@ void JoinCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
 		return ;
 	}
-	//need a checker for args 1 2 etc to loop the args because it can contain a password;
 	if (args[0] == "0") {
 		std::string allChannels = sender.getListOfChannels();
 		if (!allChannels.empty()) {

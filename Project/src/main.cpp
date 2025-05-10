@@ -3,27 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:00:59 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/09 23:26:10 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include <arpa/inet.h>
 
-/*
-Your executable will be run as follows:
-./ircserv <port> <password>
-*/
 
+//MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
+//BUFFER_SIZE → how many bytes you read from a socket at once.
 
-//https://www.suchprogramming.com/epoll-in-3-easy-steps/
-/*
-	MAX_EVENTS → how many FDs epoll_wait will return at once (not max clients).
-	BUFFER_SIZE → how many bytes you read from a socket at once.
-*/
 
 #define MAX_EVENTS 128
 #define BUFFER_SIZE 512
@@ -47,7 +40,7 @@ void	setNonBlocking(int sv_fd)
 void cleanupClient(Server &s, int fd)
 {
 	std::cout << "Cleanup client" << std::endl;
-	s.getClient(fd)->partAllChannels(); //need to rm from operator too.
+	s.getClient(fd)->partAllChannels();
 	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
@@ -103,7 +96,7 @@ void handleRead(Server &s, int fd)
 	char buffer[BUFFER_SIZE];
 	Client *client = s.getClient(fd);
 	if (!client) {
-		std::cout << "Invalid client fd: " << fd << std::endl; // probably change to std::cerr
+		std::cout << "Invalid client fd: " << fd << std::endl;
 		return;
 	}
 	while (true)
@@ -130,12 +123,11 @@ void handleRead(Server &s, int fd)
 			client->_in.append(tmp);
 				if (!isValidIRCMessage(client->_in.getRaw()))
 				{
-					client->sendMessage(client->get_nick() + " :Input line was too long\r\n"); // is sent multiple times... 05.05.25 01.07 pm
+					client->sendMessage(client->get_nick() + " :Input line was too long\r\n");
 					client->_in.clear();
 					return ;
 				}
 			
-			//std::cout << "Received from " << fd << ": " << replace_tool(replace_tool(buffer, "\r", "/r"), "\n", "/n\n"); //buffer overflow when nc with massive text
 			while (client->_in.hasCompleteCommand())
 			{
 				Parser parser;
@@ -159,9 +151,9 @@ void handleSend(Server &s, int fd)
 	{
 		return ;
 	}
-	if (s.getClient(fd)->_out.isEmpty())
+	if (s.getClient(fd)->isOutEmpty())
 		return ;
-	std::string msg = s.getClient(fd)->_out.getMessage();
+	std::string msg = s.getClient(fd)->getOutMessage();
 	ssize_t sent_bytes = send(fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);  // nosignal to protect from sending to a close socket
 	if (sent_bytes == -1)
 	{
@@ -172,7 +164,7 @@ void handleSend(Server &s, int fd)
 		return;
 	}
 	msg.erase(0, sent_bytes); // with the count of sent bytes we remove that number from the out buffer and continue
-	s.getClient(fd)->_out.addOffset(sent_bytes);
+	s.getClient(fd)->popCharsSent(sent_bytes);
 	if (s.getClient(fd)->isOutEmpty())
 	{
 		struct epoll_event ev;
@@ -186,8 +178,6 @@ void handleSend(Server &s, int fd)
 
 void handle_sigint(int sig)
 {
-	//if (sig)
-	//	exit(0);
 	(void) sig;
 	Server::mustExit = true;
 }
@@ -305,5 +295,5 @@ int main(int ac, char **av)
 	}
 }	
 
-// https://www.suchprogramming.com/epoll-in-3-easy-steps/ 
+
 

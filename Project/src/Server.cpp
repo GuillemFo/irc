@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 20:55:00 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:32:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@ Server::Server(int sv_fd, int port, std::string sv_pass) : _sv_fd(sv_fd), _port(
 
 Server::~Server()
 {
-	// loop to delete all clients and channels due new[] in each map!!
-	// delete ->second (as the exam :) )
-	// dont forget to .clear _cl_map and _ch_map
 	std::map<std::string , Channel*>::iterator it;
 	for (it = _ch_map.begin(); it != _ch_map.end(); ++it){
 		delete it->second;
@@ -29,9 +26,9 @@ Server::~Server()
 	}
 }
 
-Server::Server(const Server &other){*this = other;}	//no need??
+Server::Server(const Server &other){*this = other;}
 
-Server &Server::operator=(const Server &other)	//no need??
+Server &Server::operator=(const Server &other)
 {
 	if (this != &other)
 	{
@@ -114,16 +111,6 @@ void 	Server::rmChannelMap(const std::string &str)
 const std::map<int, Client*>	&Server::getClientMap() const {return _cl_map;}
 
 const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch_map;}
-
-
-
-// void	Server::welcome_msg(const std::string &nickname)
-// {
-// 	std::stringstream message;
-// 	message << ":" << _sv_name << " 001 " << nickname << " :Welcome to our IRC server " << nickname << "!" << std::endl;
-// 	this->send_out(message.str());
-// 	message.clear();
-// }
 
 
 bool	Server::nickExists(const std::string &theNick)

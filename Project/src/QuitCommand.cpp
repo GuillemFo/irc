@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/07 17:48:49 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:31:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 			out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT :quitting\r\n";
 		std::map<std::string, Channel*>::iterator it;
 		std::set<std::string> commonNicks;
-		for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it) // not for all channels, once per client!!
+		for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it)
 		{
 			std::map<std::string, Client*>::iterator itc;
 			std::pair<std::set<std::string>::iterator, bool> inserted;
@@ -53,8 +53,6 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 				std::cout << "member nick " << itc->first << " member pointer " << itc->second << std::endl;
 				inserted = commonNicks.insert(itc->first);
 				if (inserted.second && sender.get_nick() != itc->second->get_nick()) {
-				//	std::string channel = it->first;
-				//	sender.getServer()->getChannel(channel)->broadcast(out, sender);
 					itc->second->sendMessage(out);
 				}
 			}

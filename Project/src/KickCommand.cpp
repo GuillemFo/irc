@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 20:42:21 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:24:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void KickChannel(const Command& cmd, Client& sender)
 	}
 	if (!sender.getServer()->getChannel(channelName)->isMember(target))
 	{
-		sender.sendMessage(ircErrorText(ERR_USERNOTINCHANNEL, cmd, sender)); //need to fix 04.05 08.09 pm
+		sender.sendMessage(ircErrorText(ERR_USERNOTINCHANNEL, cmd, sender));
 		return ;
 	}
 	std::string commentPrefix = ":" + sender.get_nick();
@@ -95,7 +95,7 @@ void KickCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
 
-	if (args.empty() || args.size() < 2) { // at least one channel and one user
+	if (args.empty() || args.size() < 2) {
 		std::cout << "No arguments in the KICK command. Aborting." << std::endl;
 		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
@@ -107,12 +107,11 @@ void KickCommand::execute(const Command& cmd, Client& sender) {
 	}
 	
 	
-	// The loop does not work properly 04.05.25 09.03pm
 	Command splitcmd(cmd);
 	std::vector<std::string> channels = split_arg(args[0]);
 	std::vector<std::string> users = split_arg(args[1]);
 	if (channels.size() > 1 && channels.size() != users.size())
-	{	// if there is more than 1 chan number of chan must be = to number of users
+	{
 		sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS, cmd, sender));
 		return ;
 	}
@@ -125,9 +124,8 @@ void KickCommand::execute(const Command& cmd, Client& sender) {
 		++itu;
 		if (channels.size() > 1)
 			++itc;
-		if (args.size() > 2)	//reason
+		if (args.size() > 2)	
 			splitcmd.addArg(args[2]);
-		//if no target send error for that command?
 		KickChannel(splitcmd, sender);
 	}
 	

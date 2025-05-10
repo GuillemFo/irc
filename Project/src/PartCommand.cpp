@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PartCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/07 21:13:50 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:30:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ void partChannel(const Command& cmd, Client& sender)
 	}
 	else if (!sender.getServer()->getChannel(channel)->isMember(sender.get_nick()))
 	{
-		sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender)); //dont know if this is needed.
+		sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd, sender));
 		return ;
 	}
 	else
 	{
 		Channel *pChannel = sender.getServer()->getChannel(channel);
-		pChannel->remClient(sender.get_nick()); // might segfault
+		pChannel->remClient(sender.get_nick());
 		sender.remChannel(channel);
 		std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
 		if (args.size() >= 2)
@@ -54,7 +54,7 @@ void partChannel(const Command& cmd, Client& sender)
 		partLine += "User is leaving the channel";
 		partLine += "\r\n";
 		sender.sendMessage(partLine);
-		if (pChannel->isChannelEmpty())  // if empty remove channel
+		if (pChannel->isChannelEmpty())
 			pChannel->getServer()->rmChannelMap(channel);
 		else
 			sender.getServer()->getChannel(channel)->broadcast(partLine);
@@ -71,7 +71,7 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 	}
 	if (!sender.getOkLogin())
 	{
-		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
 		return ;
 	}
 	Command splitcmd(cmd);
@@ -80,7 +80,7 @@ void PartCommand::execute(const Command& cmd, Client& sender) {
 	for (it = targets.begin(); it != targets.end(); ++it) {
 		splitcmd.clearArgs();
 		splitcmd.addArg(*it);
-		if (args.size() >= 2) // add reason if exists
+		if (args.size() >= 2)
 			splitcmd.addArg(args[1]);
 		partChannel(splitcmd, sender);
 	}

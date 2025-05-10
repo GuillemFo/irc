@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 21:02:07 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:14:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <csignal>
-#include <cstdio> //perror
 
 #include "Colors.hpp"
 #include "Client.hpp"
@@ -83,9 +82,6 @@ class Server
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;
 		std::map<std::string , Channel*>	_ch_map;
-		//**faltaria timestamp d'inici, pel RPL_STATSUPTIME
-		//**server version and MOTD
-		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
 
 		static bool			mustExit;

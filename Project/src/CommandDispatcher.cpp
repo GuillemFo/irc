@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/08 21:02:11 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:20:36 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,12 @@ CommandDispatcher::~CommandDispatcher() {
 		delete it->second;
 	}
 	_handlers.clear();
-	//std::cout << "CommandDispatcher deleted. All command handlers have been "
-		//<< "cleared." << std::endl;
+	
 }
 
 void	CommandDispatcher::registerHandler(const std::string& name, 
 											CommandHandler* handler) {
 	_handlers[name] = handler;
-	//TODO: maybe change to return type to bool and return false if !name or !handler?
 }
 
 void	CommandDispatcher::dispatch(const Command& cmd, Client& sender) {

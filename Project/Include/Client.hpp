@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:35:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 15:16:07 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:30:26 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@
 
 
 
-#define NICK_NOT_ALLOWED_CHARS " ,*?!@" // nick can't cotain this chars
+#define NICK_NOT_ALLOWED_CHARS " ,*?!@"
 #define NICK_NOT_STARTING "$:"
-#define PREFIX "@" // the only channel membership allowed would be operator
-					// the char . should not be included in nickname
+#define PREFIX "@"
 #define USERLEN	64 //length of username in USER message 
 #define USER_NOT_ALLOWED_CHARS " \0\r\n"
 
-#define NICKLEN	9 // MUST BE specified, 9 in RFC, 30 or 31 are typical values 
+#define NICKLEN	9
 
 class Server ;
 class Channel ;
@@ -46,13 +45,12 @@ class Client
 		bool				_registered; //nick OK
 		bool				_okLogin;	// pass ok and nick ok
 		std::map<std::string, Channel*> _channels;
-		
+		OutBuffer			_out;
 		
 	public:
-		OutBuffer			_out;
 		InBuffer			_in;
 
-		Client(int fd);	//to at least know who to send the errors
+		Client(int fd);
 		Client(Server *server, int _client_fd); 
 		~Client();
 		Client(const Client &other);
@@ -87,8 +85,8 @@ class Client
 		std::string getListOfChannels();
 		void	partAllChannels();
 		
-		std::string	getClient(); // <nick> [ "!" <user> ] [ "@" <host> ]
-		std::string	getSource(); // :<nick> [ "!" <user> ] [ "@" <host> ]
+		std::string	getClient();
+		std::string	getSource();
 		bool		isRegistered();
 
 		void		sendMessage(const std::string &theMessage);

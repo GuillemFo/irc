@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/01 14:21:15 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:26:14 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,15 @@ void PrivmsgCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	if (args.size() < 1) {
 		sender.sendMessage(ircErrorText(ERR_NORECIPIENT, cmd, sender));
-		return ; // TODO: updated functionality so that error message is sent back to the clien
+		return ;
 	}
 	if (args.size() < 2) {
 		sender.sendMessage(ircErrorText(ERR_NOTEXTTOSEND, cmd, sender));
-		return ; // TODO: updated functionality so that error message is sent back to the clien
+		return ;
 	}
 	if (!sender.getOkLogin())
 	{
-		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender)); //temp error, need something to tell it has not introduced the pass or has not registered.
-		std::cout << sender._out.getMessage() << std::endl;
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
 		return ;
 	}
 	Command splitcmd(cmd);

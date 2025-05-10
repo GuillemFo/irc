@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/08 15:18:07 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:20:22 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,12 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 }
 
 Client::~Client() {
-	//this->partAllChannels();
-	// has to be removed from client map in Server
 	this->_in.clear();
 }
 
 Client::Client(const Client &other){*this = other;}
 
-Client &Client::operator=(const Client &other)	//do we need this??
+Client &Client::operator=(const Client &other)
 {
 	if (this != &other)
 	{
@@ -86,40 +84,27 @@ void	Client::setRegistered()
 	_registered = true;
 }		
 
-
-/*
-std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
-{
-	
-}
-*/
-
-
 bool	Client::isRegistered() {return this->_registered;}
 
 
 void	Client::partChannel(const std::string &channelName) 
 {
 	Channel *pChannel;
-	// check if channelName is not empty or doesn't exist
 	if ((channelName.empty()) ||
 	! this->_server->channelExists(channelName))
 		throw std::runtime_error(ERR_NOSUCHCHANNEL);
-		// Get pointer to channel object
 	pChannel = this->_server->getChannel(channelName);
 	if (! pChannel)
-		throw std::runtime_error(ERR_NOSUCHCHANNEL); // it shouldn't happen
-	// check if in channel
+		throw std::runtime_error(ERR_NOSUCHCHANNEL);
 	if (! pChannel->isMember(this->_nick))
 		throw std::runtime_error(ERR_NOTONCHANNEL);
-	// remove client from client map in channel and from channel map in client
 	pChannel->remClient(this->get_nick());
 	this->_channels.erase(name_tolower(channelName));
-	if (pChannel->isChannelEmpty())  // if empty remove channel
+	if (pChannel->isChannelEmpty())
 		pChannel->getServer()->rmChannelMap(channelName);
 }
 
-std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part all channels
+std::string Client::getListOfChannels() {
 	std::map<std::string, Channel *>::iterator it = this->_channels.begin();
 	std::string result;
 
@@ -134,8 +119,6 @@ std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part al
 
 }
 
-// Leave all channels after receiving a JOIN 0 or quit server
-// Also shoud check if is op and rm from op.
 void Client::partAllChannels()
 {
 	while (!this->_channels.empty())
@@ -143,7 +126,7 @@ void Client::partAllChannels()
 		std::string name = this->_channels.begin()->first;
 		try {
 			this->partChannel(name);
-		} catch (...) {}  // still safe
+		} catch (...) {}
 	}
 }
 
@@ -215,7 +198,7 @@ const OutBuffer& Client::getOutBuffer() const {
 void	Client::cl_Epoll_In()
 {
 	struct epoll_event ev;
-	ev.events = EPOLLIN; //| EPOLLET;
+	ev.events = EPOLLIN;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);
 }
@@ -224,7 +207,7 @@ void	Client::cl_Epoll_In_Out()
 {
 	struct epoll_event ev;
 	memset(&ev, 0, sizeof(ev)); // Explicit zeroing to avoid some errors
-	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
+	ev.events = EPOLLIN | EPOLLOUT;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	
 }
