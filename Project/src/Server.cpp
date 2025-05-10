@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:32:50 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 18:41:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ Client	*Server::getClient(const int &fd)
 	it = this->_cl_map.find(fd);
 	if (it == this->_cl_map.end())
 	{
-		return 0; // need to expand for proper error!
+		return NULL;
 	}
 	return it->second;
 }
@@ -168,9 +168,6 @@ Client			*Server::getClientByNick(const std::string &s)
 	return NULL;
 }
 
-// this command should be called from server.init() function
-// the commented lines below should be uncommented for each new command handler
-// that will be implemented
 void Server::registerAllCommands() {
 	_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
 	_dispatcher.registerHandler("JOIN", new JoinCommand(this));
@@ -180,15 +177,13 @@ void Server::registerAllCommands() {
 	_dispatcher.registerHandler("CAP", new CapCommand(this));
 	_dispatcher.registerHandler("QUIT", new QuitCommand(this));
 	_dispatcher.registerHandler("PING", new PingCommand(this));
-	// _dispatcher.registerHandler("PONG", new PongCommand(this)); // not needed by subject
-	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this)); // not needed by subject
 	_dispatcher.registerHandler("PART", new PartCommand(this));
 	_dispatcher.registerHandler("KICK", new KickCommand(this));
 	_dispatcher.registerHandler("MODE", new ModeCommand(this));
 	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
 	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
 	_dispatcher.registerHandler("WHO", new WhoCommand(this));
-	
+
 	
 	// TODO: add error handling, so that if empty string is given or non-existing
 	// handler, the program exits cleanly (this is a whole other set of functions
@@ -201,6 +196,7 @@ void Server::registerAllCommands() {
 	// if (!registerAllCommands) {
 	//	clean_up();
 	//}
+
 }
 
 void Server::printAllClientsInfo() const {

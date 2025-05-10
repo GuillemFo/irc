@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 23:26:10 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:37:54 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	setNonBlocking(int sv_fd)
 void cleanupClient(Server &s, int fd)
 {
 	std::cout << "Cleanup client" << std::endl;
-	s.getClient(fd)->partAllChannels();
+	if (s.getClient(fd) != NULL)
+		s.getClient(fd)->partAllChannels();
 	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
@@ -95,7 +96,7 @@ void handleRead(Server &s, int fd)
 {
 	char buffer[BUFFER_SIZE];
 	Client *client = s.getClient(fd);
-	if (!client) {
+	if (!client || client == NULL) {
 		std::cout << "Invalid client fd: " << fd << std::endl;
 		return;
 	}
@@ -147,7 +148,7 @@ void handleRead(Server &s, int fd)
 
 void handleSend(Server &s, int fd)
 {
-	if (s.getClient(fd) == NULL)
+	if (s.getClient(fd) == NULL || s.getClient(fd) == 0 )
 	{
 		return ;
 	}

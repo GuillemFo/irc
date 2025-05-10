@@ -66,7 +66,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 		}
 	}
 	else {
-		sender.sendMessage(ircErrorText(ERR_NONICKNAMEGIVEN, cmd, sender));
+		sender.sendMessage(ircErrorText(ERR_INVALIDUSERNAME, cmd, sender));
 		return ;
 	}
 }
