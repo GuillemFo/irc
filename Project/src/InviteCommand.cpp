@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:22:04 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/10 18:31:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,12 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	Client *theInvited = sender.getServer()->getClientByNick(nick);
+	if (theInvited == NULL)
+	{
+		sender.sendMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
+		return;
+	}
+	
 	theChannel->addInvited(theInvited);
 	sender.sendMessage(ircReplyText(RPL_INVITING, cmd, sender));
 	theInvited->sendMessage(":" + sender.get_nick() + " INVITE " + nick + " " + channel + "\r\n");

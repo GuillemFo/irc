@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/10 19:10:17 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/10 20:09:07 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,17 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 					return ;
 				}
 				int user_limit = std::atoi(args[paramIndex ++].c_str());
-				//TODO: add behaviour if user_limit is not a valid int
-				channel.set_userLimit(user_limit);
-				modeParameters += int_to_string(user_limit) + " ";
+				if (user_limit < 1) {
+					sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS,
+													cmd, sender));
+					sender.sendMessage("+l takes a positive integer \
+as argument. invalid input is was given.");
+					return ;
+				}
+				else {
+					channel.set_userLimit(user_limit);
+					modeParameters += int_to_string(user_limit) + " ";
+				}
 			}
 			else {
 				channel.clear_userLimit();
@@ -137,7 +145,7 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 			}
 			Server* server = channel.getServer();
 			Client* target = server->getClientByNick(args[paramIndex++]);
-			if (!target || !channel.isMember(target->get_nick())) {
+			if (target == NULL || !target || !channel.isMember(target->get_nick())) {
 				sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd,
 												sender));
 				return ;
