@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 11:34:54 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 23:21:21 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:14:57 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,4 @@ class Channel
 		void				broadcast(const std::string &msg, Client &sender); //all except sender
 		std::vector<std::string> getNicks();
 		std::map<std::string, Client *> getMembers();
-		void				printInfo();
-
 };

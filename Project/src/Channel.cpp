@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:27:19 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 23:21:18 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:14:59 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,31 +232,3 @@ std::vector<std::string> Channel::getNicks()
 
 std::map<std::string, Client *> Channel::getMembers() { return this->_clients;}
 
-void Channel::printInfo()
-{
-    std::cout << "///===PRINTING CHANNEL INFO===///" << std::endl;
-    std::cout << "Channel Name: " << _Name << std::endl;
-    std::cout << "Topic: " << (_Topic.empty() ? "(No topic set)" : _Topic) << std::endl;
-    std::cout << "Invite Only: " << (_inviteOnly ? "Yes" : "No") << std::endl;
-    std::cout << "Topic Protected: " << (_protectTopic ? "Yes" : "No") << std::endl;
-    std::cout << "Password Protected: " << (isPassRequired() ? "Yes" : "No") << std::endl;
-    // std::cout << "Client Limit: " << (_clientLimit > 0 ? std::to_string(_clientLimit) : "No limit") << std::endl;
-    std::cout << "Current Clients: " << _clients.size() << std::endl;
-    std::cout << "Operators: " << _opclients.size() << std::endl;
-
-    std::cout << "Clients in Channel: ";
-    std::map<std::string, Client*>::iterator it;
-    for (it = _clients.begin(); it != _clients.end(); ++it)
-    {
-        std::cout << it->first << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "Operators in Channel: ";
-    for (it = _opclients.begin(); it != _opclients.end(); ++it)
-    {
-        std::cout << it->first << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "///===END OF PRINTING CHANNEL INFO===///\n" << std::endl;
-}

@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:56:38 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/30 13:44:03 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:16:20 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ class Command {
 		void clearArgs();
 		const std::string& getName() const;
 		const std::vector<std::string>& getArgs() const;
-		void printCommand() const;
 };
 
 #endif
