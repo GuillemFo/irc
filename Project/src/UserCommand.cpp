@@ -17,20 +17,14 @@ UserCommand::UserCommand (Server* server) : _server(server) {}
 
 bool UserCommand::isValidUser(const std::string& name) {
 	if (name.empty()) {
-		std::cout << "Aborting User: User is empty."
-			<< std::endl;
 		return false;
 	}
 	if (name.length() > 50) {
-		std::cout << "Aborting USER: Username contains over 50"
-			<< " symbols." << std::endl;
 		return false;
 	}
 	for (size_t i = 0; i < name.length(); ++i) {
 		char c = name[i];
 		if (c == ' ' || c == ',' || c < 32) {
-			std::cout << "Aborting USER: Username contains invalid"
-				<< " symbols." << std::endl;
 			return false;
 		}
 	}
@@ -57,7 +51,6 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 			sender.set_user(User);
 			sender.setRealName(args[3]);
 			sender.setOkLogin();
-			std::cout << "Executing User command. User: " << User << " assigned to client: " << sender.get_clientFD() << std::endl;
 			sender.sendMessage(ircReplyText(RPL_WELCOME, cmd, sender));
 			sender.sendMessage(ircReplyText(RPL_YOURHOST, cmd, sender));
 			sender.sendMessage(ircReplyText(RPL_MOTD, cmd, sender));

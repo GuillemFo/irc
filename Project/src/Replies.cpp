@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:26:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/08 20:55:21 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:05:21 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,7 @@ std::string ircReplyText(const std::string& code, const Command& cmd, const Clie
 	if (code == RPL_CHANNELMODEIS) {
 		Channel* channel = sender.getServer()->getChannel(args[0]);
 		if (!channel) {
-			std::cout << "That is weird. This reply is sent from \
-handleChannelMode. You cannot get here if there is no such channel. "
-			<< "But getChannel returned NULL." << std::endl;
+			// This shouldn't happen
 			return "";
 		}
 		std::string modes = "+";

@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/10 20:43:07 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:09:04 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ int	Server::addClientMap(int fd)
 		this->_cl_map.insert(std::pair<int, Client*>(fd, new Client(this, fd)));
 		return (1);
 	}
-	else
-		std::cout << "Client with fd " << fd << " already exists!" << std::endl;
+	// it shouldn't happen than fd already exists
 	return (-1);
 }
 
@@ -80,8 +79,7 @@ int	Server::addChannelMap(const std::string &str)
 		this->_ch_map.insert(std::pair<std::string, Channel*>(name_tolower(str), new Channel(str, this)));
 		return (1);
 	}
-	else
-		std::cout << "Channel with name " << str << " already exists!" << std::endl;
+	// it shouldn't happen that Channel already exist whe calling thhis function
 	return (-1);
 }
 
@@ -91,7 +89,7 @@ int	Server::rmClientMap(int fd)
 	std::map<int, Client*>::iterator it = _cl_map.find(fd);
 	if (it == _cl_map.end())
 	{
-		std::cout << "Client with fd " << fd << " does not exist!" << std::endl;
+		// it shouldn't happen that Client with fd does not exist!
 		return (-1);
 	}
 	delete it->second;

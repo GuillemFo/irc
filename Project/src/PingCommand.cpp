@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:29:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/01 14:20:03 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:02:23 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,4 @@ void PingCommand::execute(const Command& cmd, Client& sender) {
 	std::string pong_out =  ":" + sender.get_nick() + " PONG " + " " + Ping + "\r\n";
 	sender.sendMessage(pong_out);
 	return ;
-
-/*
-	}
-	else {
-		sender.sendMessage(ircErrorText("ping error", cmd, sender));
-		std::cout << sender._out.getMessage() << std::endl;
-
-		return ;
-	}
-*/
 }

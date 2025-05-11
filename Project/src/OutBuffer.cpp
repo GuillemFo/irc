@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   OutBuffer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:00:55 by josegar2          #+#    #+#             */
-/*   Updated: 2025/04/23 15:11:54 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:00:00 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ void OutBuffer::addOffset(size_t charsSent)
 {
 	if (this->_queue.empty()) //avoid accessing an empty queue
 	{
-		std::cout << "Trying to access an empty queue. Stopping AddOffset" <<
-			std::endl;
+		// it shouldn't happen
 		return ;
 	}
 	

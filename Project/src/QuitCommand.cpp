@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:31:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/11 14:02:52 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ Server				*QuitCommand::getServer() const{return (this->_server);}
 void QuitCommand::execute(const Command& cmd, Client& sender) {
 	const std::vector<std::string>& args = cmd.getArgs();
 	// TODO: implement check for gettin cmd and/or sender as NULL
-	std::cout << "quit execute" << std::endl;
 	if (sender.getOkLogin())
 	{
 		std::string out;
@@ -50,7 +49,6 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 			std::pair<std::set<std::string>::iterator, bool> inserted;
 			std::map<std::string, Client *> members = it->second->getMembers();
 			for (itc = members.begin(); itc != members.end(); ++itc) {
-				std::cout << "member nick " << itc->first << " member pointer " << itc->second << std::endl;
 				inserted = commonNicks.insert(itc->first);
 				if (inserted.second && sender.get_nick() != itc->second->get_nick()) {
 					itc->second->sendMessage(out);

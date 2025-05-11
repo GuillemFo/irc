@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 11:30:21 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/11 13:59:52 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,6 @@ Command Parser::parse(const std::string& line) {
 		}
 		else if(!trailing) {
 			cmd.addArg(word);
-		}
-		else {
-			std::cout << "You are not supposed to get here! Check " <<
-			"the parsing logic!" << std::endl;
 		}
 	}
 	return cmd;
