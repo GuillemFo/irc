@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/12 10:38:56 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:13:22 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 		std::string oldNick = sender.get_nick();
 		std::string chgMsg = ":" + oldNick + " NICK " + Nick + "\r\n";
 		sender.set_nick(Nick);
-		sender.changeAllNicks(oldNick); // it does not enter !!! 12.05.25 10.38am
+		sender.changeAllNicks(oldNick);
 		sender.sendMessage(chgMsg);
 		sender.sendAllChannels(chgMsg);
 	}
