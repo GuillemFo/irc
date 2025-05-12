@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/09 11:15:28 by codespace        ###   ########.fr        #
+#    Updated: 2025/05/12 01:27:20 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cp
 		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp WhoCommand.cpp
 
 
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-gdwarf-4 #-fsanitize=address # commented due codespace issues with fsanitize
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-gdwarf-4 #-fsanitize=address
 
 SRC_F = src/
 
@@ -73,7 +73,7 @@ clean:
 	@echo "$(CYAN)$(NAME) $(YELLOW)- $(RED)Obj deleted$(RESET)"
 
 fclean: clean
-	@rm -rf $(NAME) CapTests ModeTests
+	@rm -rf $(NAME)
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 
 .PHONY: all re clean fclean g r

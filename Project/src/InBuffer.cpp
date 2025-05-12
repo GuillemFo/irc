@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 11:21:05 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/12 01:25:44 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ std::string InBuffer::extractCommand() {
 
 	if (line.length() > 510)
 	{
-		std::cout << "IRC command is longer that 512 characters. Aborting" << std::endl;
 		return std::string();
 	}
 	

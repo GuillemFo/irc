@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/11 21:35:13 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 01:29:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	setNonBlocking(int sv_fd)
 	int flag = fcntl(sv_fd, F_GETFL, 0);
 	if (flag == -1)
 	{
-		std::cout << "fcntl F_GETFL error" << std::endl;
+		std::cerr << "fcntl F_GETFL error" << std::endl;
 		std::exit(-1);
 	}
 	if (fcntl(sv_fd, F_SETFL, flag | O_NONBLOCK) == -1)
 	{
-		std::cout << "fcntl F_SETFL error" << std::endl;
+		std::cerr << "fcntl F_SETFL error" << std::endl;
 		std::exit(-1);
 	}
 }
@@ -57,7 +57,7 @@ void handleNewConnection(Server &s)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
-			std::cout << "accept error" << std::endl;
+			std::cerr << "accept error" << std::endl;
 			return;
 		}
 		setNonBlocking(cl_fd);
@@ -67,7 +67,7 @@ void handleNewConnection(Server &s)
 		ev.data.fd = cl_fd;
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
 		{
-			std::cout << "epoll_ctl: client fd error" << std::endl;
+			std::cerr << "epoll_ctl: client fd error" << std::endl;
 			close(cl_fd);
 			continue;
 		}
@@ -75,8 +75,6 @@ void handleNewConnection(Server &s)
 		char client_ip[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
 		s.getClient(cl_fd)->set_ip(std::string(client_ip));
-		std::cout << C_Y "New client connected: fd " C_RESET << cl_fd << std::endl;
-		std::cout << C_Y "IP : " << client_ip << C_RESET << std::endl;
 	}
 }
 
@@ -92,7 +90,7 @@ void handleRead(Server &s, int fd)
 	char buffer[BUFFER_SIZE];
 	Client *client = s.getClient(fd);
 	if (!client || client == NULL) {
-		std::cout << "Invalid client fd: " << fd << std::endl;
+		std::cerr << "Invalid client fd: " << fd << std::endl;
 		return;
 	}
 	while (true)
@@ -103,13 +101,11 @@ void handleRead(Server &s, int fd)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
-			std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
 			cleanupClient(s, fd);
 			break;
 		}
 		else if (bytes == 0)
 		{
-			std::cout << C_R "Client disconnected: fd " C_RESET << fd << std::endl;
 			cleanupClient(s, fd);
 			break;
 		}
@@ -155,7 +151,7 @@ void handleSend(Server &s, int fd)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
 			return; // try again later, wait for epollout
-		std::cout << "send error" << std::endl;
+		std::cerr << "send error" << std::endl;
 		cleanupClient(s, fd);
 		return;
 	}
@@ -213,7 +209,7 @@ void    set_epoll(Server &s) {
 	if (epoll_fd < 0)
 	{
         close(s.get_serverFD());
-		throw("epoll_create1 error");
+		throw("epoll_create error");
 	}
 	s.set_epollFD(epoll_fd);
 	struct epoll_event ev;
