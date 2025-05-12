@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/10 20:44:20 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:35:13 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,12 @@ void	setNonBlocking(int sv_fd)
 
 void cleanupClient(Server &s, int fd)
 {
-	std::cout << "Cleanup client" << std::endl;
 	if (s.getClient(fd) != NULL)
 		s.getClient(fd)->partAllChannels();
 	s.rmClientMap(fd);
 	epoll_ctl(s.get_epollFD(), EPOLL_CTL_DEL, fd, NULL);
 	close(fd);
 }
-
-
 
 void handleNewConnection(Server &s)
 {
@@ -89,8 +86,6 @@ bool isValidIRCMessage(const std::string &input) {
 		return false;
 	return true;
 }
-
-
 
 void handleRead(Server &s, int fd)
 {
@@ -183,84 +178,83 @@ void handle_sigint(int sig)
 	Server::mustExit = true;
 }
 
+void set_signals() {
+	signal(SIGINT, handle_sigint);
+	signal(SIGTERM, handle_sigint);
+	signal(SIGQUIT, handle_sigint);
+	signal(SIGPIPE, SIG_IGN);
+}
+
+void bind_server(Server &s) {
+	s.set_server_name("127.0.0.1");
+	struct sockaddr_in server_addr;
+	memset(&server_addr, 0, sizeof(server_addr));
+	server_addr.sin_family = AF_INET; // set IPv4 family
+	server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
+	server_addr.sin_port = htons(s.get_port()); // convert port to network byte order
+	//Binding: 
+	if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+	{
+        close(s.get_serverFD());
+		throw("bind error");
+	}
+	//Listen:
+	if(listen(s.get_serverFD(), HOLD_NON_ACCEPTED) < 0)
+	{
+        close(s.get_serverFD());
+		throw("listen error");
+	}
+}
+
+void    set_epoll(Server &s) {
+    int epoll_fd;
+	//Creating epoll instance
+	epoll_fd = epoll_create1(0);
+	if (epoll_fd < 0)
+	{
+        close(s.get_serverFD());
+		throw("epoll_create1 error");
+	}
+	s.set_epollFD(epoll_fd);
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof(ev));
+	ev.events = EPOLLIN | EPOLLET;
+	ev.data.fd = s.get_serverFD();
+		
+	if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, s.get_serverFD(), &ev) < 0)
+	{
+        close(s.get_serverFD());
+		throw("epoll_ctl: server_fd error");
+	}
+}
+
 bool Server::mustExit = false;
 
 int main(int ac, char **av)
 {
-	int sv_fd, epoll_fd;
+	int sv_fd;
 	try
 	{
-		signal(SIGINT, handle_sigint);
-		signal(SIGTERM, handle_sigint);
-		signal(SIGQUIT, handle_sigint);
-		signal(SIGPIPE, SIG_IGN);
-		if (ac != 3)
-			throw std::string("Wrong arguments");
-		sv_fd = socket(AF_INET, SOCK_STREAM, 0);
-		if (sv_fd < 0)
-		{
-			std::cout << "socket error" << std::endl;
-			return (-1);
-		}
+        if (ac != 3)
+            throw std::string("Wrong arguments");
 		if (valid_port(av[1]) == false)
-		{
-			std::cout << "Invalid port" << std::endl;
-			return (-1);
-		}
+			throw std::string("Invalid port");
+ 
+        set_signals();
+
+        sv_fd = socket(AF_INET, SOCK_STREAM, 0);
+		if (sv_fd < 0)
+			throw std::string("socket error");
 		
 		setNonBlocking(sv_fd);
 		Server s(sv_fd, atoi(av[1]), av[2]);
 		
 		if (!s.registerAllCommands())
-		{
-			std::cout << "Unable to register Command Handlers" << std::endl;
-			return (-1);
+			throw std::string("Unable to register Command Handlers");
 
-		}
-		s.set_server_name("127.0.0.1");
-		struct sockaddr_in server_addr;
-		memset(&server_addr, 0, sizeof(server_addr));
-		server_addr.sin_family = AF_INET; // set IPv4 family
-		server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
-		server_addr.sin_port = htons(s.get_port()); // convert port to network byte order
+        bind_server(s);
 
-		//Binding: 
-		if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
-		{
-			std::cout << "bind error" << std::endl;
-			close(s.get_serverFD());
-			return (-1);
-		}
-
-		//Listen:
-		if(listen(s.get_serverFD(), HOLD_NON_ACCEPTED) < 0)
-		{
-			std::cout << "listen error" << std::endl;
-			close(s.get_serverFD());
-			return (-1);
-		}
-
-		//Creating epoll instance
-		epoll_fd = epoll_create1(0);
-		if (epoll_fd < 0)
-		{
-			std::cout << "epoll_create1 error" << std::endl;
-			close(s.get_serverFD());
-			return (-1);
-		}
-
-		s.set_epollFD(epoll_fd);
-		struct epoll_event ev;
-		memset(&ev, 0, sizeof(ev));
-		ev.events = EPOLLIN | EPOLLET;
-		ev.data.fd = s.get_serverFD();
-			
-		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, s.get_serverFD(), &ev) < 0)
-		{
-			std::cout << "epoll_ctl: server_fd error" << std::endl;
-			close(s.get_serverFD());
-			return (-1);
-		}
+        set_epoll(s);
 
 		std::cout << "Server started on port " << C_R << s.get_port() << C_RESET << std::endl;
 		std::cout << "Server started on pass " << C_R << av[2] << C_RESET << std::endl;
@@ -297,7 +291,8 @@ int main(int ac, char **av)
 	}
 	catch(std::string &e)
 	{
-		std::cout << e << std::endl;
+		std::cerr << e << std::endl;
+        return (-1);
 	}
 }	
 
