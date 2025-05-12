@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QuitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/11 14:02:52 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:25:39 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void QuitCommand::execute(const Command& cmd, Client& sender) {
 	{
 		std::string out;
 		if (args.size() > 0)
-			out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT " + args[0] + "\r\n";
+			out = ":" + sender.get_nick() +" QUIT " + args[0] + "\r\n";
 		else
-			out = ":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host QUIT :quitting\r\n";
+			out = ":" + sender.get_nick() + " QUIT :quitting\r\n";
 		std::map<std::string, Channel*>::iterator it;
 		std::set<std::string> commonNicks;
 		for (it = sender.getChannels().begin(); it != sender.getChannels().end(); ++it)

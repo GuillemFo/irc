@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/11 14:00:30 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:24:59 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void joinChannel(const Command& cmd, Client& sender)
 	}
 	sender.getServer()->getChannel(channelName)->addClient(&sender);
 	sender.addChannel(sender.getServer()->getChannel(channelName));
-	sender.getServer()->getChannel(channelName)->broadcast(":" + sender.get_nick() + "!" + sender.get_user() + "@" + "host JOIN " + channelName + "\r\n");
+	sender.getServer()->getChannel(channelName)->broadcast(":" + sender.get_nick() + " JOIN " + channelName + "\r\n");
 	if (sender.getServer()->getChannel(args[0])->get_topic().empty())
 		sender.addOutMessage(ircReplyText(RPL_NOTOPIC, cmd, sender));
 	else
