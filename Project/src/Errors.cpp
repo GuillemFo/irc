@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/12 08:22:08 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:18:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ std::string ircErrorText(const std::string& code, const Command& cmd, const Clie
 	if ((pos = reply.find("<nick>")) != std::string::npos ) {
 		if (cmd.getName() == "MODE")
 			reply.replace(pos, 6, sender.get_nick());
+		else if (cmd.getName() == "INVITE") {
+			reply.replace(pos, 6, args[0]);
+		}
 		else
 		{
 			if (args.size() > 1)
