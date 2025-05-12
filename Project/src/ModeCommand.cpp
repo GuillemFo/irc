@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/12 16:54:27 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:23:26 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,7 @@ std::string ModeCommand::formatModeChangeMessage(const Client& sender,
 	const Channel& channel,
 	const std::string& modeChanges,
 	const std::string& modeParameters) {
-	std::string msg = ":" + sender.get_nick() + "!" + sender.get_user() +
-	"@" + sender.get_host() + " MODE " + channel.get_name() + " " +
+	std::string msg = ":" + sender.get_nick() + " MODE " + channel.get_name() + " " +
 	modeChanges;
 
 	if (!modeParameters.empty())
