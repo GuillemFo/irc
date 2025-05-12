@@ -16,6 +16,7 @@ UserCommand::~UserCommand () {}
 UserCommand::UserCommand (Server* server) : _server(server) {}
 
 bool UserCommand::isValidUser(const std::string& name) {
+
 	if (name.empty()) {
 		return false;
 	}
@@ -59,7 +60,7 @@ void UserCommand::execute(const Command& cmd, Client& sender) {
 		}
 	}
 	else {
-		sender.sendMessage(ircErrorText(ERR_INVALIDUSERNAME, cmd, sender));
+		sender.sendMessage(ircErrorText(ERR_NOTREGISTERED, cmd, sender));
 		return ;
 	}
 }
