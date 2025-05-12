@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/12 01:29:46 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/12 01:55:51 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,13 +192,13 @@ void bind_server(Server &s) {
 	if (bind(s.get_serverFD(), (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 	{
         close(s.get_serverFD());
-		throw("bind error");
+		throw std::runtime_error("Bind error. Port already in use.");
 	}
 	//Listen:
 	if(listen(s.get_serverFD(), HOLD_NON_ACCEPTED) < 0)
 	{
         close(s.get_serverFD());
-		throw("listen error");
+		throw std::runtime_error("listen error");
 	}
 }
 
@@ -209,7 +209,7 @@ void    set_epoll(Server &s) {
 	if (epoll_fd < 0)
 	{
         close(s.get_serverFD());
-		throw("epoll_create error");
+		throw std::runtime_error("epoll_create error");
 	}
 	s.set_epollFD(epoll_fd);
 	struct epoll_event ev;
@@ -220,7 +220,7 @@ void    set_epoll(Server &s) {
 	if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, s.get_serverFD(), &ev) < 0)
 	{
         close(s.get_serverFD());
-		throw("epoll_ctl: server_fd error");
+		throw std::runtime_error("epoll_ctl: server_fd error");
 	}
 }
 
@@ -232,21 +232,21 @@ int main(int ac, char **av)
 	try
 	{
         if (ac != 3)
-            throw std::string("Wrong arguments");
+            throw std::runtime_error ("Wrong arguments");
 		if (valid_port(av[1]) == false)
-			throw std::string("Invalid port");
+			throw std::runtime_error ("Invalid port");
  
         set_signals();
 
         sv_fd = socket(AF_INET, SOCK_STREAM, 0);
 		if (sv_fd < 0)
-			throw std::string("socket error");
+			throw std::runtime_error ("Socket error");
 		
 		setNonBlocking(sv_fd);
 		Server s(sv_fd, atoi(av[1]), av[2]);
 		
 		if (!s.registerAllCommands())
-			throw std::string("Unable to register Command Handlers");
+			throw std::runtime_error ("Unable to register Command Handlers");
 
         bind_server(s);
 
@@ -285,9 +285,9 @@ int main(int ac, char **av)
 		close(s.get_epollFD());
 		return (0);
 	}
-	catch(std::string &e)
+	catch(const std::exception &e)
 	{
-		std::cerr << e << std::endl;
+		std::cerr << e.what() << std::endl;
         return (-1);
 	}
 }	
