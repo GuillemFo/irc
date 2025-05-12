@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/12 09:12:23 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:22:32 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,9 @@
 
 void	setNonBlocking(int sv_fd)
 {
-	int flag = fcntl(sv_fd, F_GETFL, 0);
-	if (flag == -1)
+	if (fcntl(sv_fd, F_SETFL, O_NONBLOCK) == -1)
 	{
-		std::cerr << "fcntl F_GETFL error" << std::endl;
-		std::exit(-1);
-	}
-	if (fcntl(sv_fd, F_SETFL, flag | O_NONBLOCK) == -1)
-	{
-		std::cerr << "fcntl F_SETFL error" << std::endl;
-		std::exit(-1);
+		throw std::runtime_error("fcntl F_SETFL error");
 	}
 }
 
@@ -57,7 +50,6 @@ void handleNewConnection(Server &s)
 		{
 			if (errno == EAGAIN || errno == EWOULDBLOCK)
 				break;
-			std::cerr << "accept error" << std::endl;
 			return;
 		}
 		setNonBlocking(cl_fd);
@@ -67,7 +59,6 @@ void handleNewConnection(Server &s)
 		ev.data.fd = cl_fd;
 		if (epoll_ctl(s.get_epollFD(), EPOLL_CTL_ADD, cl_fd, &ev) < 0)
 		{
-			std::cerr << "epoll_ctl: client fd error" << std::endl;
 			close(cl_fd);
 			continue;
 		}
@@ -90,7 +81,6 @@ void handleRead(Server &s, int fd)
 	char buffer[BUFFER_SIZE];
 	Client *client = s.getClient(fd);
 	if (!client || client == NULL) {
-		std::cerr << "Invalid client fd: " << fd << std::endl;
 		return;
 	}
 	while (true)
@@ -151,7 +141,6 @@ void handleSend(Server &s, int fd)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
 			return; // try again later, wait for epollout
-		std::cerr << "send error" << std::endl;
 		cleanupClient(s, fd);
 		return;
 	}
@@ -184,7 +173,6 @@ void set_signals() {
 void bind_server(Server &s) {
 	s.set_server_name("127.0.0.1");
 	struct sockaddr_in server_addr;
-	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET; // set IPv4 family
 	server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
 	server_addr.sin_port = htons(s.get_port()); // convert port to network byte order
