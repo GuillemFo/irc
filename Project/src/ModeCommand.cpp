@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/11 14:00:32 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:54:27 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,11 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 				return ;
 			}
 			Server* server = channel.getServer();
-			Client* target = server->getClientByNick(args[paramIndex++]);
-			if (target == NULL || !target || !channel.isMember(target->get_nick())) {
-				sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd,
-												sender));
+			std::string tmp_nick = args[paramIndex++];
+			Client* target = server->getClientByNick(tmp_nick);
+			if (target == NULL || !target || !channel.isMember(target->get_nick()))
+			{
+				sender.sendMessage(":" + sender.getServer()->getServerName() + " " + ERR_USERNOTINCHANNEL + " " + sender.get_nick() + " " + tmp_nick + " " + channel.get_name() + " :They aren't on that channel\r\n");
 				return ;
 			}
 			if (addMode) {
