@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 21:42:22 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/12 17:24:59 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:30:29 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ void joinChannel(const Command& cmd, Client& sender)
 		{
 			return ;
 		}
+		else if (sender.getServer()->getChannel(channelName)->isChannelFull())
+		{
+			sender.sendMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
+			return ;
+		}
 		else if (sender.getServer()->getChannel(channelName)->isInviteOnly())
 		{
 			if (sender.getServer()->getChannel(channelName)->isInvited(sender.get_nick()))
@@ -85,11 +90,6 @@ void joinChannel(const Command& cmd, Client& sender)
 				sender.sendMessage(ircErrorText(ERR_INVITEONLYCHAN, cmd, sender));
 				return ;
 			}
-		}
-		else if (sender.getServer()->getChannel(channelName)->isChannelFull())
-		{
-			sender.sendMessage(ircErrorText(ERR_CHANNELISFULL, cmd, sender));
-			return ;
 		}
 
 	}
