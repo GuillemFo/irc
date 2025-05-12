@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/11 14:00:03 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 10:38:56 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 		std::string oldNick = sender.get_nick();
 		std::string chgMsg = ":" + oldNick + " NICK " + Nick + "\r\n";
 		sender.set_nick(Nick);
+		sender.changeAllNicks(oldNick); // it does not enter !!! 12.05.25 10.38am
 		sender.sendMessage(chgMsg);
-		sender.changeAllNicks(oldNick);
 		sender.sendAllChannels(chgMsg);
 	}
 }

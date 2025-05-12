@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/10 21:02:32 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:10:58 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,15 +148,32 @@ void	Client::sendMessage(const std::string &theMessage)
 	this->cl_Epoll_In_Out();
 }
 
+//changed to check all channels instead of the known by the client. maybe better to aknowledg the client that has been invited to certain channels? 12.05.25 10.50am
 void	Client::changeAllNicks(const std::string &oldNick)
 {
-	std::map<std::string, Channel*>::iterator it;
-	for (it = _channels.begin(); it != _channels.end(); ++it)
+	std::map<std::string, Channel*>::const_iterator it;
+	for (it = this->getServer()->getChannelMap().begin(); it != this->getServer()->getChannelMap().end(); ++it)
 	{
-		if (it->second->isOperator(oldNick))
-			it->second->addOperator(this);
-		it->second->addClient(this);
-		it->second->remClient(oldNick);
+		if (it->second->isMember(oldNick) || it->second->isInvited(oldNick))
+		{
+			if (it->second->isMember(oldNick))
+			{
+				it->second->addClient(this);
+				if (it->second->isOperator(oldNick))
+				{
+					it->second->addOperator(this);
+					it->second->remOperator(oldNick);
+					std::cout << "OPERATOR added" << std::endl;
+				}
+				it->second->remClient(oldNick);
+			}
+			if (it->second->isInvited(oldNick))
+			{
+				it->second->addInvited(this);
+				it->second->remInvited(oldNick);
+				std::cout << "INVITE added" << std::endl;
+			}
+		}
 	}
 }
 
