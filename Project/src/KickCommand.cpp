@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 09:41:59 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/11 14:00:13 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:22:56 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,9 @@ void KickChannel(const Command& cmd, Client& sender)
 	std::string commentPrefix = ":" + sender.get_nick();
 	std::string commentLine = commentPrefix + " KICK " + channelName + " " + target + " :";
 	if (args.size() > 2 && !args[2].empty())
-	{
-		const std::string& comment = args[2];
-		commentLine += comment;
-	}
+		commentLine += args[2];
+	else
+		commentLine += "You've been kicked";
 	commentLine += "\r\n";
 	sender.getServer()->getChannel(channelName)->broadcast(commentLine);
 	

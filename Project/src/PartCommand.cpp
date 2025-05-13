@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PartCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:06:40 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/09 11:30:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/12 18:22:57 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void partChannel(const Command& cmd, Client& sender)
 		sender.remChannel(channel);
 		std::string partLine = ":" + sender.get_nick() + " PART " + channel + " :";
 		if (args.size() >= 2)
-		partLine += args[1];
+			partLine += args[1];
 		else
-		partLine += "User is leaving the channel";
+			partLine += "User is leaving the channel";
 		partLine += "\r\n";
 		sender.sendMessage(partLine);
 		if (pChannel->isChannelEmpty())
