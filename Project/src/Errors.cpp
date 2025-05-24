@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/12 16:18:18 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/24 21:50:05 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ std::string ircErrorText(const std::string& code, const Command& cmd, const Clie
 	if ((pos = reply.find("<nick>")) != std::string::npos ) {
 		if (cmd.getName() == "MODE")
 			reply.replace(pos, 6, sender.get_nick());
-		else if (cmd.getName() == "INVITE") {
+		else if (cmd.getName() == "INVITE"
+				|| cmd.getName() == "PRIVMSG") {
 			reply.replace(pos, 6, args[0]);
 		}
 		else
