@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:12 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/12 16:22:32 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/24 14:48:53 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int main(int ac, char **av)
 	try
 	{
         if (ac != 3)
-            throw std::runtime_error ("Wrong arguments");
+            throw std::runtime_error ("Wrong arguments. Usage: ./ircserv <port> <password>");
 		if (valid_port(av[1]) == false)
 			throw std::runtime_error ("Invalid port");
  

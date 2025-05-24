@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/12 01:27:20 by codespace        ###   ########.fr        #
+#    Updated: 2025/05/24 14:38:56 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,9 @@ $(TMP)%.o: %.cpp Makefile
 
 -include $(DEP)
 
+bonus: all
+	$(MAKE) -C bot all
+
 re: fclean all
 
 clean:
@@ -75,5 +78,6 @@ clean:
 fclean: clean
 	@rm -rf $(NAME)
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
+	@$(MAKE) -C bot fclean
 
-.PHONY: all re clean fclean g r
+.PHONY: all re clean fclean g r bonus
