@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Errors.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:15:09 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/08 00:46:56 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:18:18 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ static std::map<std::string, std::string> createErrorFormats() {
     
     // Nickname errors
     m.insert(std::make_pair(ERR_NONICKNAMEGIVEN, "<client> :No nickname given"));
-    m.insert(std::make_pair(ERR_ERRONEUSNICKNAME, "<client> <nick> :Erroneous nickname"));
+    m.insert(std::make_pair(ERR_ERRONEUSNICKNAME, "<client> <nick> :Erroneous nickname or longer than 9 chars"));
     m.insert(std::make_pair(ERR_NICKNAMEINUSE, "<client> <nick> :Nickname is already in use"));
     m.insert(std::make_pair(ERR_NICKCOLLISION, "<client> <nick> :Nickname collision KILL"));
+    m.insert(std::make_pair(ERR_INVALIDUSERNAME, "<client> :Erroneous username or longer than 50 chars"));
     
     // Channel errors
     m.insert(std::make_pair(ERR_NOTONCHANNEL, "<client> <channel> :You're not on that channel"));
@@ -49,7 +50,7 @@ static std::map<std::string, std::string> createErrorFormats() {
     m.insert(std::make_pair(ERR_BADCHANMASK, "<client> <channel> :Bad Channel Mask"));
     m.insert(std::make_pair(ERR_CHANOPRIVSNEEDED, "<client> <channel> :You're not channel operator"));
 	m.insert(std::make_pair(ERR_UNKNOWNMODE, "<client> <char> :is unknown mode char to me"));
-	m.insert(std::make_pair(ERR_USERNOTINCHANNEL, "<client> <nick> <channel> :They aren't on that channel")); //need to fix 04.05 08.09 pm
+	m.insert(std::make_pair(ERR_USERNOTINCHANNEL, "<client> <nick> <channel> :They aren't on that channel")); //need to fix Still 12.05.25 08.13 am
 
     
     return m;
@@ -80,7 +81,18 @@ std::string ircErrorText(const std::string& code, const Command& cmd, const Clie
 		
 	// Replace <nick>
 	if ((pos = reply.find("<nick>")) != std::string::npos ) {
-		reply.replace(pos, 6, args[0]);
+		if (cmd.getName() == "MODE")
+			reply.replace(pos, 6, sender.get_nick());
+		else if (cmd.getName() == "INVITE") {
+			reply.replace(pos, 6, args[0]);
+		}
+		else
+		{
+			if (args.size() > 1)
+				reply.replace(pos, 6, args[1]);
+			else
+				reply.replace(pos, 6, args[0]);
+		}
 	}
 	
 	// Replace <channel>

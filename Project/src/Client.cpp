@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:21:26 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 11:57:18 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:32:37 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+
 Client::Client(int cl_fd) : _client_fd(cl_fd) 
 {
 	this->_nick = std::string();
@@ -32,14 +33,12 @@ Client::Client(Server *server, int cl_fd) : _server(server) , _client_fd(cl_fd)
 }
 
 Client::~Client() {
-	//this->partAllChannels();
-	// has to be removed from client map in Server
 	this->_in.clear();
 }
 
 Client::Client(const Client &other){*this = other;}
 
-Client &Client::operator=(const Client &other)	//do we need this??
+Client &Client::operator=(const Client &other)
 {
 	if (this != &other)
 	{
@@ -51,6 +50,9 @@ Client &Client::operator=(const Client &other)	//do we need this??
 
 
 int					Client::get_clientFD(){return (this->_client_fd);}
+void				Client::set_ip(const std::string &theIP) { this->_ip = theIP;}
+std::string			Client::get_ip(){return this->_ip;}
+
 Server				*Client::getServer() const{return (this->_server);}
 
 void				Client::set_nick(const std::string &str){this->_nick = str;}
@@ -82,46 +84,27 @@ void	Client::setRegistered()
 	_registered = true;
 }		
 
-
-/*
-std::string	Client::getLowerNick()
-{
-	
-}
-*/
-
-/*
-std::string	Client::getSource() // : <nickname> [ "!" <user> ] [ "@" <host> ]
-{
-	
-}
-*/
-
-
 bool	Client::isRegistered() {return this->_registered;}
 
 
 void	Client::partChannel(const std::string &channelName) 
 {
 	Channel *pChannel;
-	// check if channelName is not empty or doesn't exist
 	if ((channelName.empty()) ||
 	! this->_server->channelExists(channelName))
 		throw std::runtime_error(ERR_NOSUCHCHANNEL);
-		// Get pointer to channel object
 	pChannel = this->_server->getChannel(channelName);
 	if (! pChannel)
-		throw std::runtime_error(ERR_NOSUCHCHANNEL); // it shouldn't happen
-	// check if in channel
+		throw std::runtime_error(ERR_NOSUCHCHANNEL);
 	if (! pChannel->isMember(this->_nick))
 		throw std::runtime_error(ERR_NOTONCHANNEL);
-	// remove client from client map in channel and from channel map in client
 	pChannel->remClient(this->get_nick());
 	this->_channels.erase(name_tolower(channelName));
-
+	if (pChannel->isChannelEmpty())
+		pChannel->getServer()->rmChannelMap(channelName);
 }
 
-std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part all channels
+std::string Client::getListOfChannels() {
 	std::map<std::string, Channel *>::iterator it = this->_channels.begin();
 	std::string result;
 
@@ -135,24 +118,6 @@ std::string Client::getListOfChannels() { // to get #chan1,#chan2,... to part al
 	return result;
 
 }
-// Leave all channels after receiving a JOIN 0 or quit server
-// Also shoud check if is op and rm from op.
-
-
-//Testing 05.05.25 03.54pm
-// void	Client::partAllChannels()
-// {
-// 	std::map<std::string, Channel *>::iterator it;
-// 	for (it = this->_channels.begin(); it != this->_channels.end();)
-// 	{
-// 		std::cout << "here:" << it->second->get_name() << ":" << std::endl;
-// 		try {
-// 			this->partChannel(it->second->get_name());
-// 		} catch (...) {}	// no errors should be thrown from partChannel
-// 		it++;
-// 	}
-// 	this->_channels.clear();  // no memebers should be left
-// }
 
 void Client::partAllChannels()
 {
@@ -161,7 +126,7 @@ void Client::partAllChannels()
 		std::string name = this->_channels.begin()->first;
 		try {
 			this->partChannel(name);
-		} catch (...) {}  // still safe
+		} catch (...) {}
 	}
 }
 
@@ -177,104 +142,39 @@ void	Client::remChannel(const std::string &theChannel)
 		_channels.erase(it);
 }
 
-
-// channelName should be shorter or equal to CHANNELLEN
-void	Client::joinChannel(const std::string &channelName)
-{
-	std::cout << "Join Channel without password" << std::endl;
-	if (channelName == "0") // it should be checked in the command handler to avoid JOIN 0,#chan or #chan,0
-		this->partAllChannels();
-	Channel * pChannel;
-	// check if channel is not empty
-	if (channelName.empty())
-		throw std::runtime_error(ERR_NOSUCHCHANNEL);
-	// check if name is correct
-	if (!Channel::isNameCorrect(channelName))
-		throw std::runtime_error(ERR_BADCHANMASK);
-	// check if channel exists
-	if (! this->_server->channelExists(channelName))
-	{
-		this->_server->addChannelMap(channelName); // create new channel
-	}
-	// Get pointer to channel object
-	pChannel = this->_server->getChannel(channelName);
-	if (! pChannel)
-		throw std::runtime_error(ERR_NOSUCHCHANNEL); // it shouldn't happen
-	// already in?
-	if (pChannel->isMember(this->_nick))
-		return;		// this will send again the JOIN replies
-		// option to throw td::runtime_error(ERR_USERONCHANNEL); // not RFC compliant
-		// also possible a custom error just to say it's ignored and no replies
-	// is Invite only (+i) ?
-	if (pChannel->isInviteOnly())
-		throw std::runtime_error(ERR_INVITEONLYCHAN);
-	// is pass required? In this function pass is not provided
-	if (pChannel->isPassRequired())
-		throw std::runtime_error(ERR_BADCHANNELKEY);
-	// is channel full?
-	if (pChannel->isChannelFull())
-		throw std::runtime_error(ERR_CHANNELISFULL);
-	// add channel to the map of channels
-	this->_channels[name_tolower(channelName)] = pChannel;
-	// add client to the map of clients in channel
-	pChannel->addClient(this);}
-
-void	Client::joinChannel(const std::string &channelName, const std::string &channelPwd)
-{
-	std::cout << "Join Channel with password" << std::endl;
-	if (channelName == "0")
-		this->partAllChannels();
-	Channel * pChannel;
-	// check if channel is not empty
-	if (channelName.empty())
-		throw std::runtime_error(ERR_NOSUCHCHANNEL);
-	// check if name is correct
-	if (!Channel::isNameCorrect(channelName))
-		throw std::runtime_error(ERR_BADCHANMASK);
-	// check if channel exists
-	if (! this->_server->channelExists(channelName))
-	{
-		this->_server->addChannelMap(channelName); // create new channel
-	}
-	// Get pointer to channel object
-	pChannel = this->_server->getChannel(channelName);
-	if (! pChannel)
-		throw std::runtime_error(ERR_NOSUCHCHANNEL); // it shouldn't happen
-	// already in?
-	if (pChannel->isMember(this->_nick))
-		return;		// this will send again the JOIN replies
-		// option to throw std::runtime_error(ERR_USERONCHANNEL); // not RFC compliant
-		// also possible a custom error just to say it's ignored and no replies
-	// is Invite only (+i) ?
-	if (pChannel->isInviteOnly())
-		throw std::runtime_error(ERR_INVITEONLYCHAN);
-	// if no pwd required
-	if (pChannel->isPassRequired() && pChannel->check_pass(channelPwd))
-		throw std::runtime_error(ERR_BADCHANNELKEY);
-	// is channel full?
-	if (pChannel->isChannelFull())
-		throw std::runtime_error(ERR_CHANNELISFULL);
-	// add channel to the map of channels
-	this->_channels[name_tolower(channelName)] = pChannel;
-	// add client to the map of clients in channel
-	pChannel->addClient(this);
-}
-
 void	Client::sendMessage(const std::string &theMessage)
 {
 	this->addOutMessage(theMessage);
 	this->cl_Epoll_In_Out();
 }
 
+//changed to check all channels instead of the known by the client. maybe better to aknowledg the client that has been invited to certain channels? 12.05.25 10.50am
+// Seems to work as expected now :)
 void	Client::changeAllNicks(const std::string &oldNick)
 {
-	std::map<std::string, Channel*>::iterator it;
-	for (it = _channels.begin(); it != _channels.end(); ++it)
+	std::map<std::string, Channel*>::const_iterator it;
+	for (it = this->getServer()->getChannelMap().begin(); it != this->getServer()->getChannelMap().end(); ++it)
 	{
-		if (it->second->isOperator(oldNick))
-			it->second->addOperator(this);
-		it->second->addClient(this);
-		it->second->remClient(oldNick);
+		if (it->second->isMember(oldNick) || it->second->isInvited(oldNick))
+		{
+			if (it->second->isMember(oldNick))
+			{
+				it->second->addClient(this);
+				if (it->second->isOperator(oldNick))
+				{
+					it->second->addOperator(this);
+					it->second->remOperator(oldNick);
+					//std::cout << "OPERATOR added" << std::endl;
+				}
+				it->second->remClient(oldNick);
+			}
+			if (it->second->isInvited(oldNick))
+			{
+				it->second->addInvited(this);
+				it->second->remInvited(oldNick);
+				//std::cout << "INVITE added" << std::endl;
+			}
+		}
 	}
 }
 
@@ -289,7 +189,6 @@ void	Client::sendAllChannels(const std::string &theMessage)
 
 void Client::addOutMessage(const std::string& message) {
 	std::string temp = message;
-	std::cout << ">>>" + _nick + ": " + message << std::endl;
 	this->_out.addMessage(temp);
 }
 
@@ -316,7 +215,7 @@ const OutBuffer& Client::getOutBuffer() const {
 void	Client::cl_Epoll_In()
 {
 	struct epoll_event ev;
-	ev.events = EPOLLIN; //| EPOLLET;
+	ev.events = EPOLLIN;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);
 }
@@ -325,7 +224,7 @@ void	Client::cl_Epoll_In_Out()
 {
 	struct epoll_event ev;
 	memset(&ev, 0, sizeof(ev)); // Explicit zeroing to avoid some errors
-	ev.events = EPOLLIN | EPOLLOUT; //| EPOLLET;
+	ev.events = EPOLLIN | EPOLLOUT;
 	ev.data.fd = this->get_clientFD();
 	epoll_ctl(this->getServer()->get_epollFD(), EPOLL_CTL_MOD, this->get_clientFD(), &ev);	
 }

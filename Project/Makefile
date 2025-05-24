@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/06 19:53:13 by gforns-s         ###   ########.fr        #
+#    Updated: 2025/05/12 01:27:20 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,8 @@ SRC = main.cpp Server.cpp Client.cpp Channel.cpp Tools.cpp Command.cpp Parser.cp
 		CapCommand.cpp Errors.cpp Replies.cpp PingCommand.cpp PartCommand.cpp InBuffer.cpp QuitCommand.cpp \
 		TopicCommand.cpp InviteCommand.cpp ModeCommand.cpp KickCommand.cpp WhoCommand.cpp
 
-#just for tests
-MODETEST_SRC := $(subst main.cpp, ModeTests.cpp, $(SRC))
-MODETEST_PATHS := $(addprefix src/, $(MODETEST_SRC))
-FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-fsanitize=address # commented due codespace issues with fsanitize
+
+FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-gdwarf-4 #-fsanitize=address
 
 SRC_F = src/
 
@@ -35,24 +33,6 @@ SRC_PREFIX = $(addprefix $(SRC_F),$(SRC))
 OBJ = $(addprefix $(TMP), $(SRC_PREFIX:.cpp=.o))
 
 DEP = $(OBJ:.o=.d)
-
-#### PATHS FOR Guille
-SRC_G = 
-
-SRC_F_G = src/gforns-s/
-
-SRC_P_G = $(addprefix $(SRC_F_G),$(SRC_G))
-
-OBJ_G = $(addprefix $(TMP), $(SRC_P_G:.cpp=.o))
-
-#### PATHS FOR Roman
-SRC_R =
-
-SRC_F_R = src/rzhdanov/
-
-SRC_P_R = $(addprefix $(SRC_F_R),$(SRC_R))
-
-OBJ_R = $(addprefix $(TMP), $(SRC_P_R:.cpp=.o))
 
 #############################################################################
 
@@ -80,54 +60,9 @@ $(NAME): $(OBJ) $(OBJ_G) $(OBJ_R)
 	@$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) $(OBJ_R) -I $(INC) -o $(NAME)
 	@echo "$(GREEN)$(NAME) compiled$(RESET)"
 
-###############################################################################
-
-#### Rule for Guille
-g: $(OBJ) $(OBJ_G)
-	$(GCC) $(FLAGS) $(OBJ) $(OBJ_G) -I $(INC) -o $(NAME)
-	@echo "$(GREEN)$(NAME)Guillem's code compiled$(RESET)"
-
-#### Rule for Roman
-r: $(OBJ) $(OBJ_R)
-	$(GCC) $(FLAGS) $(OBJ) $(OBJ_R) -I $(INC) -o $(NAME)
-	@echo "$(GREEN)$(NAME)Roman's code compiled$(RESET)"
-
-###############################################################################
 $(TMP)%.o: %.cpp Makefile
 	@mkdir -p $(dir $@)
 	@$(GCC) $(FLAGS) -c $< -I $(INC) -o $@
-
-#### CapTests (sorry for the mess)
-CapTests: \
-    src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
-    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
-    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp
-	g++ -std=c++98 -IInclude \
-    src/CapCommand.cpp src/CapTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
-    src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
-    src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-    src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp \
-    -o CapTests
-
-#### ModeTests (sorry for the mess)
-ModeTests: $(MODETEST_PATHS)
-	g++ -IInclude $(MODETEST_PATHS) -o ModeTests
-# ModeTests: \
-#     src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
-#     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
-#     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-#     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-# 	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp
-# 	g++ -IInclude \
-#     src/CapCommand.cpp src/ModeTests.cpp src/Command.cpp src/Client.cpp src/Server.cpp \
-#     src/OutBuffer.cpp src/Channel.cpp src/CommandDispatcher.cpp \
-#     src/JoinCommand.cpp src/NickCommand.cpp src/PassCommand.cpp \
-#     src/PrivmsgCommand.cpp src/UserCommand.cpp src/Tools.cpp \
-# 	src/ModeCommand.cpp src/InBuffer.cpp src/Errors.cpp src/Replies.cpp src/PingCommand.cpp src/PartCommand.cpp\
-#     -o ModeTests
 
 -include $(DEP)
 
@@ -138,7 +73,7 @@ clean:
 	@echo "$(CYAN)$(NAME) $(YELLOW)- $(RED)Obj deleted$(RESET)"
 
 fclean: clean
-	@rm -rf $(NAME) CapTests ModeTests
+	@rm -rf $(NAME)
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 
 .PHONY: all re clean fclean g r

@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   CommandDispatcher.hpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 13:39:36 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/06 19:47:38 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/10 20:44:30 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMANDISPATCHER_HPP
 # define COMMANDISPATCHER_HPP
 
-# include "Parser.hpp"
 # include "CommandHandler.hpp"
 # include <map>
 # include <string>
 
-//class Client;
 class Command;
 
 class CommandDispatcher {
@@ -30,7 +28,7 @@ class CommandDispatcher {
 		CommandDispatcher& operator=(const CommandDispatcher& src);
 		~CommandDispatcher();
 
-		void registerHandler(const std::string& name, CommandHandler* handler);
+		bool registerHandler(const std::string& name, CommandHandler* handler);
 		void dispatch(const Command& cmd, Client& sender);
 };
 

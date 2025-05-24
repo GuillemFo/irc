@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:40:34 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 19:53:49 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:09:04 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@ Server::Server(int sv_fd, int port, std::string sv_pass) : _sv_fd(sv_fd), _port(
 
 Server::~Server()
 {
-	// loop to delete all clients and channels due new[] in each map!!
-	// delete ->second (as the exam :) )
-	// dont forget to .clear _cl_map and _ch_map
 	std::map<std::string , Channel*>::iterator it;
 	for (it = _ch_map.begin(); it != _ch_map.end(); ++it){
 		delete it->second;
@@ -29,9 +26,9 @@ Server::~Server()
 	}
 }
 
-Server::Server(const Server &other){*this = other;}	//no need??
+Server::Server(const Server &other){*this = other;}
 
-Server &Server::operator=(const Server &other)	//no need??
+Server &Server::operator=(const Server &other)
 {
 	if (this != &other)
 	{
@@ -69,8 +66,7 @@ int	Server::addClientMap(int fd)
 		this->_cl_map.insert(std::pair<int, Client*>(fd, new Client(this, fd)));
 		return (1);
 	}
-	else
-		std::cout << "Client with fd " << fd << " already exists!" << std::endl;
+	// it shouldn't happen than fd already exists
 	return (-1);
 }
 
@@ -83,8 +79,7 @@ int	Server::addChannelMap(const std::string &str)
 		this->_ch_map.insert(std::pair<std::string, Channel*>(name_tolower(str), new Channel(str, this)));
 		return (1);
 	}
-	else
-		std::cout << "Channel with name " << str << " already exists!" << std::endl;
+	// it shouldn't happen that Channel already exist whe calling thhis function
 	return (-1);
 }
 
@@ -94,7 +89,7 @@ int	Server::rmClientMap(int fd)
 	std::map<int, Client*>::iterator it = _cl_map.find(fd);
 	if (it == _cl_map.end())
 	{
-		std::cout << "Client with fd " << fd << " does not exist!" << std::endl;
+		// it shouldn't happen that Client with fd does not exist!
 		return (-1);
 	}
 	delete it->second;
@@ -102,36 +97,18 @@ int	Server::rmClientMap(int fd)
 	return (1);
 }
 
-
-
-
-int	Server::rmChannelMap(std::string &str) // not needed by subject
+void 	Server::rmChannelMap(const std::string &str)
 {
-	if (_ch_map.find(name_tolower(str)) == _ch_map.end())
-		std::cout << "Channel with name " << str << " does not exists!" << std::endl;
-	else
+	if (_ch_map.find(name_tolower(str)) != _ch_map.end())
 	{
-		
 		delete this->_ch_map[name_tolower(str)];
 		this->_ch_map.erase(name_tolower(str));
-		return (1);
 	}
-	return (-1);
 }
 
 const std::map<int, Client*>	&Server::getClientMap() const {return _cl_map;}
 
 const std::map<std::string, Channel*>	&Server::getChannelMap() const {return _ch_map;}
-
-
-
-// void	Server::welcome_msg(const std::string &nickname)
-// {
-// 	std::stringstream message;
-// 	message << ":" << _sv_name << " 001 " << nickname << " :Welcome to our IRC server " << nickname << "!" << std::endl;
-// 	this->send_out(message.str());
-// 	message.clear();
-// }
 
 
 bool	Server::nickExists(const std::string &theNick)
@@ -172,7 +149,7 @@ Client	*Server::getClient(const int &fd)
 	it = this->_cl_map.find(fd);
 	if (it == this->_cl_map.end())
 	{
-		return 0; // need to expand for proper error!
+		return NULL;
 	}
 	return it->second;
 }
@@ -189,60 +166,23 @@ Client			*Server::getClientByNick(const std::string &s)
 	return NULL;
 }
 
+bool Server::registerAllCommands() {
+	bool	r = true;
 
+	r = r && _dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
+	r = r && _dispatcher.registerHandler("JOIN", new JoinCommand(this));
+	r = r && _dispatcher.registerHandler("NICK", new NickCommand(this));
+	r = r && _dispatcher.registerHandler("USER", new UserCommand(this));
+	r = r && _dispatcher.registerHandler("PASS", new PassCommand(this));
+	r = r && _dispatcher.registerHandler("CAP", new CapCommand(this));
+	r = r && _dispatcher.registerHandler("QUIT", new QuitCommand(this));
+	r = r && _dispatcher.registerHandler("PING", new PingCommand(this));
+	r = r && _dispatcher.registerHandler("PART", new PartCommand(this));
+	r = r && _dispatcher.registerHandler("KICK", new KickCommand(this));
+	r = r && _dispatcher.registerHandler("MODE", new ModeCommand(this));
+	r = r && _dispatcher.registerHandler("TOPIC", new TopicCommand(this));
+	r = r && _dispatcher.registerHandler("INVITE", new InviteCommand(this));
+	r = r && _dispatcher.registerHandler("WHO", new WhoCommand(this));
 
-// this command should be called from server.init() function
-// the commented lines below should be uncommented for each new command handler
-// that will be implemented
-void Server::registerAllCommands() {
-	_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this));
-	_dispatcher.registerHandler("JOIN", new JoinCommand(this));
-	_dispatcher.registerHandler("NICK", new NickCommand(this));
-	_dispatcher.registerHandler("USER", new UserCommand(this));
-	_dispatcher.registerHandler("PASS", new PassCommand(this));
-	_dispatcher.registerHandler("CAP", new CapCommand(this));
-	_dispatcher.registerHandler("QUIT", new QuitCommand(this));
-	_dispatcher.registerHandler("PING", new PingCommand(this));
-	// _dispatcher.registerHandler("PONG", new PongCommand(this)); // not needed by subject
-	// _dispatcher.registerHandler("NOTICE", new NoticeCommand(this)); // not needed by subject
-	_dispatcher.registerHandler("PART", new PartCommand(this));
-	_dispatcher.registerHandler("KICK", new KickCommand(this));
-	_dispatcher.registerHandler("MODE", new ModeCommand(this));
-	_dispatcher.registerHandler("TOPIC", new TopicCommand(this));
-	_dispatcher.registerHandler("INVITE", new InviteCommand(this));
-	_dispatcher.registerHandler("WHO", new WhoCommand(this));
-	
-	
-	// TODO: add error handling, so that if empty string is given or non-existing
-	// handler, the program exits cleanly (this is a whole other set of functions
-	// that we will need to implement)
-	// in this particular case maybe make this funciton return a bool
-	// and make all other functions return a bool. then we can do
-	//return _dispatcher.registerHandler("JOIN", new JoinCommand(this)) &&
-	//		_dispatcher.registerHandler("PRIVMSG", new PrivmsgCommand(this)) && ...
-	// and in the server.init() we put:
-	// if (!registerAllCommands) {
-	//	clean_up();
-	//}
-}
-
-void Server::printAllClientsInfo() const {
-	std::cout << "----- Client Info Dump -----" << std::endl;
-
-	if (_cl_map.empty()) {
-		std::cout << "No clients connected to the server." << std::endl;
-		return;
-	}
-
-	for (std::map<int, Client*>::const_iterator it = _cl_map.begin(); it != _cl_map.end(); ++it) {
-		Client* client = it->second;
-		if (client) {
-			std::cout << "Client FD: " << it->first << std::endl;
-			std::cout << "  Nickname: " << client->get_nick() << std::endl;
-			std::cout << "  Username: " << client->get_user() << std::endl;
-			std::cout << "  Host: " << client->get_host() << std::endl;
-			std::cout << "  Is Registered: " << (client->isRegistered() ? "Yes" : "No") << std::endl;
-			std::cout << "-----------------------------" << std::endl;
-		}
-	}
+	return r;
 }

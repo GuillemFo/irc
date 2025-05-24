@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 21:10:53 by romanzdanov       #+#    #+#             */
-/*   Updated: 2025/05/08 00:47:10 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:23:26 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void ModeCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NOSUCHCHANNEL, cmd, sender));
 		return ;
 	}
-
-	if (args.size() == 1) {
-		std::string modes = "itkol";
+	if (!channel->isMember(sender.get_nick())) {
+		sender.sendMessage(ircErrorText(ERR_USERNOTINCHANNEL, cmd, sender));
+		return ;
+	}
+	if (args.size() == 1 ) {
 		sender.sendMessage(ircReplyText(RPL_CHANNELMODEIS, cmd, sender));
-		// std::cout << "here is the sender's message: "
-		// 	<< sender.getOutMessage() << std::endl;
 			return ;
 	}
 	if (!channel->isOperator(sender.get_nick())) {
@@ -66,40 +66,12 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 	std::vector<std::string> args = cmd.getArgs();
 
 	bool	addMode = true;
-	//TODO: maybe add check if args[1] exists to avoid segfaults.
-	// even though we can only get here if args[1] does exist.
 	std::string					modeString;
-	//TODO: make validModes argument a macro
 	std::string					validModes = "itkol";
 	size_t						argsSize = args.size();
-	// std::vector<std::string>	parameters;
 	modeString += args[1];
-	// for (size_t i = 1; i < argsSize; ++i) {
-	// 	const std::string& part = args[i];
-	// 	if (!part.empty() && (part[0] == '+' || part[0] == '-')) {
-	// 		bool argIsValidMode = true;
-	// 		for (size_t j = 1; j < part.length(); ++j) {
-	// 			if(validModes.find(part[j]) == std::string::npos) {
-	// 				//TODO: implement 472 ERR_UNKNOWNMODE here
-	// 				sender.sendMessage(ircErrorText(ERR_UNKNOWNCOMMAND, ))
-	// 				argIsValidMode = false;
-	// 				break;
-	// 			}
-	// 		}
-	// 		if (argIsValidMode) {
-	// 			modeString += part;
-	// 			continue;
-	// 		}	
-	// 	}
-	// 	parameters.push_back(part);
-	// }
+
 	size_t modeStringLength = modeString.length();
-	//TODO: add check for whether modeString is not empty
-	// below is a stub, but better use error codes
-	// if (!modeStringLength) {
-	// 	std::cout << "no valid modes in command arguments" << std::endl;
-	// 	return ;
-	// }
 	size_t paramIndex = 2;
 	std::string modeChanges;
 	std::string modeParameters;
@@ -148,9 +120,15 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 					return ;
 				}
 				int user_limit = std::atoi(args[paramIndex ++].c_str());
-				//TODO: add behaviour if user_limit is not a valid int
-				channel.set_userLimit(user_limit);
-				modeParameters += int_to_string(user_limit) + " ";
+				if (user_limit < 1) {
+					sender.sendMessage(ircErrorText(ERR_NEEDMOREPARAMS,
+													cmd, sender));
+					return ;
+				}
+				else {
+					channel.set_userLimit(user_limit);
+					modeParameters += int_to_string(user_limit) + " ";
+				}
 			}
 			else {
 				channel.clear_userLimit();
@@ -164,25 +142,11 @@ void ModeCommand::handleChannelMode(Client& sender, Channel& channel,
 				return ;
 			}
 			Server* server = channel.getServer();
-			if (!server) {
-				// std::cout << "AAAAAAAAAAAAA SERVER IS NULL!!!" << std::endl;
-				//TODO: this situation should never happen under standard operation
-				// of a server. so behaviour must be something exceptional
-				// though terminating connection because of that would be 
-				// too extreme. IMPLEMENT APPROPRIATE BEHAVIOUR
-				// sending err_msg is probably just a placeholder. TBD
-				// also returning here means we do not get to send to the user the 
-				// modeChanges string. So at least this has to be changed.
-				std::string err_msg = "INTERNAL ERROR: could not process. \
-o argument. Please report this bug to server admins in #bug_reports channel";
-				sender.sendMessage(err_msg);
-				std::cout << "ERROR: Channel's server pointer is null." << std::endl;
-				return;
-			}
-			Client* target = server->getClientByNick(args[paramIndex++]);
-			if (!target || !channel.isMember(target->get_nick())) {
-				sender.sendMessage(ircErrorText(ERR_NOTONCHANNEL, cmd,
-												sender));
+			std::string tmp_nick = args[paramIndex++];
+			Client* target = server->getClientByNick(tmp_nick);
+			if (target == NULL || !target || !channel.isMember(target->get_nick()))
+			{
+				sender.sendMessage(":" + sender.getServer()->getServerName() + " " + ERR_USERNOTINCHANNEL + " " + sender.get_nick() + " " + tmp_nick + " " + channel.get_name() + " :They aren't on that channel\r\n");
 				return ;
 			}
 			if (addMode) {
@@ -206,8 +170,7 @@ std::string ModeCommand::formatModeChangeMessage(const Client& sender,
 	const Channel& channel,
 	const std::string& modeChanges,
 	const std::string& modeParameters) {
-	std::string msg = ":" + sender.get_nick() + "!" + sender.get_user() +
-	"@" + sender.get_host() + " MODE " + channel.get_name() + " " +
+	std::string msg = ":" + sender.get_nick() + " MODE " + channel.get_name() + " " +
 	modeChanges;
 
 	if (!modeParameters.empty())

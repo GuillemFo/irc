@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 07:49:13 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/04/26 10:24:58 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:00:49 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void PassCommand::execute(const Command& cmd, Client& sender) {
 	const std::string& Pass = args[0];
 	if (PassCommand::isValidPass(Pass)) {
 		sender.setPassOK();
-		std::cout << "Executing Pass command. Cient authorized" << std::endl;
 	}
 	else {
 		sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));

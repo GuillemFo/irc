@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:17:09 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/06 19:53:59 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/10 20:38:56 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <csignal>
-#include <cstdio> //perror
 
 #include "Colors.hpp"
 #include "Client.hpp"
@@ -83,9 +82,6 @@ class Server
 		std::string							_sv_name;
 		std::map<int, Client*>				_cl_map;
 		std::map<std::string , Channel*>	_ch_map;
-		//**faltaria timestamp d'inici, pel RPL_STATSUPTIME
-		//**server version and MOTD
-		//**LOC1, LOC2, ADMINEMAIL per les seve replies
 	public:
 
 		static bool			mustExit;
@@ -116,8 +112,7 @@ class Server
 		int					addChannelMap(const std::string &str, const std::string &pw);
 		
 		int					rmClientMap(int fd);
-		int					rmChannelMap(std::string &str);
-		int					rmChannelMap(std::string &str, std::string &pw);
+		void				rmChannelMap(const std::string &str);
 
 		bool				nickExists(const std::string &theNick);
 		bool				channelExists(const std::string &theChannel);
@@ -130,8 +125,7 @@ class Server
 		void				buff_to_string(char *str);
 		void				command_list(std::string &str);
 		void				welcome_msg(const std::string &nickname);
-		void				registerAllCommands();
-		void				printAllClientsInfo() const;
+		bool				registerAllCommands();
 };
 
 

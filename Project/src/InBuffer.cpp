@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   InBuffer.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 03:35:10 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/05 21:51:58 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/12 01:25:44 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,9 @@ std::string InBuffer::extractCommand() {
 	std::string line = this->_buffer.substr(0, pos);
 	this->_buffer.erase(0, pos + 2);
 
-// 	/////////////
-// 	if (_buffer.length() == 0)
-// 	{
-// 		this->clear();
-// 		std::cout << "Buffer empty" << std::endl;
-// 	}
-// //////////////////////
-	if (line.length() > 510) // -2 because we removed \r\n
+
+	if (line.length() > 510)
 	{
-		std::cout << "IRC command is longer that 512 characters. Aborting" << std::endl;
 		return std::string();
 	}
 	

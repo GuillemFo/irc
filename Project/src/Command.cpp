@@ -6,7 +6,7 @@
 /*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:44:56 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/27 21:41:11 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:15:32 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,4 @@ const std::string& Command::getName() const {
 
 const std::vector<std::string>& Command::getArgs() const {
 	return this->_args;
-}
-
-void Command::printCommand() const {
-	std::cout << "Command: " << this->getName() << std::endl;
-	const std::vector<std::string>& args = this->getArgs();
-	for (size_t i = 0; i < args.size(); i++) {
-		std::cout << "Arg[" << i << "]: " << args[i] << std::endl;
-	}
 }

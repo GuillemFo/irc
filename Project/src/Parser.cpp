@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:39:54 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/04/29 01:32:42 by codespace        ###   ########.fr       */
+/*   Updated: 2025/05/11 13:59:52 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 Parser::Parser () {}
 Parser::Parser(const Parser& src) {
-	//just to maintain canonical form; parser will be called ad hoc and will
-	//not have any data members. cleaner this way
 	(void) src;
 }
 Parser& Parser::operator=(const Parser& src) {
@@ -32,10 +30,6 @@ Command Parser::parse(const std::string& line) {
 	std::string word;
 	if (!(iss >> word))
 		return cmd;
-	// uncomment for raw input testing
-	// if (word[0] == '/')
-	// 	word = word.substr(1);
-	
 	cmd.setName(word);
 
 	bool trailing = false;
@@ -52,10 +46,6 @@ Command Parser::parse(const std::string& line) {
 		}
 		else if(!trailing) {
 			cmd.addArg(word);
-		}
-		else {
-			std::cout << "You are not supposed to get here! Check " <<
-			"the parsing logic!" << std::endl;
 		}
 	}
 	return cmd;

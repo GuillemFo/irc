@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:19:06 by josegar2          #+#    #+#             */
-/*   Updated: 2025/05/08 00:46:46 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:11:35 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /********* ERRORS ***********/
 /* Generic errors */
 #define ERR_INPUTTOOLONG		"417"
-#define ERR_UNKNOWNCOMMAND		"422"
+#define ERR_UNKNOWNCOMMAND		"421"
 
 /* Capability Errors */
 #define ERR_INVALIDCAPCMD		"410"  // Not supported parameters for CAP
@@ -35,6 +35,7 @@
 #define ERR_ERRONEUSNICKNAME	"432"  // Invalid nickname format
 #define ERR_NICKNAMEINUSE		"433"  // Nickname already in use
 #define ERR_NICKCOLLISION		"436"  // Nickname collision (server conflict)
+#define ERR_INVALIDUSERNAME		"468"  // Invalid username format
 
 /* Channel Join Errors */
 #define ERR_NOSUCHCHANNEL		"403"  // Channel doesn't exist

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   InviteCommand.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 19:23:44 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/05 16:40:05 by josegar2         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:31:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,16 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 		sender.sendMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
 		return ;
 	}
-	// There is no requirement that the channel the target user is being invited to 
-	// must exist or be a valid channel
 	const std::string& channel = args[1];
-	if (!sender.getServer()->channelExists(channel)) // create if it doesn't exist
+	if (!sender.getServer()->channelExists(channel))
 	{
 	    if (!JoinCommand::isValidChannelName(channel)) {
 		    sender.sendMessage(ircErrorText(ERR_BADCHANMASK, cmd, sender));
 		    return ;
 	    }
-		sender.getServer()->addChannelMap(channel);  // add channel
-		sender.getServer()->getChannel(channel)->addClient(&sender); //add sender to channel clients
-		sender.addChannel(sender.getServer()->getChannel(channel)); //add channel to sender channels
+		sender.getServer()->addChannelMap(channel);
+		sender.getServer()->getChannel(channel)->addClient(&sender);
+		sender.addChannel(sender.getServer()->getChannel(channel));
     }
 	Channel *theChannel = sender.getServer()->getChannel(channel);
 	if (!theChannel->isMember(sender.get_nick()))
@@ -77,8 +75,13 @@ void InviteCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	Client *theInvited = sender.getServer()->getClientByNick(nick);
+	if (theInvited == NULL)
+	{
+		sender.sendMessage(ircErrorText(ERR_NOSUCHNICK, cmd, sender));
+		return;
+	}
+	
 	theChannel->addInvited(theInvited);
-	//theInvited->addChannel(theChannel);
 	sender.sendMessage(ircReplyText(RPL_INVITING, cmd, sender));
 	theInvited->sendMessage(":" + sender.get_nick() + " INVITE " + nick + " " + channel + "\r\n");
 }

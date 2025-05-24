@@ -13,3 +13,4 @@ ModeTests
 .DS_Store
 bot
 bot_test
+vgcore.*

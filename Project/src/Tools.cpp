@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josegar2 <josegar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:07:49 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/07 00:07:23 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:23:53 by josegar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,6 @@ bool	valid_port(const std::string &str)
 	}
 	else
 		return (false);
-}
-
-std::string to_upper(std::string &str)
-{
-	std::stringstream ss;
-	for (int i = 0; str[i] != '\0'; i++)
-	{
-		ss << (char)std::toupper(str[i]);
-	}
-		std::string ret = ss.str();
-	return (ret);
-}
-std::string to_lower(std::string &str)
-{
-	std::stringstream ss;
-	for (int i = 0; str[i] != '\0'; i++)
-	{
-		ss << (char)std::tolower(str[i]);
-	}
-		std::string ret = ss.str();
-	return (ret);
 }
 
 std::string replace_tool(std::string str, std::string to_replace, std::string _new)

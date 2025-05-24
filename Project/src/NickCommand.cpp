@@ -6,7 +6,7 @@
 /*   By: gforns-s <gforns-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:00:29 by gforns-s          #+#    #+#             */
-/*   Updated: 2025/05/04 19:32:28 by gforns-s         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:13:22 by gforns-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,9 @@ NickCommand& NickCommand::operator=(const NickCommand& src) {
 NickCommand::~NickCommand () {}
 
 bool isIrcSpecialChar(char c) {
-    // Check if c is in 0x5B-0x60 or 0x7B-0x7D
     return (c >= 0x5B && c <= 0x60) || (c >= 0x7B && c <= 0x7D);
 }
 
-//   nickname   =  ( letter / special ) *8( letter / digit / special / "-" )
-//   special    =  %x5B-60 / %x7B-7D
 
 bool NickCommand::isValidNick(const std::string& name) {
 	if (name.empty() ||
@@ -58,10 +55,9 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 		return ;
 	}
 	std::string Nick = args[0]; //not made const just in case nick can be truncated
-	if (! sender.getPassOK())  // can the order be NICK-PASS-USER
+	if (! sender.getPassOK())
 	{
-		sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender)); //temp error, need something to tell it has not introduced the pass.
-		return ;
+		sender.sendMessage(ircErrorText(ERR_PASSWDMISMATCH, cmd, sender));
 	}
 	if (!NickCommand::isValidNick(Nick))
 	{
@@ -77,18 +73,14 @@ void NickCommand::execute(const Command& cmd, Client& sender) {
 	if (sender.get_nick().empty()) //new nick
 	{
 		sender.set_nick(Nick);
-		std::cout << "Executing Nick command. Nick: " << Nick << " assigned to client: " << sender.get_clientFD() << std::endl;
 		sender.setRegistered();
 	}
 	else { // change nick
-		//TODO broadcst to all channels the change of nick
 		std::string oldNick = sender.get_nick();
 		std::string chgMsg = ":" + oldNick + " NICK " + Nick + "\r\n";
 		sender.set_nick(Nick);
-		sender.sendMessage(chgMsg);
 		sender.changeAllNicks(oldNick);
+		sender.sendMessage(chgMsg);
 		sender.sendAllChannels(chgMsg);
-		//if operator with old nick, change operator from all channels to the new nick and remove old operator
-		//if channel member, loop trough all channels to rename nick from the list of users?
 	}
 }
