@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:06 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/10 01:16:15 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/24 20:27:14 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ bool Bot::connectToServer(const std::string& server, int port,
 	sendRaw("NICK bot42");
 	sendRaw("USER bot42 0 * :IRC Bot");
 	sendRaw("JOIN #bot");
+	// sendRaw("PRIVMSG rzhdanov :hello");
 
 	return true;
 }
@@ -73,6 +74,8 @@ bool Bot::isConnected() const {
 void Bot::sendRaw(const std::string& msg) {
 	std::string full = msg +"\r\n";
 	send(this->_socket_fd, full.c_str(), full.size(), 0);
+	// std::cout << "[DEBUG]: " << "we are in sendRaw" << std::endl
+				// << full << std::endl;
 }
 
 void Bot::handleMessage(const std::string& msg) {
@@ -81,36 +84,61 @@ void Bot::handleMessage(const std::string& msg) {
 	// a random position in the message (if someone send a message 
 	// containing PING)
 	// if (msg.find(PING) == 0) {
-	if (msg.compare(0, 4, PING) == 0) {
-		sendRaw("PONG" + msg.substr(4));
-		// std::cout << "WE HAVE FOUND PING" << std::endl;
-		return ;
-	}
-	size_t exclamation = msg.find('!');
-	// size_t colon = msg.find(" :");
-	size_t colon = msg.find(':');
-	if (colon != std::string::npos && exclamation != std::string::npos) {
-		std::string sender = msg.substr(1, exclamation - 1);
+	// if (msg.compare(0, 4, PING) == 0) {
+	size_t colon = msg.find(" :");
+	std::string prefix = msg.substr(0, colon);
+	size_t exclamation = prefix.find('!');
+	// size_t colon = msg.find(':', 1);
+	// std::cout << "[DEBUG] " << "OUR MESSAGE AT THE BEGINNING OF HANDLE MESSAGE: "
+		// std::cout 
+		// << std::endl << msg << std::endl; 
+	// if (colon != std::string::npos && exclamation != std::string::npos) {
+	if (colon != std::string::npos) {
+		size_t space = msg.find(' ', 1);
+		std::string sender;
+		if (exclamation != std::string::npos) {
+			sender = msg.substr(1, exclamation - 1);
+		}
+		else if(space != std::string::npos) {
+			sender = msg.substr(1, space - 1);
+		}
+		else {
+			std::cerr << "the message is not formatted properly" << std::endl;
+			return ;
+		}
+		// std::cout << "[DEBUG]. sender is: " << sender << std::endl;
 		std::string content = msg.substr(colon + 1);
 		// std::cout<< "DEBUG INSIDE IF LOOP. COLON IS NOT NPOS" << std::endl;
 		// std::cout << "Extracted content: [" << content << "]" << std::endl;
 		size_t privmsgPos = msg.find("PRIVMSG ");
 		if (privmsgPos != std::string::npos) {
-			size_t limit = this->_commands.size();
+			// size_t limit = this->_commands.size();
+			// std::cout << "[DEBUG]: limit is: " << limit << std::endl;
 			size_t targetStart = privmsgPos + 8;
 			size_t targetEnd = msg.find(' ', targetStart);
-			std:: string target = msg.substr(targetStart, 
+			std::string target = msg.substr(targetStart, 
 											targetEnd - targetStart);
-			for (size_t i = 0; i < limit; ++i) {
-				if (this->_commands[i]->matches(content)) {
-					std::string response = "PRIVMSG " + target + " :"
-						+ this->_commands[i]->respond(sender);
-					// std::cout << "TESTING: " << response << std::endl;
-					sendRaw(response);
-					// sendRaw(this->_commands[i]->respond(sender));
-					break;
-				}
+			std::string response;
+			if (content.find(PING) != std::string::npos) {
+				response = "PRIVMSG " + sender + " :CUSTOM PONG FROM BOT42";
+				// std::cout << "WE HAVE FOUND PING" << std::endl;
+				// return ;
 			}
+			else {
+				response = "PRIVMSG " + sender + " " + content + " to you too, dear "
+							+ sender + "!";
+			}
+			sendRaw(response);
+			// for (size_t i = 0; i < limit; ++i) {
+			// 	if (this->_commands[i]->matches(content)) {
+			// 		std::string response = "PRIVMSG " + sender + " :" + content + " to you too!";
+			// 			// + this->_commands[i]->respond(sender);
+			// 		// std::cout << "TESTING: " << response << std::endl;
+			// 		sendRaw(response);
+			// 		sendRaw(this->_commands[i]->respond(sender));
+			// 		break;
+			// 	}
+			// }
 		}
 	}
 }

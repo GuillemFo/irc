@@ -6,7 +6,7 @@
 #    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/24 14:38:56 by rzhdanov         ###   ########.fr        #
+#    Updated: 2025/05/24 20:20:38 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,12 @@ SRC_PREFIX = $(addprefix $(SRC_F),$(SRC))
 OBJ = $(addprefix $(TMP), $(SRC_PREFIX:.cpp=.o))
 
 DEP = $(OBJ:.o=.d)
+
+PASS = pass
+PORT = 12321
+LOCALHOST = localhost
+BOT = ./bot/bot
+IRCSERV = ./ircserv
 
 #############################################################################
 
@@ -69,6 +75,12 @@ $(TMP)%.o: %.cpp Makefile
 bonus: all
 	$(MAKE) -C bot all
 
+bot: bonus
+	@echo "$(GREEN)Launching ircserv...$(RESET)"
+	@$(IRCSERV) $(PORT) $(PASS) &
+	@sleep 2
+	@echo "$(CYAN)Launching bot...$(RESET)"
+	@$(BOT) $(LOCALHOST) $(PORT) $(PASS)
 re: fclean all
 
 clean:
@@ -80,4 +92,4 @@ fclean: clean
 	@echo "$(CYAN)$(NAME) $(RED)deleted$(RESET)"
 	@$(MAKE) -C bot fclean
 
-.PHONY: all re clean fclean g r bonus
+.PHONY: all re clean fclean g r bonus bot
