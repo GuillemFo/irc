@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:06 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/25 19:03:22 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/25 19:27:57 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,19 @@ bool Bot::isConnected() const {
 }
 
 void Bot::sendRaw(const std::string& msg) {
-	std::string full = msg +"\r\n";
+	const size_t MAX_IRC_LINE = 512;
+	const std::string CRLF = "\r\n";
+	const std::string suffix = " [truncated]";
+	
+	size_t safe_limit = 450;
+	std::string to_send = msg;
+	if (msg.size() + CRLF.size() > MAX_IRC_LINE) {
+		if (msg.size() > safe_limit) {
+			to_send = msg.substr(0, safe_limit - suffix.size()) + suffix;
+		}
+	}
+	std::string full = to_send + CRLF;
 	send(this->_socket_fd, full.c_str(), full.size(), 0);
-	// std::cout << "[DEBUG]: " << "we are in sendRaw" << std::endl
-				// << full << std::endl;
 }
 
 void Bot::handleMessage(const std::string& msg) {
