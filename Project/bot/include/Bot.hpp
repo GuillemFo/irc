@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:00 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/09 23:17:44 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:50:25 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <vector>
 # include <string>
+# include <csignal>
 # include "IncomingCommand.hpp"
 
 # define PING "PING"
@@ -26,6 +27,8 @@ class Bot {
 		int _socket_fd;
 		std::vector<IncomingCommand*> _commands;
 		bool _connected;
+		static Bot* instance;
+		static volatile sig_atomic_t stopRequested;
 
 		void sendRaw(const std::string& msg);
 		// void handleMessage(const std::string& msg);
@@ -40,6 +43,8 @@ class Bot {
 		void run();
 		bool isConnected() const;
 		void handleMessage(const std::string& msg);
+		static void handleSignal(int signal);
+		void cleanup();
 };
 
 #endif

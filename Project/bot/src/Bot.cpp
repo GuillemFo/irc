@@ -6,7 +6,7 @@
 /*   By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 22:08:06 by rzhdanov          #+#    #+#             */
-/*   Updated: 2025/05/24 20:27:14 by rzhdanov         ###   ########.fr       */
+/*   Updated: 2025/05/25 19:03:22 by rzhdanov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,22 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <cstdlib>
+#include <fcntl.h>
+#include <errno.h>
+#include <cstdio>
 #include "Bot.hpp"
 #include "BotPingCommand.hpp"
 
-#define BUFFER_SIZE 1024
-Bot::Bot() {};
+#define BUFFER_SIZE 512
+
+Bot* Bot::instance = NULL;
+volatile sig_atomic_t Bot::stopRequested = 0;
+
+Bot::Bot() {
+	instance = this;
+	signal(SIGINT, Bot::handleSignal);
+};
+
 Bot::Bot(const std::string& server, int port, const std::string& password)
 	: _socket_fd(-1), _connected(false) {
 	_connected = connectToServer(server, port, password);
@@ -37,6 +48,27 @@ Bot::~Bot() {
 	for (size_t i = 0; i < this->_commands.size(); i++) {
 		delete this->_commands[i];
 	}
+}
+
+void Bot::handleSignal(int signal) {
+	if (signal == SIGINT) {
+		stopRequested = 1;
+	}
+}
+
+void Bot::cleanup() {
+	if (this->_connected) {
+		close(this->_socket_fd);
+		this->_socket_fd = -1;
+		this->_connected = false;
+	}
+	for (size_t i = 0; i < this->_commands.size(); i++) {
+		delete this->_commands[i];
+		this->_commands[i] = NULL;
+	}
+	this->_commands.clear();
+	instance = NULL;
+	std::cout << "[SERVICE MESSAGE] Bot cleaned upon interruption with ctrl-c.";
 }
 
 bool Bot::connectToServer(const std::string& server, int port,
@@ -56,6 +88,15 @@ bool Bot::connectToServer(const std::string& server, int port,
 		std::cerr << "Connection failed" << std::endl;
 		return false;
 	}
+	int flags = fcntl(this->_socket_fd, F_GETFL, 0);
+	if (flags == -1) {
+		std::cerr << "Failed to get socket flags" << std::endl;
+		return false;
+	}
+	if (fcntl(this->_socket_fd, F_SETFL, flags | O_NONBLOCK) == -1) {
+		std::cerr << "Failed to set non-blocking mode" << std::endl;
+		return false;
+	}	
 	if (!password.empty()) {
 		sendRaw("PASS " + password);
 	}
@@ -145,24 +186,37 @@ void Bot::handleMessage(const std::string& msg) {
 
 void Bot::run() {
 	char buffer[BUFFER_SIZE];
-	while (true) {
+	while (!stopRequested) {
 		std::memset(buffer, 0, BUFFER_SIZE);
 		int bytes = recv(this->_socket_fd, buffer, BUFFER_SIZE - 1, 0);
 		std::string raw(buffer);
 		// std::cout << "[RECV] \n" << raw << "[END OF RCV]" << std::endl;
-		if (bytes <= 0) {
+		if (bytes > 0) {
+			std::string msg(buffer);
+			std::stringstream ss(msg);
+			std::string line;
+			while (std::getline(ss, line)) {
+				if (!line.empty() && line[line.size() - 1] != '\r')
+				{
+					line.erase(line.size() - 1);
+				}
+				// std::cout << msg;
+				handleMessage(line);
+			}
+		}
+		else if (bytes == 0) {
 			break;
 		}
-		std::string msg(buffer);
-		std::stringstream ss(msg);
-		std::string line;
-		while (std::getline(ss, line)) {
-			if (!line.empty() && line[line.size() - 1] != '\r')
-			{
-				line.erase(line.size() - 1);
+		else {
+			if (errno == EAGAIN || errno == EWOULDBLOCK) {
+				usleep(100000);
+				continue;
 			}
-			// std::cout << msg;
-			handleMessage(line);
+			else {
+				perror("recv");
+				break;
+			}
 		}
 	}
+	cleanup();
 }
