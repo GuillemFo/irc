@@ -6,7 +6,7 @@
 #    By: rzhdanov <rzhdanov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/30 08:52:23 by gforns-s          #+#    #+#              #
-#    Updated: 2025/05/24 20:20:38 by rzhdanov         ###   ########.fr        #
+#    Updated: 2025/05/29 12:10:53 by rzhdanov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -pedantic -pedantic-errors -g #-gd
 
 SRC_F = src/
 
-GCC = c++
+GCC = g++
 
 TMP = tmp/
 
