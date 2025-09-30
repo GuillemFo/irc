@@ -72,5 +72,6 @@ IRC clients connect to IRC servers to join channels, forming communication netwo
 - **Error processing** for all edge cases
 - **Resource-efficient** operation
 
-Client used: `HexChat`
-I/O operations: `epoll`
+Client used: `HexChat`  
+I/O operations: `epoll`  
+More info at `zInfo` folder
