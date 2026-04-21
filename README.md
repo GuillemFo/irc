@@ -1,3 +1,4 @@
+*****AI used to explain this project*****
 # ft_irc - Internet Relay Chat
 
 ## 🎯 Project Overview
